@@ -9,7 +9,7 @@ const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bintang';
 
 // Masukkan Web App URL dari Google Apps Script jika sudah ada
-const GOOGLE_SCRIPT_URL = ''; 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec'; 
 
 /* ══════ GERBANG ══════ */
 (function gerbang(){
