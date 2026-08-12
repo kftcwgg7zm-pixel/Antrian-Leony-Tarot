@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Italianno&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ═════════ TOKEN ═════════ */
 :root{
   --langit:#dcebfe; --langit-dalam:#bdd7f7;
   --awan:#f8fbff; --mawar:#fbd9e6; --blush:#ef9cbf;
@@ -29,7 +28,6 @@ body{
 img{max-width:100%;display:block}
 button{font-family:inherit}
 
-/* ═════════ GERBANG PEMBUKA ═════════ */
 #gerbang{position:fixed;inset:0;z-index:900;display:grid;place-items:center;overflow:hidden;
   background:linear-gradient(180deg,#e8f2ff,#f7e6f0);transition:opacity .9s ease,visibility .9s}
 #gerbang.pergi{opacity:0;visibility:hidden;pointer-events:none}
@@ -50,7 +48,6 @@ button{font-family:inherit}
 .gerbang-teks .kt2{font-size:11px;letter-spacing:.2em;color:#c3aac0;margin-top:26px;animation:kedip 2s ease-in-out infinite}
 @keyframes kedip{0%,100%{opacity:.35}50%{opacity:1}}
 
-/* ═════════ LANGIT ═════════ */
 .langit{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .rays{position:absolute;top:-58vh;left:50%;width:190vw;height:190vw;transform:translateX(-50%);
   background:repeating-conic-gradient(from 0deg,rgba(255,255,255,0) 0 5deg,rgba(255,255,255,.55) 5.2deg 6.6deg,rgba(255,255,255,0) 6.8deg 13deg);
@@ -74,7 +71,6 @@ button{font-family:inherit}
 .laut-awan .lap2{opacity:.65;animation:geser 96s linear infinite reverse}
 @keyframes geser{to{transform:translateX(25%)}}
 
-/* gelembung sabun */
 .sabun{position:absolute;bottom:-18vh;pointer-events:none;animation:melayang-naik var(--dur,26s) linear infinite;animation-delay:var(--del,0s)}
 .sabun .film{width:var(--d,60px);height:var(--d,60px);border-radius:50%;position:relative;
   animation:goyang var(--gy,7s) ease-in-out infinite;
@@ -95,25 +91,21 @@ button{font-family:inherit}
   8%{opacity:1}82%{opacity:.95}100%{transform:translateY(-128vh) scale(1.06);opacity:0}}
 @keyframes goyang{0%,100%{transform:translateX(-16px)}50%{transform:translateX(16px)}}
 
-/* bulu malaikat */
 .bulu{position:absolute;top:-14vh;width:var(--bw,26px);opacity:.75;
   animation:jatuh var(--bd,30s) linear infinite;animation-delay:var(--bdl,0s)}
 .bulu svg{animation:ayun 6s ease-in-out infinite}
 @keyframes jatuh{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(122vh) rotate(300deg)}}
 @keyframes ayun{0%,100%{transform:translateX(-24px) rotate(-14deg)}50%{transform:translateX(24px) rotate(16deg)}}
 
-/* kerlip */
 .kerlip{position:absolute;color:#fff;font-size:var(--ks,12px);opacity:0;text-shadow:0 0 10px rgba(255,240,255,.95);
   animation:kelap var(--kd,4s) ease-in-out infinite;animation-delay:var(--kdl,0s)}
 @keyframes kelap{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:1;transform:scale(1.15)}}
 
-/* jejak kilau kursor */
 .jejak{position:fixed;pointer-events:none;z-index:80;font-size:13px;color:#fff;
   text-shadow:0 0 8px #ffd9ee,0 0 16px #cfe3ff;animation:lenyap .9s ease-out forwards}
 @keyframes lenyap{0%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
   100%{opacity:0;transform:translate(-50%,-160%) scale(.2) rotate(90deg)}}
 
-/* ═════════ TIPOGRAFI ═════════ */
 .skrip{font-family:'Italianno',cursive;font-weight:400;line-height:.9}
 h1.judul{margin:0;font-size:clamp(66px,15vw,132px);position:relative;z-index:3;
   background:linear-gradient(168deg,#fff 4%,#fce4ef 26%,#f0aecb 52%,#d5c4f0 74%,#bcd6f7 100%);
@@ -125,7 +117,6 @@ h2.sub{font-family:'Italianno',cursive;font-size:clamp(44px,8vw,64px);margin:0 0
   background:linear-gradient(150deg,#a9bfe6,#e6a9c8);-webkit-background-clip:text;background-clip:text;color:transparent}
 p{margin:0 0 12px}
 
-/* ═════════ JENDELA ═════════ */
 .jendela{position:relative;background:rgba(255,255,255,.88);border-radius:var(--r);
   border:1px solid rgba(255,255,255,.95);box-shadow:var(--bayang);backdrop-filter:blur(12px);
   overflow:hidden;margin-bottom:22px}
@@ -140,20 +131,17 @@ p{margin:0 0 12px}
 .isi{padding:24px;position:relative}
 @media (max-width:520px){.isi{padding:19px 15px}}
 
-/* ═════════ STATISTIK BOARD ═════════ */
 .papan-stat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
 .kartu-stat{background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(240,245,255,.7));border:1px solid rgba(255,255,255,.95);
   border-radius:18px;padding:12px 10px;text-align:center;box-shadow:0 8px 20px -12px rgba(130,160,210,.4)}
 .kartu-stat .angka{font-size:22px;font-weight:700;color:#5d6c8d;line-height:1.2}
 .kartu-stat .lbl{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;margin-top:2px}
 
-/* TABEL LAPORAN HARIAN ADMIN */
 .tabel-laporan{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;text-align:left}
 .tabel-laporan th{background:rgba(235,242,255,.8);padding:10px;font-weight:600;color:#5d6c8d;border-radius:8px 8px 0 0}
 .tabel-laporan td{padding:10px;border-bottom:1px solid var(--garis);color:var(--tinta)}
 .tabel-laporan tr:last-child td{border-bottom:0}
 
-/* ═════════ NAV ═════════ */
 .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:70;width:calc(100% - 22px);max-width:540px;
   border-radius:28px;overflow:hidden;box-shadow:0 22px 44px -18px rgba(110,130,190,.65);
   border:1px solid rgba(255,255,255,.95);background:rgba(255,255,255,.8);backdrop-filter:blur(18px)}
@@ -166,19 +154,16 @@ p{margin:0 0 12px}
   box-shadow:inset 0 1px 0 #fff,0 6px 14px -8px rgba(200,140,175,.9)}
 .tab:focus-visible{outline:2px solid var(--blush);outline-offset:2px}
 
-/* SUB-TABS (ALL & FAST TRACK) */
 .sub-tabs{display:flex;gap:10px;margin-bottom:18px;border-bottom:1px solid var(--garis);padding-bottom:10px}
 .sub-tab{flex:1;border:1px solid var(--garis);background:rgba(255,255,255,.6);border-radius:14px;padding:10px;
   text-align:center;font-weight:600;font-size:13px;cursor:pointer;color:var(--tinta-muda);transition:.25s}
 .sub-tab.aktif{background:linear-gradient(160deg,#fde6f0,#f5d1e4);color:#b4708f;border-color:#f0b9d3;box-shadow:var(--bayang-lembut)}
 
-/* ═════════ LAYOUT ═════════ */
 .bungkus{position:relative;z-index:2;max-width:950px;margin:0 auto;padding:22px 16px 10px}
 .hal{display:none;animation:masuk .55s ease both}
 .hal.aktif{display:block}
 @keyframes masuk{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
-/* ═════════ HERO ═════════ */
 .hero{text-align:center;padding:18px 0 4px;position:relative}
 .panggung{position:relative;display:grid;place-items:center;padding:14px 0 2px}
 .sayap{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);width:min(112%,760px);pointer-events:none;z-index:1;
@@ -194,7 +179,6 @@ p{margin:0 0 12px}
 @keyframes halo-puter{to{transform:translateX(-50%) rotateX(72deg) rotate(360deg)}}
 .hero .tagline{color:#93a9d1;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;position:relative;z-index:3}
 
-/* ═════════ FORM & INPUT ═════════ */
 .form{display:grid;gap:14px}
 label{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px}
 input[type=text],input[type=password],textarea{width:100%;border:1px solid var(--garis);background:rgba(255,255,255,.94);border-radius:14px;
@@ -203,7 +187,6 @@ input:focus,textarea:focus{outline:0;border-color:var(--blush);box-shadow:0 0 0 
 .baris{display:grid;gap:14px;grid-template-columns:1.2fr 1fr}
 @media (max-width:560px){.baris{grid-template-columns:1fr}}
 
-/* PILLS INPUT TIPE ANTRIAN ADMIN */
 .pills-tipe-input{display:flex;gap:8px;background:rgba(255,255,255,.8);padding:4px;border-radius:14px;border:1px solid var(--garis);height:47px;align-items:center}
 .pill-tipe-opt{flex:1;height:100%;border:0;background:transparent;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--tinta-muda);cursor:pointer;transition:.25s}
 .pill-tipe-opt.aktif{background:linear-gradient(160deg,#fde6f0,#f5d1e4);color:#b4708f;box-shadow:0 3px 10px rgba(220,150,180,.25)}
@@ -219,7 +202,6 @@ input:focus,textarea:focus{outline:0;border-color:var(--blush);box-shadow:0 0 0 
 .pesan-status.ok{background:#eaf6ec;color:#4f7a58;border:1px solid #cfe8d5}
 .pesan-status.err{background:#fdeaf0;color:#a9526f;border:1px solid #f6cddb}
 
-/* ═════════ FEED & LIST ═════════ */
 .cari{position:relative;margin-bottom:14px}
 .cari input{padding-left:38px}
 .cari::before{content:"⌕";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--tinta-muda);font-size:19px}
@@ -232,7 +214,6 @@ input:focus,textarea:focus{outline:0;border-color:var(--blush);box-shadow:0 0 0 
 .nama-p{font-weight:600;font-size:14.5px;color:#5d6c8d}
 .waktu{font-size:11px;color:var(--tinta-muda);margin-left:auto}
 
-/* LENCANA STATUS */
 .lencana{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:4px 10px;border-radius:20px;
   background:#fff3e2;color:#b58146;border:1px solid #f6e0c2;transition:.2s}
 .lencana.baca{background:#eef8f0;color:#5c8a68;border-color:#d3ecd9}
@@ -243,7 +224,6 @@ input:focus,textarea:focus{outline:0;border-color:var(--blush);box-shadow:0 0 0 
 .kosong .em{font-size:30px;margin-bottom:8px}
 .kosong .j{font-family:'Italianno',cursive;font-size:36px;color:#b9c8e4;line-height:1}
 
-/* ═════════ PILLS SELECTION ADMIN ═════════ */
 .alat{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;align-items:center}
 .pills-status{display:flex;gap:6px;background:rgba(235,240,250,.6);padding:3px;border-radius:14px;border:1px solid var(--garis)}
 .pill-opt{border:0;background:transparent;padding:5px 11px;font-size:11px;font-weight:600;border-radius:10px;cursor:pointer;color:var(--tinta-muda);transition:.2s}
@@ -257,7 +237,6 @@ input:focus,textarea:focus{outline:0;border-color:var(--blush);box-shadow:0 0 0 
 .mini{border:1px solid var(--garis);background:#fff;border-radius:12px;padding:6px 11px;font-size:11.5px;cursor:pointer;color:#7686aa;transition:.2s}
 .mini:hover{border-color:var(--blush);color:var(--blush)}
 
-/* ═════════ TOMBOL LAYANG ═════════ */
 .layang{position:fixed;top:14px;right:14px;z-index:75;display:flex;gap:8px}
 .layang button{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.95);cursor:pointer;
   background:rgba(255,255,255,.78);backdrop-filter:blur(12px);box-shadow:var(--bayang-lembut);font-size:17px;
@@ -282,7 +261,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
 </head>
 <body>
 
-<!-- ═══ GERBANG ═══ -->
 <div id="gerbang">
   <div class="tirai kr"></div><div class="tirai kn"></div>
   <div class="gerbang-teks">
@@ -292,7 +270,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
   </div>
 </div>
 
-<!-- ═══ LANGIT ═══ -->
 <div class="langit" aria-hidden="true">
   <div class="rays"></div>
   <div class="gloria"></div>
@@ -313,7 +290,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
   <button id="btn-atas" title="Kembali ke atas" aria-label="Kembali ke atas">↑</button>
 </div>
 
-<!-- ═══ KONTEN ═══ -->
 <div class="bungkus">
 
   <header class="hero">
@@ -326,7 +302,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
     <p class="tagline">pantau antrian · baca kartu · tarot reading</p>
   </header>
 
-  <!-- ─── 1. HALAMAN UTAMA: ANTRIAN CUSTOMER ─── -->
   <section class="hal aktif" id="hal-antrian">
     <div class="jendela">
       <div class="bar biru"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">customer_queue</span></div>
@@ -334,7 +309,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         <h2 class="sub">Daftar Antrian</h2>
         <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Lihat urutan antrian tarot kamu di bawah ini.</p>
         
-        <!-- Counter Statistik Antrian (Diganti Pertanyaan Hari Ini) -->
         <div class="papan-stat">
           <div class="kartu-stat">
             <div class="angka" id="st-hari-ini">0</div>
@@ -350,7 +324,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
           </div>
         </div>
 
-        <!-- Tab Side-by-Side: 1. All | 2. Fast Track -->
         <div class="sub-tabs">
           <button class="sub-tab aktif" id="tab-all">🌸 All</button>
           <button class="sub-tab" id="tab-fasttrack">⚡ Fast Track</button>
@@ -362,10 +335,8 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
     </div>
   </section>
 
-  <!-- ─── 2. HALAMAN UTAMA: DASHBOARD ADMIN ─── -->
   <section class="hal" id="hal-admin">
     
-    <!-- TAMPILAN JIKA BELUM LOGIN -->
     <div class="jendela" id="jendela-login">
       <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">admin_login</span></div>
       <div class="isi">
@@ -380,10 +351,8 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
       </div>
     </div>
 
-    <!-- TAMPILAN DASHBOARD (JIKA SUDAH LOGIN) -->
     <div id="panel-admin" style="display:none">
       
-      <!-- FORM INPUT ORDER/ANTRIAN -->
       <div class="jendela">
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">input_antrian_baru</span></div>
         <div class="isi">
@@ -397,7 +366,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
               </div>
               <div>
                 <label>Status Tipe Antrian</label>
-                <!-- Pills Button untuk Pilih Tipe Antrian -->
                 <div class="pills-tipe-input">
                   <button type="button" class="pill-tipe-opt aktif" id="btn-tipe-reg">Reguler</button>
                   <button type="button" class="pill-tipe-opt" id="btn-tipe-ft">⚡ Fast Track</button>
@@ -410,7 +378,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         </div>
       </div>
 
-      <!-- LAPORAN PERTANYAAN PER TANGGAL (NEW) -->
       <div class="jendela">
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">laporan_harian</span></div>
         <div class="isi">
@@ -427,14 +394,12 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
                 </tr>
               </thead>
               <tbody id="tabel-laporan-body">
-                <!-- Data Laporan dimasukkan lewat JS -->
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- KELOLA ANTRIAN CUSTOMER -->
       <div class="jendela">
         <div class="bar biru"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">kelola_antrian</span></div>
         <div class="isi">
@@ -457,7 +422,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
   </footer>
 </div>
 
-<!-- ═══ NAVIGASI (2 HALAMAN UTAMA) ═══ -->
 <nav class="nav" role="tablist" aria-label="Halaman">
   <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">navigasi</span></div>
   <div class="tabs">
@@ -475,7 +439,6 @@ const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bintang';
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec'; 
 
-/* ══════ GERBANG ══════ */
 (function gerbang(){
   const g = $('#gerbang');
   const buka = () => {
@@ -487,7 +450,6 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99Hv
   setTimeout(buka, hemat ? 400 : 2500);
 })();
 
-/* ══════ SAYAP MALAIKAT ══════ */
 (function sayap(){
   const svg = $('#sayap'), ns = 'http://www.w3.org/2000/svg';
   const grad = document.createElementNS(ns, 'defs');
@@ -515,7 +477,6 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99Hv
   svg.appendChild(sisi(-1)); svg.appendChild(sisi(1));
 })();
 
-/* ══════ GELEMBUNG · BULU · KERLIP ══════ */
 (function hias(){
   const w = $('#hias');
   const acak = (a, b) => a + Math.random() * (b - a);
@@ -552,7 +513,6 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99Hv
   }
 })();
 
-/* ══════ JEJAK KILAU ══════ */
 if(!hemat){
   let akhir = 0;
   addEventListener('pointermove', e => {
@@ -569,7 +529,6 @@ if(!hemat){
   }, {passive:true});
 }
 
-/* ══════ MUSIK KAYANGAN ══════ */
 const suara = (() => {
   let ctx = null, gain = null, timer = null, hidup = false;
   const nada = [523.25, 587.33, 659.25, 783.99, 880, 1046.5];
@@ -607,51 +566,44 @@ $('#btn-suara').addEventListener('click', e => {
 });
 $('#btn-atas').addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
 
-/* ══════ LOCALSTORAGE & SPREADSHEET ══════ */
-const KUNCI_ANTRIAN = 'leony_tarot:antrian';
 let dAntrian = [];
 
-function simpanAntrianLocal(data){
-  dAntrian = data;
-  localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(data));
-  gambarAntrian();
-  gambarAdmin();
-}
-
-function muatAntrianLocal(){
-  const local = localStorage.getItem(KUNCI_ANTRIAN);
-  if(local){
-    try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
-  } else {
-    dAntrian = [
-      { id:'1', detail:'Alya - 1 Order', tipe:'Fast Track', status:'Belum Dibaca', ts:Date.now() - 3600000 },
-      { id:'2', detail:'Nadia - 2 Order', tipe:'Reguler', status:'Belum Dibaca', ts:Date.now() - 7200000 },
-      { id:'3', detail:'Risa - 1 Order', tipe:'Reguler', status:'Sudah Dibaca', ts:Date.now() - 10800000 }
-    ];
+async function muatAntrianServer() {
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL);
+    const dataServer = await res.json();
+    if(Array.isArray(dataServer)){
+      dAntrian = dataServer;
+    } else {
+      dAntrian = [];
+    }
+  } catch(e) {
+    console.error("Gagal mengambil data dari Google Sheet:", e);
+    dAntrian = [];
   }
+  
   gambarAntrian();
   gambarAdmin();
 }
 
-async function syncToSpreadsheet(action, payload) {
+async function kirimKeSpreadsheet(payload) {
   if(!GOOGLE_SCRIPT_URL) return;
   try {
     await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action, ...payload })
+      body: JSON.stringify(payload)
     });
   } catch(e) {
-    console.error("Gagal sync ke Spreadsheet:", e);
+    console.error("Gagal kirim ke Spreadsheet:", e);
   }
 }
 
-/* ══════ UTIL ══════ */
 const aman = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function kapan(ts){
   const d = new Date(ts), s = (Date.now() - ts) / 1000;
-  if(s < 60) return 'baru aja';
+  if(isNaN(s) || s < 60) return 'baru aja';
   if(s < 3600) return Math.floor(s/60) + ' menit lalu';
   if(s < 86400) return Math.floor(s/3600) + ' jam lalu';
   return d.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
@@ -662,7 +614,6 @@ function status(el, teks, jenis){
   if(jenis === 'ok') setTimeout(() => el.className = 'pesan-status', 5200);
 }
 
-/* ══════ NAVIGASI UTAMA ══════ */
 const tabs = document.querySelectorAll('.tab');
 function keHalaman(nama){
   document.querySelectorAll('.hal').forEach(h => h.classList.toggle('aktif', h.id === 'hal-' + nama));
@@ -671,7 +622,6 @@ function keHalaman(nama){
 }
 tabs.forEach(t => t.addEventListener('click', () => keHalaman(t.dataset.hal)));
 
-/* ══════ SUB-TABS (ALL & FAST TRACK) ══════ */
 let tipeSubTabAktif = 'All';
 $('#tab-all').addEventListener('click', () => {
   tipeSubTabAktif = 'All';
@@ -686,7 +636,6 @@ $('#tab-fasttrack').addEventListener('click', () => {
   gambarAntrian();
 });
 
-/* ══════ RENDER ANTRIAN (CUSTOMER) ══════ */
 let cariAntrianTeks = '';
 $('#cari-antrian').addEventListener('input', e => {
   cariAntrianTeks = e.target.value.trim().toLowerCase();
@@ -701,11 +650,12 @@ function gambarAntrian(){
     filtered = filtered.filter(x => x.tipe === 'Fast Track');
   }
 
-  // Filter khusus Hari Ini
   const hariIni = new Date().toDateString();
-  const nanyaHariIni = filtered.filter(x => new Date(x.ts).toDateString() === hariIni).length;
+  const nanyaHariIni = filtered.filter(x => {
+    const t = Number(x.ts);
+    return !isNaN(t) && new Date(t).toDateString() === hariIni;
+  }).length;
 
-  // Update Statistik Customer
   $('#st-hari-ini').textContent = nanyaHariIni;
   $('#st-belum').textContent = filtered.filter(x => x.status === 'Belum Dibaca').length;
   $('#st-sudah').textContent = filtered.filter(x => x.status === 'Sudah Dibaca').length;
@@ -730,13 +680,12 @@ function gambarAntrian(){
         <span class="nama-p">${aman(x.detail)}</span>
         ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡ Fast Track</span>' : ''}
         <span class="${statusClass}">${aman(x.status)}</span>
-        <span class="waktu">${kapan(x.ts)}</span>
+        <span class="waktu">${kapan(Number(x.ts))}</span>
       </div>
     </article>`;
   }).join('');
 }
 
-/* ══════ LOGIN ADMIN ══════ */
 let isLoggedAdmin = false;
 $('#form-login').addEventListener('submit', e => {
   e.preventDefault();
@@ -761,7 +710,6 @@ $('#btn-logout').addEventListener('click', () => {
   $('#form-login').reset();
 });
 
-/* ══════ TOGGLE PILLS INPUT ADMIN ══════ */
 let tipeAntrianInput = 'Reguler';
 $('#btn-tipe-reg').addEventListener('click', () => {
   tipeAntrianInput = 'Reguler';
@@ -774,7 +722,6 @@ $('#btn-tipe-ft').addEventListener('click', () => {
   $('#btn-tipe-reg').classList.remove('aktif');
 });
 
-/* ══════ INPUT ANTRIAN BARU (ADMIN) ══════ */
 $('#form-input').addEventListener('submit', async e => {
   e.preventDefault();
   const detail = $('#i-detail').value.trim();
@@ -784,9 +731,10 @@ $('#form-input').addEventListener('submit', async e => {
   if(!detail) return status(st, 'Nama dan Jumlah Order harus diisi.', 'err');
 
   btn.disabled = true;
-  btn.textContent = 'Menyimpan...';
+  btn.textContent = 'Menyimpan ke Spreadsheet...';
 
   const itemBaru = {
+    action: 'ADD',
     id: 'q_' + Date.now(),
     detail: detail,
     tipe: tipeAntrianInput,
@@ -794,18 +742,15 @@ $('#form-input').addEventListener('submit', async e => {
     ts: Date.now()
   };
 
-  dAntrian.unshift(itemBaru);
-  simpanAntrianLocal(dAntrian);
-
-  await syncToSpreadsheet('ADD', itemBaru);
+  await kirimKeSpreadsheet(itemBaru);
+  await muatAntrianServer();
 
   btn.disabled = false;
   btn.textContent = 'Kirim ♡';
-  status(st, 'Antrian berhasil ditambahkan ♡', 'ok');
+  status(st, 'Berhasil masuk ke Spreadsheet & Web! ♡', 'ok');
   $('#i-detail').value = '';
 });
 
-/* ══════ RENDER KELOLA ANTRIAN & LAPORAN HARIAN (ADMIN) ══════ */
 let cariAdminTeks = '';
 $('#cari-admin').addEventListener('input', e => {
   cariAdminTeks = e.target.value.trim().toLowerCase();
@@ -815,10 +760,8 @@ $('#cari-admin').addEventListener('input', e => {
 function gambarAdmin(){
   if(!isLoggedAdmin) return;
   
-  // 1. Render Tabel Laporan Per Tanggal
   renderLaporanTgl();
 
-  // 2. Render Feed Antrian Admin
   const el = $('#feed-admin');
   let data = dAntrian;
 
@@ -841,7 +784,7 @@ function gambarAdmin(){
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
         <span class="lencana kilat">${aman(x.tipe)}</span>
-        <span class="waktu">${kapan(x.ts)}</span>
+        <span class="waktu">${kapan(Number(x.ts))}</span>
       </div>
       <div class="alat">
         <div class="pills-status">
@@ -862,10 +805,10 @@ function renderLaporanTgl(){
     return;
   }
 
-  // Dikelompokkan berdasarkan Tanggal
   const rekap = {};
   dAntrian.forEach(x => {
-    const tgl = new Date(x.ts).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    const tglNum = Number(x.ts);
+    const tgl = !isNaN(tglNum) ? new Date(tglNum).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Hari Ini';
     if(!rekap[tgl]){
       rekap[tgl] = { total: 0, sudah: 0, belum: 0 };
     }
@@ -886,22 +829,17 @@ function renderLaporanTgl(){
 }
 
 window.ubahStatusTarot = async function(id, val){
-  const idx = dAntrian.findIndex(x => x.id === id);
-  if(idx !== -1){
-    dAntrian[idx].status = val;
-    simpanAntrianLocal(dAntrian);
-    await syncToSpreadsheet('UPDATE_STATUS', { id, status: val });
-  }
+  await kirimKeSpreadsheet({ action: 'UPDATE_STATUS', id, status: val });
+  await muatAntrianServer();
 };
 
 window.hapusAntrian = async function(id){
   if(!confirm('Yakin mau hapus antrian ini?')) return;
-  dAntrian = dAntrian.filter(x => x.id !== id);
-  simpanAntrianLocal(dAntrian);
-  await syncToSpreadsheet('DELETE', { id });
+  await kirimKeSpreadsheet({ action: 'DELETE', id });
+  await muatAntrianServer();
 };
 
-muatAntrianLocal();
+muatAntrianServer();
 </script>
 </body>
 </html>
