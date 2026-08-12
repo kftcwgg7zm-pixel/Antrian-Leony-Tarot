@@ -8,8 +8,8 @@ const hp = window.matchMedia('(max-width: 720px)').matches;
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bintang';
 
-// URL Web App dari Google Apps Script
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZb1q53NbBsPUczaOF_2Y0hMdDMcYirlftTU13v1v2jZ2PHFF-Ftgbf2aN-Z8qpTX0IA/exec'; 
+// Masukkan Web App URL dari Google Apps Script jika sudah ada
+const GOOGLE_SCRIPT_URL = ''; 
 
 /* ══════ GERBANG ══════ */
 (function gerbang(){
@@ -154,9 +154,7 @@ function simpanAntrianLocal(data){
   gambarAdmin();
 }
 
-// FUNGSI MUAT DATA DARI LOCALSTORAGE & GOOGLE SHEETS CLOUD
-async function muatAntrianLocal(){
-  // 1. Load data cepat dari LocalStorage dulu
+function muatAntrianLocal(){
   const local = localStorage.getItem(KUNCI_ANTRIAN);
   if(local){
     try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
@@ -169,22 +167,6 @@ async function muatAntrianLocal(){
   }
   gambarAntrian();
   gambarAdmin();
-
-  // 2. Narik data paling baru (real-time) dari Google Sheets
-  if(GOOGLE_SCRIPT_URL){
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL);
-      const cloudData = await res.json();
-      if(Array.isArray(cloudData) && cloudData.length > 0){
-        dAntrian = cloudData;
-        localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(dAntrian));
-        gambarAntrian();
-        gambarAdmin();
-      }
-    } catch(e) {
-      console.error("Gagal sinkron cloud:", e);
-    }
-  }
 }
 
 async function syncToSpreadsheet(action, payload) {
@@ -227,52 +209,33 @@ tabs.forEach(t => t.addEventListener('click', () => keHalaman(t.dataset.hal)));
 
 /* ══════ SUB-TABS ANTRIAN CUSTOMER ══════ */
 let tipeSubTabAktif = 'Reguler';
-if($('#tab-reguler')){
-  $('#tab-reguler').addEventListener('click', () => {
-    tipeSubTabAktif = 'Reguler';
-    $('#tab-reguler').classList.add('aktif');
-    if($('#tab-fasttrack')) $('#tab-fasttrack').classList.remove('aktif');
-    gambarAntrian();
-  });
-}
-if($('#tab-fasttrack')){
-  $('#tab-fasttrack').addEventListener('click', () => {
-    tipeSubTabAktif = 'Fast Track';
-    $('#tab-fasttrack').classList.add('aktif');
-    if($('#tab-reguler')) $('#tab-reguler').classList.remove('aktif');
-    gambarAntrian();
-  });
-}
+$('#tab-reguler').addEventListener('click', () => {
+  tipeSubTabAktif = 'Reguler';
+  $('#tab-reguler').classList.add('aktif');
+  $('#tab-fasttrack').classList.remove('aktif');
+  gambarAntrian();
+});
+$('#tab-fasttrack').addEventListener('click', () => {
+  tipeSubTabAktif = 'Fast Track';
+  $('#tab-fasttrack').classList.add('aktif');
+  $('#tab-reguler').classList.remove('aktif');
+  gambarAntrian();
+});
 
 /* ══════ RENDER ANTRIAN (CUSTOMER) ══════ */
 let cariAntrianTeks = '';
-if($('#cari-antrian')){
-  $('#cari-antrian').addEventListener('input', e => {
-    cariAntrianTeks = e.target.value.trim().toLowerCase();
-    gambarAntrian();
-  });
-}
+$('#cari-antrian').addEventListener('input', e => {
+  cariAntrianTeks = e.target.value.trim().toLowerCase();
+  gambarAntrian();
+});
 
 function gambarAntrian(){
   const el = $('#feed-antrian');
-  if(!el) return;
-  
-  let filtered = dAntrian;
-
-  // Filter Sub-tab jika ada
-  if(tipeSubTabAktif){
-    filtered = filtered.filter(x => x.tipe === tipeSubTabAktif);
-  }
+  let filtered = dAntrian.filter(x => x.tipe === tipeSubTabAktif);
   
   if(cariAntrianTeks){
     filtered = filtered.filter(x => x.detail.toLowerCase().includes(cariAntrianTeks));
   }
-
-  // Update statistik jika elemennya ada
-  const hariIni = new Date().toDateString();
-  if($('#st-hari-ini')) $('#st-hari-ini').textContent = filtered.filter(x => new Date(x.ts).toDateString() === hariIni).length;
-  if($('#st-belum')) $('#st-belum').textContent = filtered.filter(x => x.status === 'Belum Dibaca').length;
-  if($('#st-sudah')) $('#st-sudah').textContent = filtered.filter(x => x.status === 'Sudah Dibaca').length;
 
   if(!filtered.length){
     el.innerHTML = '<div class="kosong"><div class="em">💌</div><div class="j">antrian kosong</div><p style="font-size:13px;margin-top:6px">Belum ada antrian untuk kategori ini.</p></div>';
@@ -297,82 +260,71 @@ function gambarAntrian(){
 
 /* ══════ LOGIN ADMIN ══════ */
 let isLoggedAdmin = false;
-if($('#form-login')){
-  $('#form-login').addEventListener('submit', e => {
-    e.preventDefault();
-    const u = $('#l-nama').value.trim();
-    const p = $('#l-pass').value.trim();
-    const st = $('#l-status');
+$('#form-login').addEventListener('submit', e => {
+  e.preventDefault();
+  const u = $('#l-nama').value.trim();
+  const p = $('#l-pass').value.trim();
+  const st = $('#l-status');
 
-    if(u === ADMIN_USER && p === ADMIN_PASS){
-      isLoggedAdmin = true;
-      $('#jendela-login').style.display = 'none';
-      $('#panel-admin').style.display = 'block';
-      gambarAdmin();
-    } else {
-      status(st, 'Username atau Password salah!', 'err');
-    }
-  });
-}
+  if(u === ADMIN_USER && p === ADMIN_PASS){
+    isLoggedAdmin = true;
+    $('#jendela-login').style.display = 'none';
+    $('#panel-admin').style.display = 'block';
+    gambarAdmin();
+  } else {
+    status(st, 'Username atau Password salah!', 'err');
+  }
+});
 
-if($('#btn-logout')){
-  $('#btn-logout').addEventListener('click', () => {
-    isLoggedAdmin = false;
-    $('#jendela-login').style.display = 'block';
-    $('#panel-admin').style.display = 'none';
-    $('#form-login').reset();
-  });
-}
+$('#btn-logout').addEventListener('click', () => {
+  isLoggedAdmin = false;
+  $('#jendela-login').style.display = 'block';
+  $('#panel-admin').style.display = 'none';
+  $('#form-login').reset();
+});
 
 /* ══════ INPUT ANTRIAN BARU (ADMIN) ══════ */
-if($('#form-input')){
-  $('#form-input').addEventListener('submit', async e => {
-    e.preventDefault();
-    const detail = $('#i-detail').value.trim();
-    const tipeEl = $('#i-tipe');
-    const tipe = tipeEl ? tipeEl.value : 'Reguler';
-    const st = $('#i-status');
-    const btn = $('#btn-input');
+$('#form-input').addEventListener('submit', async e => {
+  e.preventDefault();
+  const detail = $('#i-detail').value.trim();
+  const tipe = $('#i-tipe').value;
+  const st = $('#i-status');
+  const btn = $('#btn-input');
 
-    if(!detail) return status(st, 'Nama dan Jumlah Order harus diisi.', 'err');
+  if(!detail) return status(st, 'Nama dan Jumlah Order harus diisi.', 'err');
 
-    btn.disabled = true;
-    btn.textContent = 'Menyimpan...';
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan...';
 
-    const itemBaru = {
-      id: 'q_' + Date.now(),
-      detail: detail,
-      tipe: tipe,
-      status: 'Belum Dibaca',
-      ts: Date.now()
-    };
+  const itemBaru = {
+    id: 'q_' + Date.now(),
+    detail: detail,
+    tipe: tipe,
+    status: 'Belum Dibaca',
+    ts: Date.now()
+  };
 
-    dAntrian.unshift(itemBaru);
-    simpanAntrianLocal(dAntrian);
+  dAntrian.unshift(itemBaru);
+  simpanAntrianLocal(dAntrian);
 
-    await syncToSpreadsheet('ADD', itemBaru);
+  await syncToSpreadsheet('ADD', itemBaru);
 
-    btn.disabled = false;
-    btn.textContent = 'Kirim Ke Antrian & Spreadsheet ♡';
-    status(st, 'Antrian berhasil ditambahkan ♡', 'ok');
-    $('#i-detail').value = '';
-  });
-}
+  btn.disabled = false;
+  btn.textContent = 'Kirim Ke Antrian & Spreadsheet ♡';
+  status(st, 'Antrian berhasil ditambahkan ♡', 'ok');
+  $('#i-detail').value = '';
+});
 
 /* ══════ RENDER KELOLA ANTRIAN (ADMIN) ══════ */
 let cariAdminTeks = '';
-if($('#cari-admin')){
-  $('#cari-admin').addEventListener('input', e => {
-    cariAdminTeks = e.target.value.trim().toLowerCase();
-    gambarAdmin();
-  });
-}
+$('#cari-admin').addEventListener('input', e => {
+  cariAdminTeks = e.target.value.trim().toLowerCase();
+  gambarAdmin();
+});
 
 function gambarAdmin(){
   if(!isLoggedAdmin) return;
   const el = $('#feed-admin');
-  if(!el) return;
-
   let data = dAntrian;
 
   if(cariAdminTeks){
@@ -421,5 +373,4 @@ window.hapusAntrian = async function(id){
   await syncToSpreadsheet('DELETE', { id });
 };
 
-// JALANKAN MUAT DATA PERTAMA KALI
 muatAntrianLocal();
