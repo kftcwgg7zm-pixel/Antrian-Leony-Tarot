@@ -1,14 +1,10 @@
+<script>
 const $ = s => document.querySelector(s);
 const hemat = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hp = window.matchMedia('(max-width: 720px)').matches;
 
-/* ════════════════════════════════════════════════════════════════
-   KONFIGURASI SPREADSHEET & LOGIN ADMIN
-   ════════════════════════════════════════════════════════════════ */
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bintang';
-
-// Masukkan Web App URL dari Google Apps Script jika sudah ada
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec'; 
 
 /* ══════ GERBANG ══════ */
@@ -143,51 +139,39 @@ $('#btn-suara').addEventListener('click', e => {
 });
 $('#btn-atas').addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
 
-/* ══════ PENYIMPANAN LOCAL & SPREADSHEET SYNC ══════ */
-const KUNCI_ANTRIAN = 'leony_tarot:antrian';
+/* ══════ FETCH DATA CEPAT DARI GOOGLE SHEET ══════ */
 let dAntrian = [];
 
-function simpanAntrianLocal(data){
-  dAntrian = data;
-  localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(data));
-  gambarAntrian();
-  gambarAdmin();
-}
-
-function muatAntrianLocal(){
-  const local = localStorage.getItem(KUNCI_ANTRIAN);
-  if(local){
-    try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
-  } else {
-    dAntrian = [
-      { id:'1', detail:'Alya - 1 Order', tipe:'Fast Track', status:'Belum Dibaca', ts:Date.now() - 3600000 },
-      { id:'2', detail:'Nadia - 2 Order', tipe:'Reguler', status:'Belum Dibaca', ts:Date.now() - 7200000 },
-      { id:'3', detail:'Risa - 1 Order', tipe:'Reguler', status:'Sudah Dibaca', ts:Date.now() - 10800000 }
-    ];
-  }
-  gambarAntrian();
-  gambarAdmin();
-}
-
-async function syncToSpreadsheet(action, payload) {
-  if(!GOOGLE_SCRIPT_URL) return;
+async function muatAntrianServer() {
   try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action, ...payload })
-    });
+    const res = await fetch(GOOGLE_SCRIPT_URL);
+    const dataServer = await res.json();
+    if(Array.isArray(dataServer)){
+      dAntrian = dataServer;
+    }
   } catch(e) {
-    console.error("Gagal sync ke Spreadsheet:", e);
+    console.error("Gagal mengambil data dari Google Sheet:", e);
   }
+  gambarAntrian();
+  gambarAdmin();
+}
+
+// Kirim ke Spreadsheet di background tanpa membuat UI / tombol macet
+function kirimKeSpreadsheetBg(payload) {
+  if(!GOOGLE_SCRIPT_URL) return;
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(e => console.error("Background sync error:", e));
 }
 
 /* ══════ UTIL ══════ */
 const aman = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function kapan(ts){
   const d = new Date(ts), s = (Date.now() - ts) / 1000;
-  if(s < 60) return 'baru aja';
+  if(isNaN(s) || s < 60) return 'baru aja';
   if(s < 3600) return Math.floor(s/60) + ' menit lalu';
   if(s < 86400) return Math.floor(s/3600) + ' jam lalu';
   return d.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
@@ -195,7 +179,7 @@ function kapan(ts){
 function status(el, teks, jenis){
   el.textContent = teks;
   el.className = 'pesan-status tampil ' + jenis;
-  if(jenis === 'ok') setTimeout(() => el.className = 'pesan-status', 5200);
+  if(jenis === 'ok') setTimeout(() => el.className = 'pesan-status', 4000);
 }
 
 /* ══════ NAVIGASI UTAMA ══════ */
@@ -207,18 +191,18 @@ function keHalaman(nama){
 }
 tabs.forEach(t => t.addEventListener('click', () => keHalaman(t.dataset.hal)));
 
-/* ══════ SUB-TABS ANTRIAN CUSTOMER ══════ */
-let tipeSubTabAktif = 'Reguler';
-$('#tab-reguler').addEventListener('click', () => {
-  tipeSubTabAktif = 'Reguler';
-  $('#tab-reguler').classList.add('aktif');
+/* ══════ SUB-TABS (ALL & FAST TRACK) ══════ */
+let tipeSubTabAktif = 'All';
+$('#tab-all').addEventListener('click', () => {
+  tipeSubTabAktif = 'All';
+  $('#tab-all').classList.add('aktif');
   $('#tab-fasttrack').classList.remove('aktif');
   gambarAntrian();
 });
 $('#tab-fasttrack').addEventListener('click', () => {
   tipeSubTabAktif = 'Fast Track';
   $('#tab-fasttrack').classList.add('aktif');
-  $('#tab-reguler').classList.remove('aktif');
+  $('#tab-all').classList.remove('aktif');
   gambarAntrian();
 });
 
@@ -231,8 +215,22 @@ $('#cari-antrian').addEventListener('input', e => {
 
 function gambarAntrian(){
   const el = $('#feed-antrian');
-  let filtered = dAntrian.filter(x => x.tipe === tipeSubTabAktif);
+  let filtered = dAntrian;
   
+  if(tipeSubTabAktif === 'Fast Track'){
+    filtered = filtered.filter(x => x.tipe === 'Fast Track');
+  }
+
+  const hariIni = new Date().toDateString();
+  const nanyaHariIni = filtered.filter(x => {
+    const t = Number(x.ts);
+    return !isNaN(t) && new Date(t).toDateString() === hariIni;
+  }).length;
+
+  $('#st-hari-ini').textContent = nanyaHariIni;
+  $('#st-belum').textContent = filtered.filter(x => x.status === 'Belum Dibaca').length;
+  $('#st-sudah').textContent = filtered.filter(x => x.status === 'Sudah Dibaca').length;
+
   if(cariAntrianTeks){
     filtered = filtered.filter(x => x.detail.toLowerCase().includes(cariAntrianTeks));
   }
@@ -251,8 +249,9 @@ function gambarAntrian(){
       <div class="kepala">
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
+        ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡ Fast Track</span>' : ''}
         <span class="${statusClass}">${aman(x.status)}</span>
-        <span class="waktu">${kapan(x.ts)}</span>
+        <span class="waktu">${kapan(Number(x.ts))}</span>
       </div>
     </article>`;
   }).join('');
@@ -283,39 +282,50 @@ $('#btn-logout').addEventListener('click', () => {
   $('#form-login').reset();
 });
 
-/* ══════ INPUT ANTRIAN BARU (ADMIN) ══════ */
-$('#form-input').addEventListener('submit', async e => {
+/* ══════ TOGGLE PILLS INPUT ADMIN ══════ */
+let tipeAntrianInput = 'Reguler';
+$('#btn-tipe-reg').addEventListener('click', () => {
+  tipeAntrianInput = 'Reguler';
+  $('#btn-tipe-reg').classList.add('aktif');
+  $('#btn-tipe-ft').classList.remove('aktif');
+});
+$('#btn-tipe-ft').addEventListener('click', () => {
+  tipeAntrianInput = 'Fast Track';
+  $('#btn-tipe-ft').classList.add('aktif');
+  $('#btn-tipe-reg').classList.remove('aktif');
+});
+
+/* ══════ INPUT ANTRIAN BARU (INSTANT UI UPDATE) ══════ */
+$('#form-input').addEventListener('submit', e => {
   e.preventDefault();
   const detail = $('#i-detail').value.trim();
-  const tipe = $('#i-tipe').value;
   const st = $('#i-status');
-  const btn = $('#btn-input');
 
   if(!detail) return status(st, 'Nama dan Jumlah Order harus diisi.', 'err');
 
-  btn.disabled = true;
-  btn.textContent = 'Menyimpan...';
-
   const itemBaru = {
+    action: 'ADD',
     id: 'q_' + Date.now(),
     detail: detail,
-    tipe: tipe,
+    tipe: tipeAntrianInput,
     status: 'Belum Dibaca',
     ts: Date.now()
   };
 
+  // 1. Langsung masukkan & tampilkan di layar seketika (tanpa menunggu server)
   dAntrian.unshift(itemBaru);
-  simpanAntrianLocal(dAntrian);
+  gambarAntrian();
+  gambarAdmin();
 
-  await syncToSpreadsheet('ADD', itemBaru);
-
-  btn.disabled = false;
-  btn.textContent = 'Kirim Ke Antrian & Spreadsheet ♡';
-  status(st, 'Antrian berhasil ditambahkan ♡', 'ok');
+  // 2. Kosongkan input & berikan notif sukses kilat
   $('#i-detail').value = '';
+  status(st, 'Berhasil ditambahkan! ♡', 'ok');
+
+  // 3. Kirim ke Google Spreadsheet di background secara senyap
+  kirimKeSpreadsheetBg(itemBaru);
 });
 
-/* ══════ RENDER KELOLA ANTRIAN (ADMIN) ══════ */
+/* ══════ RENDER KELOLA ANTRIAN & LAPORAN HARIAN (ADMIN) ══════ */
 let cariAdminTeks = '';
 $('#cari-admin').addEventListener('input', e => {
   cariAdminTeks = e.target.value.trim().toLowerCase();
@@ -324,6 +334,9 @@ $('#cari-admin').addEventListener('input', e => {
 
 function gambarAdmin(){
   if(!isLoggedAdmin) return;
+  
+  renderLaporanTgl();
+
   const el = $('#feed-admin');
   let data = dAntrian;
 
@@ -337,72 +350,79 @@ function gambarAdmin(){
   }
 
   el.innerHTML = data.map(x => {
+    const isBelum = x.status === 'Belum Dibaca' ? 'sel-belum' : '';
+    const isSudah = x.status === 'Sudah Dibaca' ? 'sel-sudah' : '';
+    const isCancel = x.status === 'Cancel' ? 'sel-cancel' : '';
+
     return `<article class="gelembung">
       <div class="kepala">
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
         <span class="lencana kilat">${aman(x.tipe)}</span>
-        <span class="waktu">${kapan(x.ts)}</span>
+        <span class="waktu">${kapan(Number(x.ts))}</span>
       </div>
       <div class="alat">
-        <label style="font-size:11px;margin:0;color:var(--tinta-muda)">Status Tarot:</label>
-        <select class="mini-select" data-id="${x.id}" onchange="ubahStatusTarot('${x.id}', this.value)">
-          <option value="Belum Dibaca" ${x.status === 'Belum Dibaca' ? 'selected' : ''}>Belum Dibaca</option>
-          <option value="Sudah Dibaca" ${x.status === 'Sudah Dibaca' ? 'selected' : ''}>Sudah Dibaca</option>
-          <option value="Cancel" ${x.status === 'Cancel' ? 'selected' : ''}>Cancel</option>
-        </select>
-        <button class="mini" onclick="hapusAntrian('${x.id}')" style="color:#a9526f;margin-left:auto">Hapus</button>
+        <div class="pills-status">
+          <button class="pill-opt ${isBelum}" onclick="ubahStatusTarot('${x.id}', 'Belum Dibaca')">Belum</button>
+          <button class="pill-opt ${isSudah}" onclick="ubahStatusTarot('${x.id}', 'Sudah Dibaca')">Sudah</button>
+          <button class="pill-opt ${isCancel}" onclick="ubahStatusTarot('${x.id}', 'Cancel')">Cancel</button>
+        </div>
+        <button class="btn-hapus" onclick="hapusAntrian('${x.id}')">Hapus</button>
       </div>
     </article>`;
   }).join('');
 }
 
-window.ubahStatusTarot = async function(id, val){
+function renderLaporanTgl(){
+  const tbody = $('#tabel-laporan-body');
+  if(!dAntrian.length){
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--tinta-muda)">Belum ada data antrian</td></tr>';
+    return;
+  }
+
+  const rekap = {};
+  dAntrian.forEach(x => {
+    const tglNum = Number(x.ts);
+    const tgl = !isNaN(tglNum) ? new Date(tglNum).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Hari Ini';
+    if(!rekap[tgl]){
+      rekap[tgl] = { total: 0, sudah: 0, belum: 0 };
+    }
+    rekap[tgl].total++;
+    if(x.status === 'Sudah Dibaca') rekap[tgl].sudah++;
+    else if(x.status === 'Belum Dibaca') rekap[tgl].belum++;
+  });
+
+  tbody.innerHTML = Object.keys(rekap).map(tgl => {
+    const r = rekap[tgl];
+    return `<tr>
+      <td><strong>${tgl}</strong></td>
+      <td>${r.total} order</td>
+      <td style="color:#5c8a68;font-weight:600">${r.sudah}</td>
+      <td style="color:#b58146;font-weight:600">${r.belum}</td>
+    </tr>`;
+  }).join('');
+}
+
+// Ubah Status Seketika (Tanpa Loading)
+window.ubahStatusTarot = function(id, val){
   const idx = dAntrian.findIndex(x => x.id === id);
   if(idx !== -1){
     dAntrian[idx].status = val;
-    simpanAntrianLocal(dAntrian);
-    await syncToSpreadsheet('UPDATE_STATUS', { id, status: val });
+    gambarAntrian();
+    gambarAdmin();
+    kirimKeSpreadsheetBg({ action: 'UPDATE_STATUS', id, status: val });
   }
 };
 
-window.hapusAntrian = async function(id){
+// Hapus Antrian Seketika (Tanpa Loading)
+window.hapusAntrian = function(id){
   if(!confirm('Yakin mau hapus antrian ini?')) return;
   dAntrian = dAntrian.filter(x => x.id !== id);
-  simpanAntrianLocal(dAntrian);
-  await syncToSpreadsheet('DELETE', { id });
-};
-
-muatAntrianLocal();
-async function muatAntrianLocal(){
-  // Coba ambil data terbaru langsung dari Spreadsheet (doGet)
-  if(GOOGLE_SCRIPT_URL){
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL);
-      const dataServer = await res.json();
-      if(Array.isArray(dataServer) && dataServer.length > 0){
-        dAntrian = dataServer;
-        localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(dAntrian));
-        gambarAntrian();
-        gambarAdmin();
-        return;
-      }
-    } catch(e) {
-      console.error("Gagal ambil dari server, pakai cache lokal:", e);
-    }
-  }
-
-  // Fallback ke localStorage jika offline atau URL kosong
-  const local = localStorage.getItem(KUNCI_ANTRIAN);
-  if(local){
-    try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
-  } else {
-    dAntrian = [
-      { id:'1', detail:'Alya - 1 Order', tipe:'Fast Track', status:'Belum Dibaca', ts:Date.now() - 3600000 },
-      { id:'2', detail:'Nadia - 2 Order', tipe:'Reguler', status:'Belum Dibaca', ts:Date.now() - 7200000 },
-      { id:'3', detail:'Risa - 1 Order', tipe:'Reguler', status:'Sudah Dibaca', ts:Date.now() - 10800000 }
-    ];
-  }
   gambarAntrian();
   gambarAdmin();
-}
+  kirimKeSpreadsheetBg({ action: 'DELETE', id });
+};
+
+// Panggil pertama kali saat halaman dibuka
+muatAntrianServer();
+</script>
