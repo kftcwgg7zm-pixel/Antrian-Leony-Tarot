@@ -374,3 +374,35 @@ window.hapusAntrian = async function(id){
 };
 
 muatAntrianLocal();
+async function muatAntrianLocal(){
+  // Coba ambil data terbaru langsung dari Spreadsheet (doGet)
+  if(GOOGLE_SCRIPT_URL){
+    try {
+      const res = await fetch(GOOGLE_SCRIPT_URL);
+      const dataServer = await res.json();
+      if(Array.isArray(dataServer) && dataServer.length > 0){
+        dAntrian = dataServer;
+        localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(dAntrian));
+        gambarAntrian();
+        gambarAdmin();
+        return;
+      }
+    } catch(e) {
+      console.error("Gagal ambil dari server, pakai cache lokal:", e);
+    }
+  }
+
+  // Fallback ke localStorage jika offline atau URL kosong
+  const local = localStorage.getItem(KUNCI_ANTRIAN);
+  if(local){
+    try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
+  } else {
+    dAntrian = [
+      { id:'1', detail:'Alya - 1 Order', tipe:'Fast Track', status:'Belum Dibaca', ts:Date.now() - 3600000 },
+      { id:'2', detail:'Nadia - 2 Order', tipe:'Reguler', status:'Belum Dibaca', ts:Date.now() - 7200000 },
+      { id:'3', detail:'Risa - 1 Order', tipe:'Reguler', status:'Sudah Dibaca', ts:Date.now() - 10800000 }
+    ];
+  }
+  gambarAntrian();
+  gambarAdmin();
+}
