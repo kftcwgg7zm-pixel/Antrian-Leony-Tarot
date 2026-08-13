@@ -156,7 +156,6 @@ async function muatAntrianServer() {
   gambarAdmin();
 }
 
-// Kirim ke Spreadsheet di background tanpa membuat UI / tombol macet
 function kirimKeSpreadsheetBg(payload) {
   if(!GOOGLE_SCRIPT_URL) return;
   fetch(GOOGLE_SCRIPT_URL, {
@@ -295,34 +294,42 @@ $('#btn-tipe-ft').addEventListener('click', () => {
   $('#btn-tipe-reg').classList.remove('aktif');
 });
 
-/* ══════ INPUT ANTRIAN BARU (INSTANT UI UPDATE) ══════ */
+/* ══════ BULK INPUT ANTRIAN BARU (MAKSIMAL 5 BARIS) ══════ */
 $('#form-input').addEventListener('submit', e => {
   e.preventDefault();
-  const detail = $('#i-detail').value.trim();
+  const rawText = $('#i-detail').value.trim();
   const st = $('#i-status');
 
-  if(!detail) return status(st, 'Nama dan Jumlah Order harus diisi.', 'err');
+  if(!rawText) return status(st, 'Nama dan jumlah order harus diisi.', 'err');
 
-  const itemBaru = {
+  // Pecah berdasarkan baris enter & filter baris kosong
+  let barisList = rawText.split('\n').map(b => b.trim()).filter(b => b.length > 0);
+
+  if(barisList.length > 5){
+    return status(st, 'Maksimal hanya boleh 5 baris/nama dalam 1x kirim!', 'err');
+  }
+
+  // Buat array data baru untuk setiap baris
+  let itemsBaru = barisList.map((detail, index) => ({
     action: 'ADD',
-    id: 'q_' + Date.now(),
+    id: 'q_' + Date.now() + '_' + index,
     detail: detail,
     tipe: tipeAntrianInput,
     status: 'Belum Dibaca',
-    ts: Date.now()
-  };
+    ts: Date.now() + index // bedakan sedikit timestamp-nya agar urut
+  }));
 
-  // 1. Langsung masukkan & tampilkan di layar seketika (tanpa menunggu server)
-  dAntrian.unshift(itemBaru);
+  // Masukkan secara instan ke urutan paling atas layar
+  dAntrian.unshift(...itemsBaru);
   gambarAntrian();
   gambarAdmin();
 
-  // 2. Kosongkan input & berikan notif sukses kilat
+  // Bersihkan form & beri pesan sukses
   $('#i-detail').value = '';
-  status(st, 'Berhasil ditambahkan! ♡', 'ok');
+  status(st, `Berhasil menambahkan ${itemsBaru.length} antrian sekaligus! ♡`, 'ok');
 
-  // 3. Kirim ke Google Spreadsheet di background secara senyap
-  kirimKeSpreadsheetBg(itemBaru);
+  // Kirim ke Spreadsheet secara beruntun di background
+  itemsBaru.forEach(item => kirimKeSpreadsheetBg(item));
 });
 
 /* ══════ RENDER KELOLA ANTRIAN & LAPORAN HARIAN (ADMIN) ══════ */
@@ -403,7 +410,6 @@ function renderLaporanTgl(){
   }).join('');
 }
 
-// Ubah Status Seketika (Tanpa Loading)
 window.ubahStatusTarot = function(id, val){
   const idx = dAntrian.findIndex(x => x.id === id);
   if(idx !== -1){
@@ -414,15 +420,13 @@ window.ubahStatusTarot = function(id, val){
   }
 };
 
-// Hapus Antrian Seketika (Tanpa Loading)
 window.hapusAntrian = function(id){
   if(!confirm('Yakin mau hapus antrian ini?')) return;
-  dAntrian = dAntrian.filter(x => x.id !== id);
+  dAntrian = dEntrian = dAntrian.filter(x => x.id !== id);
   gambarAntrian();
   gambarAdmin();
   kirimKeSpreadsheetBg({ action: 'DELETE', id });
 };
 
-// Panggil pertama kali saat halaman dibuka
 muatAntrianServer();
 </script>
