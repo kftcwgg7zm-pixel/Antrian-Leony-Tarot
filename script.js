@@ -168,7 +168,7 @@ async function syncToSpreadsheet(action, payload) {
   }
 }
 
-// Fungsi Batch Request agar kirim banyak data sekaligus cukup 1 kali HTTP request (ngebut)
+// Batch Request di belakang layar
 async function syncBatchToSpreadsheet(items) {
   if(!GOOGLE_SCRIPT_URL) return;
   try {
@@ -331,17 +331,13 @@ $('#btn-tambah-baris').addEventListener('click', () => {
   container.appendChild(divBaru);
 });
 
-/* ══════ INPUT ANTRIAN BARU (ADMIN) - BATCH / KILAT ══════ */
-$('#form-input').addEventListener('submit', async e => {
+/* ══════ INPUT ANTRIAN BARU (ADMIN) - INSTANT / BACKGROUND SYNC ══════ */
+$('#form-input').addEventListener('submit', e => {
   e.preventDefault();
   const st = $('#i-status');
-  const btn = $('#btn-input');
 
   const items = document.querySelectorAll('.baris-input-item');
   if(!items.length) return status(st, 'Minimal isi 1 antrian.', 'err');
-
-  btn.disabled = true;
-  btn.textContent = 'Menyimpan ke Spreadsheet...';
 
   let timestampBase = Date.now();
   let listBaru = [];
@@ -361,19 +357,14 @@ $('#form-input').addEventListener('submit', async e => {
   });
 
   if(!listBaru.length){
-    btn.disabled = false;
-    btn.textContent = 'Kirim Semua ke Antrian ♡';
     return status(st, 'Semua field nama masih kosong!', 'err');
   }
 
+  // 1. LANGSUNG SIMPAN KE LOCALSTORAGE & TAMPILKAN DI WEB
   dAntrian = [...listBaru.reverse(), ...dAntrian];
   simpanAntrianLocal(dAntrian);
 
-  // Kirim seluruh data sekaligus dalam 1 request (batching) agar tidak lemot
-  await syncBatchToSpreadsheet(listBaru);
-
-  await muatAntrianServer();
-
+  // 2. RESET FORM INPUT SEKETIKA
   $('#container-multi-input').innerHTML = `
     <div class="baris-input-item baris" style="align-items: flex-end;">
       <div>
@@ -395,9 +386,10 @@ $('#form-input').addEventListener('submit', async e => {
   `;
   bindPillsEvents($('.baris-input-item'));
 
-  btn.disabled = false;
-  btn.textContent = 'Kirim Semua ke Antrian ♡';
-  status(st, `Berhasil mengirim ${listBaru.length} antrian ke Spreadsheet & Web! ♡`, 'ok');
+  status(st, `Berhasil menambahkan ${listBaru.length} antrian! ♡`, 'ok');
+
+  // 3. SYNC KE GOOGLE SPREADSHEET DI DI BELAKANG LAYAR (ASYNCHRONOUS)
+  syncBatchToSpreadsheet(listBaru);
 });
 
 /* ══════ RENDER KELOLA ANTRIAN (ADMIN) ══════ */
@@ -442,20 +434,22 @@ function gambarAdmin(){
   }).join('');
 }
 
-window.ubahStatusTarot = async function(id, val){
+window.ubahStatusTarot = function(id, val){
   const idx = dAntrian.findIndex(x => x.id === id);
   if(idx !== -1){
     dAntrian[idx].status = val;
     simpanAntrianLocal(dAntrian);
-    await syncToSpreadsheet('UPDATE_STATUS', { id, status: val });
+    // Sync ke spreadsheet di background
+    syncToSpreadsheet('UPDATE_STATUS', { id, status: val });
   }
 };
 
-window.hapusAntrian = async function(id){
+window.hapusAntrian = function(id){
   if(!confirm('Yakin mau hapus antrian ini?')) return;
   dAntrian = dAntrian.filter(x => x.id !== id);
   simpanAntrianLocal(dAntrian);
-  await syncToSpreadsheet('DELETE', { id });
+  // Sync ke spreadsheet di background
+  syncToSpreadsheet('DELETE', { id });
 };
 
 async function muatAntrianServer(){
