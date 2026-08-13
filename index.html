@@ -448,7 +448,10 @@ const hp = window.matchMedia('(max-width: 720px)').matches;
 
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bintang';
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec'; 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec';
+
+// Seberapa sering semua HP (customer & admin) narik data terbaru dari spreadsheet di belakang layar.
+const POLL_INTERVAL_MS = 3000;
 
 (function gerbang(){
   const g = $('#gerbang');
@@ -577,37 +580,49 @@ $('#btn-suara').addEventListener('click', e => {
 });
 $('#btn-atas').addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
 
+/* ══════ PENYIMPANAN LOCAL & SPREADSHEET SYNC (UI DULUAN, SPREADSHEET BELAKANGAN) ══════ */
+const KUNCI_ANTRIAN = 'leony_tarot:antrian';
 let dAntrian = [];
 
-async function muatAntrianServer() {
-  try {
-    const res = await fetch(GOOGLE_SCRIPT_URL);
-    const dataServer = await res.json();
-    if(Array.isArray(dataServer)){
-      dAntrian = dataServer;
-    } else {
-      dAntrian = [];
-    }
-  } catch(e) {
-    console.error("Gagal mengambil data dari Google Sheet:", e);
-    dAntrian = [];
-  }
-  
+// Id yang baru aja ditambah/diubah di HP ini tapi belum kekonfirmasi nyampe di spreadsheet.
+// Dipakai supaya pas polling narik data server, perubahan yang baru aja dibikin gak sempat
+// "ketimpa balik" ke kondisi lama sebelum sempat tersync.
+const idBelumTersinkron = new Set();
+
+function simpanAntrianLocal(data){
+  dAntrian = data;
+  localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(data));
   gambarAntrian();
   gambarAdmin();
 }
 
-async function kirimKeSpreadsheet(payload) {
+async function syncToSpreadsheet(action, payload) {
   if(!GOOGLE_SCRIPT_URL) return;
   try {
     await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ action, ...payload })
     });
   } catch(e) {
-    console.error("Gagal kirim ke Spreadsheet:", e);
+    console.error("Gagal sync ke Spreadsheet:", e);
+  } finally {
+    if(payload && payload.id) idBelumTersinkron.delete(payload.id);
+  }
+}
+
+async function syncBatchToSpreadsheet(items) {
+  if(!GOOGLE_SCRIPT_URL) return;
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'ADD_BATCH', items })
+    });
+  } catch(e) {
+    console.error("Gagal sync batch ke Spreadsheet:", e);
   }
 }
 
@@ -656,7 +671,7 @@ $('#cari-antrian').addEventListener('input', e => {
 function gambarAntrian(){
   const el = $('#feed-antrian');
   let filtered = dAntrian;
-  
+
   if(tipeSubTabAktif === 'Fast Track'){
     filtered = filtered.filter(x => x.tipe === 'Fast Track');
   }
@@ -768,16 +783,14 @@ $('#btn-tambah-baris').addEventListener('click', () => {
   container.appendChild(divBaru);
 });
 
-$('#form-input').addEventListener('submit', async e => {
+/* ══════ INPUT ANTRIAN BARU (ADMIN) — UI & LOCALSTORAGE INSTAN DULU,
+   SPREADSHEET DIPROSES DI BELAKANG LAYAR TANPA BIKIN ADMIN NUNGGU ══════ */
+$('#form-input').addEventListener('submit', e => {
   e.preventDefault();
   const st = $('#i-status');
-  const btn = $('#btn-input');
 
   const items = document.querySelectorAll('.baris-input-item');
   if(!items.length) return status(st, 'Minimal isi 1 antrian.', 'err');
-
-  btn.disabled = true;
-  btn.textContent = 'Menyimpan ke Spreadsheet...';
 
   let timestampBase = Date.now();
   let listBaru = [];
@@ -787,7 +800,6 @@ $('#form-input').addEventListener('submit', async e => {
     const tipe = el.querySelector('.i-tipe-val').value;
     if(detail) {
       listBaru.push({
-        action: 'ADD',
         id: 'q_' + (timestampBase + index),
         detail: detail,
         tipe: tipe,
@@ -798,17 +810,15 @@ $('#form-input').addEventListener('submit', async e => {
   });
 
   if(!listBaru.length){
-    btn.disabled = false;
-    btn.textContent = 'Kirim Semua ke Antrian ♡';
     return status(st, 'Semua field nama masih kosong!', 'err');
   }
 
-  for(const item of listBaru) {
-    await kirimKeSpreadsheet(item);
-  }
+  // 1. UI & localStorage berubah SEKETIKA, gak nunggu spreadsheet sama sekali.
+  listBaru.forEach(x => idBelumTersinkron.add(x.id));
+  dAntrian = [...listBaru.slice().reverse(), ...dAntrian];
+  simpanAntrianLocal(dAntrian);
 
-  await muatAntrianServer();
-
+  // Reset form biar admin bisa langsung input lagi dengan cepat
   $('#container-multi-input').innerHTML = `
     <div class="baris-input-item baris" style="align-items: flex-end;">
       <div>
@@ -829,10 +839,10 @@ $('#form-input').addEventListener('submit', async e => {
     </div>
   `;
   bindPillsEvents($('.baris-input-item'));
+  status(st, `Berhasil ditambahkan ke layar secara instan! ♡`, 'ok');
 
-  btn.disabled = false;
-  btn.textContent = 'Kirim Semua ke Antrian ♡';
-  status(st, `Berhasil mengirim ${listBaru.length} antrian ke Spreadsheet & Web! ♡`, 'ok');
+  // 2. Kirim ke spreadsheet di belakang layar (gak di-await, gak ngeblock UI)
+  syncBatchToSpreadsheet(listBaru);
 });
 
 let cariAdminTeks = '';
@@ -843,7 +853,7 @@ $('#cari-admin').addEventListener('input', e => {
 
 function gambarAdmin(){
   if(!isLoggedAdmin) return;
-  
+
   renderLaporanTgl();
 
   const el = $('#feed-admin');
@@ -912,18 +922,79 @@ function renderLaporanTgl(){
   }).join('');
 }
 
-window.ubahStatusTarot = async function(id, val){
-  await kirimKeSpreadsheet({ action: 'UPDATE_STATUS', id, status: val });
-  await muatAntrianServer();
+/* ══════ UBAH STATUS / HAPUS — UI INSTAN DULU, SPREADSHEET DI BELAKANG LAYAR ══════ */
+window.ubahStatusTarot = function(id, val){
+  const idx = dAntrian.findIndex(x => x.id === id);
+  if(idx !== -1){
+    idBelumTersinkron.add(id);
+    dAntrian[idx].status = val;
+    simpanAntrianLocal(dAntrian); // UI & localStorage langsung berubah detik ini juga
+    syncToSpreadsheet('UPDATE_STATUS', { id, status: val }); // spreadsheet diproses belakangan
+  }
 };
 
-window.hapusAntrian = async function(id){
+window.hapusAntrian = function(id){
   if(!confirm('Yakin mau hapus antrian ini?')) return;
-  await kirimKeSpreadsheet({ action: 'DELETE', id });
-  await muatAntrianServer();
+  idBelumTersinkron.delete(id);
+  dAntrian = dAntrian.filter(x => x.id !== id);
+  simpanAntrianLocal(dAntrian); // UI & localStorage langsung bersih detik ini juga
+  syncToSpreadsheet('DELETE', { id }); // spreadsheet diproses belakangan
 };
 
-muatAntrianServer();
+// Tarik data terbaru dari spreadsheet lalu gabungkan ke layar.
+// Item yang masih "idBelumTersinkron" (baru aja diubah/ditambah di HP ini, belum kekonfirmasi
+// server) tetap dipertahankan versi lokalnya, biar gak sempet "kedip balik" ke data lama
+// pas polling numpuk data dari server.
+async function tarikDataSpreadsheet(){
+  if(!GOOGLE_SCRIPT_URL) return false;
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL);
+    const dataServer = await res.json();
+    if(!Array.isArray(dataServer)) return false;
+
+    const idServer = new Map(dataServer.map(x => [x.id, x]));
+    idBelumTersinkron.forEach(id => { if(idServer.has(id)) idBelumTersinkron.delete(id); });
+
+    const pendingBaru = dAntrian.filter(x => idBelumTersinkron.has(x.id) && !idServer.has(x.id));
+    const pendingUbah = dAntrian.filter(x => idBelumTersinkron.has(x.id) && idServer.has(x.id));
+
+    let hasil = [...pendingBaru, ...dataServer];
+    pendingUbah.forEach(p => {
+      const i = hasil.findIndex(x => x.id === p.id);
+      if(i !== -1) hasil[i] = p; // pertahankan perubahan lokal yang belum kekonfirmasi
+    });
+
+    dAntrian = hasil;
+    localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(dAntrian));
+    gambarAntrian();
+    gambarAdmin();
+    return true;
+  } catch(e) {
+    console.error("Polling ke spreadsheet gagal, coba lagi nanti:", e);
+    return false;
+  }
+}
+
+async function muatAntrianLocal(){
+  // 1. Tampilin dulu apa yang ada di cache lokal SEKETIKA, tanpa loading sama sekali.
+  const local = localStorage.getItem(KUNCI_ANTRIAN);
+  if(local){
+    try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
+  } else {
+    dAntrian = [];
+  }
+  gambarAntrian();
+  gambarAdmin();
+
+  // 2. Di belakang layar, tarik data asli dari spreadsheet (gak bikin UI nunggu).
+  await tarikDataSpreadsheet();
+
+  // 3. Polling berkala — bikin HP lain (admin/customer) ikut update otomatis
+  //    tanpa perlu refresh manual.
+  setInterval(tarikDataSpreadsheet, POLL_INTERVAL_MS);
+}
+
+muatAntrianLocal();
 </script>
 </body>
 </html>
