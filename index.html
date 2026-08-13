@@ -448,7 +448,7 @@ const hp = window.matchMedia('(max-width: 720px)').matches;
 
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bintang';
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec'; 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwcJZoquWAgqtZsQPj0490yWz6KPHEHN693QqcX05KPuRuwlLBrsznFbJWYoUOr-RI0/exec'; 
 
 (function gerbang(){
   const g = $('#gerbang');
@@ -787,7 +787,6 @@ $('#form-input').addEventListener('submit', async e => {
     const tipe = el.querySelector('.i-tipe-val').value;
     if(detail) {
       listBaru.push({
-        action: 'ADD',
         id: 'q_' + (timestampBase + index),
         detail: detail,
         tipe: tipe,
@@ -803,9 +802,7 @@ $('#form-input').addEventListener('submit', async e => {
     return status(st, 'Semua field nama masih kosong!', 'err');
   }
 
-  for(const item of listBaru) {
-    await kirimKeSpreadsheet(item);
-  }
+  await kirimKeSpreadsheet({ action: 'ADD_BATCH', items: listBaru });
 
   await muatAntrianServer();
 
