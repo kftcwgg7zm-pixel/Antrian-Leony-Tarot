@@ -143,7 +143,7 @@ $('#btn-suara').addEventListener('click', e => {
 });
 $('#btn-atas').addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
 
-/* ══════ PENYIMPANAN LOCAL & SPREADSHEET SYNC ══════ */
+/* ══════ PENYIMPANAN LOCAL & SPREADSHEET SYNC (BACKGROUND) ══════ */
 const KUNCI_ANTRIAN = 'leony_tarot:antrian';
 let dAntrian = [];
 
@@ -168,7 +168,6 @@ async function syncToSpreadsheet(action, payload) {
   }
 }
 
-// Batch Request di belakang layar
 async function syncBatchToSpreadsheet(items) {
   if(!GOOGLE_SCRIPT_URL) return;
   try {
@@ -331,7 +330,7 @@ $('#btn-tambah-baris').addEventListener('click', () => {
   container.appendChild(divBaru);
 });
 
-/* ══════ INPUT ANTRIAN BARU (ADMIN) - INSTANT / BACKGROUND SYNC ══════ */
+/* ══════ INPUT ANTRIAN BARU (ADMIN) - UI DULUAN SECARA INSTAN ══════ */
 $('#form-input').addEventListener('submit', e => {
   e.preventDefault();
   const st = $('#i-status');
@@ -360,11 +359,11 @@ $('#form-input').addEventListener('submit', e => {
     return status(st, 'Semua field nama masih kosong!', 'err');
   }
 
-  // 1. LANGSUNG SIMPAN KE LOCALSTORAGE & TAMPILKAN DI WEB
+  // 1. UPDATE UI & LOCALSTORAGE SEKETIKA (Tanpa nunggu spreadsheet sama sekali!)
   dAntrian = [...listBaru.reverse(), ...dAntrian];
   simpanAntrianLocal(dAntrian);
 
-  // 2. RESET FORM INPUT SEKETIKA
+  // Reset form supaya admin bisa langsung input lagi dengan cepat
   $('#container-multi-input').innerHTML = `
     <div class="baris-input-item baris" style="align-items: flex-end;">
       <div>
@@ -385,10 +384,9 @@ $('#form-input').addEventListener('submit', e => {
     </div>
   `;
   bindPillsEvents($('.baris-input-item'));
+  status(st, `Berhasil ditambahkan ke layar secara instan! ♡`, 'ok');
 
-  status(st, `Berhasil menambahkan ${listBaru.length} antrian! ♡`, 'ok');
-
-  // 3. SYNC KE GOOGLE SPREADSHEET DI DI BELAKANG LAYAR (ASYNCHRONOUS)
+  // 2. KIRIM KE SPREADSHEET DI BELAKANG LAYAR (Background process, tanpa await)
   syncBatchToSpreadsheet(listBaru);
 });
 
@@ -438,21 +436,19 @@ window.ubahStatusTarot = function(id, val){
   const idx = dAntrian.findIndex(x => x.id === id);
   if(idx !== -1){
     dAntrian[idx].status = val;
-    simpanAntrianLocal(dAntrian);
-    // Sync ke spreadsheet di background
-    syncToSpreadsheet('UPDATE_STATUS', { id, status: val });
+    simpanAntrianLocal(dAntrian); // UI & LocalStorage langsung berubah instan detik ini juga
+    syncToSpreadsheet('UPDATE_STATUS', { id, status: val }); // Spreadsheet diproses di belakang layar
   }
 };
 
 window.hapusAntrian = function(id){
   if(!confirm('Yakin mau hapus antrian ini?')) return;
   dAntrian = dAntrian.filter(x => x.id !== id);
-  simpanAntrianLocal(dAntrian);
-  // Sync ke spreadsheet di background
-  syncToSpreadsheet('DELETE', { id });
+  simpanAntrianLocal(dAntrian); // UI & LocalStorage langsung bersih instan detik ini juga
+  syncToSpreadsheet('DELETE', { id }); // Spreadsheet diproses di belakang layar
 };
 
-async function muatAntrianServer(){
+async function muatAntrianLocal(){
   if(GOOGLE_SCRIPT_URL){
     try {
       const res = await fetch(GOOGLE_SCRIPT_URL);
@@ -483,4 +479,4 @@ async function muatAntrianServer(){
   gambarAdmin();
 }
 
-muatAntrianServer();
+muatAntrianLocal();
