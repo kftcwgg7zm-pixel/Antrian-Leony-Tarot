@@ -357,34 +357,23 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">input_antrian_baru</span></div>
         <div class="isi">
           <h2 class="sub">Input Antrian Baru</h2>
-          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama & jumlah order dalam satu field, lalu pilih tipe antrian. Bisa tambah lebih dari 1 orang sekaligus!</p>
+          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama & jumlah order dalam satu field, lalu pilih tipe antrian.</p>
           <form class="form" id="form-input">
-            <div id="container-multi-input" style="display: grid; gap: 14px;">
-              <div class="baris-input-item baris" style="align-items: flex-end;">
-                <div>
-                  <label for="i-detail">Nama &amp; Jumlah Order</label>
-                  <input type="text" class="i-detail" placeholder="Anisa 10k" required>
-                </div>
-                <div style="display: flex; gap: 8px; align-items: flex-end;">
-                  <div style="flex: 1;">
-                    <label>Status Tipe Antrian</label>
-                    <div class="pills-tipe-input">
-                      <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
-                      <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
-                    </div>
-                    <input type="hidden" class="i-tipe-val" value="Reguler">
-                  </div>
-                  <button type="button" class="mini btn-hapus-baris" style="display:none; height:47px; color:#a9526f;">✕</button>
+            <div class="baris">
+              <div>
+                <label for="i-detail">Nama &amp; Jumlah Order</label>
+                <input type="text" id="i-detail" placeholder="Contoh: Anisa - 2 Order" required>
+              </div>
+              <div>
+                <label>Status Tipe Antrian</label>
+                <div class="pills-tipe-input">
+                  <button type="button" class="pill-tipe-opt aktif" id="btn-tipe-reg">Reguler</button>
+                  <button type="button" class="pill-tipe-opt" id="btn-tipe-ft">⚡ Fast Track</button>
                 </div>
               </div>
             </div>
-
-            <div>
-              <button type="button" class="mini" id="btn-tambah-baris" style="border-color:var(--blush); color:#b4708f; width:100%; padding:10px;">+ Tambah Customer Lain</button>
-            </div>
-
             <div class="pesan-status" id="i-status"></div>
-            <button type="submit" class="kirim" id="btn-input">Kirim Semua ke Antrian ♡</button>
+            <button type="submit" class="kirim" id="btn-input">Kirim ♡</button>
           </form>
         </div>
       </div>
@@ -448,11 +437,7 @@ const hp = window.matchMedia('(max-width: 720px)').matches;
 
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bintang';
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec';
-
-// Semua HP (customer & admin) narik data terbaru LANGSUNG DARI SPREADSHEET tiap 3 detik.
-// Ga ada localStorage sama sekali — spreadsheet adalah satu-satunya sumber kebenaran.
-const POLL_INTERVAL_MS = 3000;
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec'; 
 
 (function gerbang(){
   const g = $('#gerbang');
@@ -581,47 +566,37 @@ $('#btn-suara').addEventListener('click', e => {
 });
 $('#btn-atas').addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
 
-/* ══════ DATA: SPREADSHEET ADALAH SATU-SATUNYA SUMBER KEBENARAN, GA ADA LOCALSTORAGE ══════ */
 let dAntrian = [];
 
-// Id item yang baru aja ditambah/diubah/dihapus DI HP INI, tapi belum kekonfirmasi
-// masuk ke spreadsheet. Cuma dipakai sementara di memory tab ini (bukan disimpan),
-// biar pas polling narik data, hasil aksi yang baru aja dibikin gak sempet "kedip balik"
-// ke kondisi lama sebelum request ke server-nya kelar. HP lain TIDAK punya set ini,
-// jadi mereka murni ngikutin apa yang ada di spreadsheet.
-const idBelumTersinkron = new Set();
-const dataPendingLokal = new Map(); // id -> objek antrian versi lokal (utk item baru / lagi diubah)
-
-function render(){
+async function muatAntrianServer() {
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL);
+    const dataServer = await res.json();
+    if(Array.isArray(dataServer)){
+      dAntrian = dataServer;
+    } else {
+      dAntrian = [];
+    }
+  } catch(e) {
+    console.error("Gagal mengambil data dari Google Sheet:", e);
+    dAntrian = [];
+  }
+  
   gambarAntrian();
   gambarAdmin();
 }
 
-async function syncToSpreadsheet(action, payload) {
+async function kirimKeSpreadsheet(payload) {
   if(!GOOGLE_SCRIPT_URL) return;
   try {
     await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action, ...payload })
+      body: JSON.stringify(payload)
     });
   } catch(e) {
-    console.error("Gagal sync ke Spreadsheet:", e);
-  }
-}
-
-async function syncBatchToSpreadsheet(items) {
-  if(!GOOGLE_SCRIPT_URL) return;
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'ADD_BATCH', items })
-    });
-  } catch(e) {
-    console.error("Gagal sync batch ke Spreadsheet:", e);
+    console.error("Gagal kirim ke Spreadsheet:", e);
   }
 }
 
@@ -670,7 +645,7 @@ $('#cari-antrian').addEventListener('input', e => {
 function gambarAntrian(){
   const el = $('#feed-antrian');
   let filtered = dAntrian;
-
+  
   if(tipeSubTabAktif === 'Fast Track'){
     filtered = filtered.filter(x => x.tipe === 'Fast Track');
   }
@@ -735,117 +710,45 @@ $('#btn-logout').addEventListener('click', () => {
   $('#form-login').reset();
 });
 
-function bindPillsEvents(parentEl) {
-  const btnReg = parentEl.querySelector('.btn-reg');
-  const btnFt = parentEl.querySelector('.btn-ft');
-  const inputVal = parentEl.querySelector('.i-tipe-val');
-
-  btnReg.addEventListener('click', () => {
-    inputVal.value = 'Reguler';
-    btnReg.classList.add('aktif');
-    btnFt.classList.remove('aktif');
-  });
-  btnFt.addEventListener('click', () => {
-    inputVal.value = 'Fast Track';
-    btnFt.classList.add('aktif');
-    btnReg.classList.remove('aktif');
-  });
-}
-bindPillsEvents($('.baris-input-item'));
-
-$('#btn-tambah-baris').addEventListener('click', () => {
-  const container = $('#container-multi-input');
-  const divBaru = document.createElement('div');
-  divBaru.className = 'baris-input-item baris';
-  divBaru.style.cssText = 'align-items: flex-end; animation: masuk .3s ease both;';
-  divBaru.innerHTML = `
-    <div>
-      <label for="i-detail">Nama &amp; Jumlah Order</label>
-      <input type="text" class="i-detail" placeholder="Anisa 10k" required>
-    </div>
-    <div style="display: flex; gap: 8px; align-items: flex-end;">
-      <div style="flex: 1;">
-        <label>Status Tipe Antrian</label>
-        <div class="pills-tipe-input">
-          <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
-          <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
-        </div>
-        <input type="hidden" class="i-tipe-val" value="Reguler">
-      </div>
-      <button type="button" class="mini btn-hapus-baris" style="height:47px; color:#a9526f;" title="Hapus baris">✕</button>
-    </div>
-  `;
-  bindPillsEvents(divBaru);
-  divBaru.querySelector('.btn-hapus-baris').addEventListener('click', () => {
-    divBaru.remove();
-  });
-  container.appendChild(divBaru);
+let tipeAntrianInput = 'Reguler';
+$('#btn-tipe-reg').addEventListener('click', () => {
+  tipeAntrianInput = 'Reguler';
+  $('#btn-tipe-reg').classList.add('aktif');
+  $('#btn-tipe-ft').classList.remove('aktif');
+});
+$('#btn-tipe-ft').addEventListener('click', () => {
+  tipeAntrianInput = 'Fast Track';
+  $('#btn-tipe-ft').classList.add('aktif');
+  $('#btn-tipe-reg').classList.remove('aktif');
 });
 
-/* ══════ INPUT ANTRIAN BARU (ADMIN) ══════
-   Layar admin sendiri langsung nampilin item baru (biar kerasa instan & responsif),
-   TAPI ini cuma tampilan sementara di tab admin itu doang (gak disimpan lokal).
-   Begitu POST ke spreadsheet sukses & polling narik data terbaru, tampilan otomatis
-   diambil alih penuh oleh data asli dari spreadsheet — itu tetap satu-satunya sumber data. */
-$('#form-input').addEventListener('submit', e => {
+$('#form-input').addEventListener('submit', async e => {
   e.preventDefault();
+  const detail = $('#i-detail').value.trim();
   const st = $('#i-status');
+  const btn = $('#btn-input');
 
-  const items = document.querySelectorAll('.baris-input-item');
-  if(!items.length) return status(st, 'Minimal isi 1 antrian.', 'err');
+  if(!detail) return status(st, 'Nama dan Jumlah Order harus diisi.', 'err');
 
-  let timestampBase = Date.now();
-  let listBaru = [];
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan ke Spreadsheet...';
 
-  items.forEach((el, index) => {
-    const detail = el.querySelector('.i-detail').value.trim();
-    const tipe = el.querySelector('.i-tipe-val').value;
-    if(detail) {
-      listBaru.push({
-        id: 'q_' + (timestampBase + index),
-        detail: detail,
-        tipe: tipe,
-        status: 'Belum Dibaca',
-        ts: timestampBase + index
-      });
-    }
-  });
+  const itemBaru = {
+    action: 'ADD',
+    id: 'q_' + Date.now(),
+    detail: detail,
+    tipe: tipeAntrianInput,
+    status: 'Belum Dibaca',
+    ts: Date.now()
+  };
 
-  if(!listBaru.length){
-    return status(st, 'Semua field nama masih kosong!', 'err');
-  }
+  await kirimKeSpreadsheet(itemBaru);
+  await muatAntrianServer();
 
-  // 1. Tampilkan seketika di layar admin ini (echo lokal sementara, bukan sumber data).
-  listBaru.forEach(x => { idBelumTersinkron.add(x.id); dataPendingLokal.set(x.id, x); });
-  dAntrian = [...listBaru.slice().reverse(), ...dAntrian];
-  render();
-
-  // Reset form biar admin bisa langsung input lagi dengan cepat
-  $('#container-multi-input').innerHTML = `
-    <div class="baris-input-item baris" style="align-items: flex-end;">
-      <div>
-        <label for="i-detail">Nama &amp; Jumlah Order</label>
-        <input type="text" class="i-detail" placeholder="Anisa 10k" required>
-      </div>
-      <div style="display: flex; gap: 8px; align-items: flex-end;">
-        <div style="flex: 1;">
-          <label>Status Tipe Antrian</label>
-          <div class="pills-tipe-input">
-            <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
-            <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
-          </div>
-          <input type="hidden" class="i-tipe-val" value="Reguler">
-        </div>
-        <button type="button" class="mini btn-hapus-baris" style="display:none; height:47px; color:#a9526f;">✕</button>
-      </div>
-    </div>
-  `;
-  bindPillsEvents($('.baris-input-item'));
-  status(st, `Sedang diproses ke spreadsheet... nanti otomatis muncul di semua HP ♡`, 'ok');
-
-  // 2. Kirim ke SPREADSHEET (proses sesungguhnya). Begitu ini kelar & polling jalan,
-  //    baris ini beneran ada di sheet dan bakal muncul di semua HP, gak cuma di sini.
-  syncBatchToSpreadsheet(listBaru);
+  btn.disabled = false;
+  btn.textContent = 'Kirim ♡';
+  status(st, 'Berhasil masuk ke Spreadsheet & Web! ♡', 'ok');
+  $('#i-detail').value = '';
 });
 
 let cariAdminTeks = '';
@@ -856,7 +759,7 @@ $('#cari-admin').addEventListener('input', e => {
 
 function gambarAdmin(){
   if(!isLoggedAdmin) return;
-
+  
   renderLaporanTgl();
 
   const el = $('#feed-admin');
@@ -925,73 +828,19 @@ function renderLaporanTgl(){
   }).join('');
 }
 
-/* ══════ UBAH STATUS / HAPUS — echo instan di tab ini, spreadsheet tetap yang diproses & jadi acuan ══════ */
-window.ubahStatusTarot = function(id, val){
-  const idx = dAntrian.findIndex(x => x.id === id);
-  if(idx !== -1){
-    idBelumTersinkron.add(id);
-    dAntrian[idx].status = val;
-    dataPendingLokal.set(id, dAntrian[idx]);
-    render();
-    syncToSpreadsheet('UPDATE_STATUS', { id, status: val });
-  }
+window.ubahStatusTarot = async function(id, val){
+  await kirimKeSpreadsheet({ action: 'UPDATE_STATUS', id, status: val });
+  await muatAntrianServer();
 };
 
-window.hapusAntrian = function(id){
+window.hapusAntrian = async function(id){
   if(!confirm('Yakin mau hapus antrian ini?')) return;
-  idBelumTersinkron.delete(id);
-  dataPendingLokal.delete(id);
-  dAntrian = dAntrian.filter(x => x.id !== id);
-  render();
-  syncToSpreadsheet('DELETE', { id });
+  await kirimKeSpreadsheet({ action: 'DELETE', id });
+  await muatAntrianServer();
 };
 
-/* ══════ SATU-SATUNYA SUMBER DATA: NARIK LANGSUNG DARI SPREADSHEET ══════
-   Dipanggil begitu halaman dibuka, lalu diulang tiap POLL_INTERVAL_MS —
-   ini yang bikin SEMUA HP (admin & customer manapun) lihat data yang sama
-   secara real-time, karena semua nariknya dari server yang sama. */
-async function tarikDataSpreadsheet(){
-  if(!GOOGLE_SCRIPT_URL) return false;
-  try {
-    const res = await fetch(GOOGLE_SCRIPT_URL);
-    const dataServer = await res.json();
-    if(!Array.isArray(dataServer)) return false;
-
-    // Begitu server udah punya id ini, berarti beneran udah masuk sheet → lepas status pending.
-    idBelumTersinkron.forEach(id => {
-      if(dataServer.some(x => x.id === id)){
-        idBelumTersinkron.delete(id);
-        dataPendingLokal.delete(id);
-      }
-    });
-
-    // Item yang masih pending (baru aja diketik/diubah di HP INI, belum sempat kekonfirmasi
-    // di panggilan fetch ini) tetap ditampilkan supaya gak kedip hilang sesaat.
-    const idServer = new Set(dataServer.map(x => x.id));
-    const pendingBaru = [...dataPendingLokal.values()].filter(x => !idServer.has(x.id));
-    let hasil = [...pendingBaru, ...dataServer];
-    dataPendingLokal.forEach((val, id) => {
-      const i = hasil.findIndex(x => x.id === id);
-      if(i !== -1) hasil[i] = val;
-    });
-
-    dAntrian = hasil;
-    render();
-    return true;
-  } catch(e) {
-    console.error("Polling ke spreadsheet gagal, coba lagi nanti:", e);
-    return false;
-  }
-}
-
-async function muatAntrian(){
-  // Ga ada cache lokal — biarin markup "Memuat data antrian..." tampil sampai
-  // data ASLI dari spreadsheet berhasil ditarik.
-  await tarikDataSpreadsheet();
-  setInterval(tarikDataSpreadsheet, POLL_INTERVAL_MS);
-}
-
-muatAntrian();
+muatAntrianServer();
 </script>
 </body>
 </html>
+
