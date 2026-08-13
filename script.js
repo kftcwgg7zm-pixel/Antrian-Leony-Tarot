@@ -1,7 +1,7 @@
 const $ = s => document.querySelector(s);
 const hemat = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hp = window.matchMedia('(max-width: 720px)').matches;
-
+ 
 /* ════════════════════════════════════════════════════════════════
    KONFIGURASI SPREADSHEET & LOGIN ADMIN
    ════════════════════════════════════════════════════════════════ */
