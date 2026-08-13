@@ -1,7 +1,7 @@
 const $ = s => document.querySelector(s);
 const hemat = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hp = window.matchMedia('(max-width: 720px)').matches;
- 
+
 /* ════════════════════════════════════════════════════════════════
    KONFIGURASI SPREADSHEET & LOGIN ADMIN
    ════════════════════════════════════════════════════════════════ */
@@ -10,6 +10,10 @@ const ADMIN_PASS = 'bintang';
 
 // Masukkan Web App URL dari Google Apps Script jika sudah ada
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8FJ8APz99HvYnSxKxiD2AdeD03Hq8LtcBtfaV7QdNj8MvWGvnfF1F7fTp02pfwkAr/exec'; 
+
+// Seberapa sering semua HP (customer & admin) narik data terbaru dari spreadsheet.
+// Ini yang bikin antrian baru dari HP admin ikut muncul di HP customer lain tanpa refresh manual.
+const POLL_INTERVAL_MS = 2000;
 
 /* ══════ GERBANG ══════ */
 (function gerbang(){
@@ -146,6 +150,10 @@ $('#btn-atas').addEventListener('click', () => scrollTo({top:0, behavior:'smooth
 /* ══════ PENYIMPANAN LOCAL & SPREADSHEET SYNC (BACKGROUND) ══════ */
 const KUNCI_ANTRIAN = 'leony_tarot:antrian';
 let dAntrian = [];
+
+// Id antrian yang baru aja ditambahin di HP ini tapi belum kekonfirmasi nyampe di spreadsheet.
+// Dipakai biar pas polling, item yang baru diketik gak sempet "hilang sekilas" sebelum tersync.
+const idBelumTersinkron = new Set();
 
 function simpanAntrianLocal(data){
   dAntrian = data;
@@ -360,6 +368,7 @@ $('#form-input').addEventListener('submit', e => {
   }
 
   // 1. UPDATE UI & LOCALSTORAGE SEKETIKA (Tanpa nunggu spreadsheet sama sekali!)
+  listBaru.forEach(x => idBelumTersinkron.add(x.id));
   dAntrian = [...listBaru.reverse(), ...dAntrian];
   simpanAntrianLocal(dAntrian);
 
@@ -448,23 +457,33 @@ window.hapusAntrian = function(id){
   syncToSpreadsheet('DELETE', { id }); // Spreadsheet diproses di belakang layar
 };
 
-async function muatAntrianLocal(){
-  if(GOOGLE_SCRIPT_URL){
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL);
-      const dataServer = await res.json();
-      if(Array.isArray(dataServer) && dataServer.length > 0){
-        dAntrian = dataServer;
-        localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(dAntrian));
-        gambarAntrian();
-        gambarAdmin();
-        return;
-      }
-    } catch(e) {
-      console.error("Gagal ambil dari server, pakai cache lokal:", e);
-    }
-  }
+// Tarik data terbaru dari spreadsheet lalu gabungkan ke layar.
+// Item yang masih "idBelumTersinkron" (baru diketik, belum kekirim ke sheet) tetap
+// dipertahankan biar gak sempet ilang sekilas pas polling nimpa data.
+async function tarikDataSpreadsheet(){
+  if(!GOOGLE_SCRIPT_URL) return false;
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL);
+    const dataServer = await res.json();
+    if(!Array.isArray(dataServer)) return false;
 
+    dataServer.forEach(x => idBelumTersinkron.delete(x.id));
+    const idServer = new Set(dataServer.map(x => x.id));
+    const sisaPending = dAntrian.filter(x => idBelumTersinkron.has(x.id) && !idServer.has(x.id));
+
+    dAntrian = [...sisaPending, ...dataServer];
+    localStorage.setItem(KUNCI_ANTRIAN, JSON.stringify(dAntrian));
+    gambarAntrian();
+    gambarAdmin();
+    return true;
+  } catch(e) {
+    console.error("Polling ke spreadsheet gagal, coba lagi nanti:", e);
+    return false;
+  }
+}
+
+async function muatAntrianLocal(){
+  // 1. Tampilin dulu apa yang ada di cache lokal SEKETIKA, tanpa loading sama sekali.
   const local = localStorage.getItem(KUNCI_ANTRIAN);
   if(local){
     try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
@@ -477,6 +496,13 @@ async function muatAntrianLocal(){
   }
   gambarAntrian();
   gambarAdmin();
+
+  // 2. Di belakang layar, tarik data asli dari spreadsheet (gak bikin UI nunggu).
+  await tarikDataSpreadsheet();
+
+  // 3. Polling berkala — ini yang bikin HP customer lain ikut update otomatis
+  //    begitu ada antrian baru dari HP admin, tanpa perlu refresh manual.
+  setInterval(tarikDataSpreadsheet, POLL_INTERVAL_MS);
 }
 
 muatAntrianLocal();
