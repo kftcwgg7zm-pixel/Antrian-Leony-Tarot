@@ -154,21 +154,6 @@ function simpanAntrianLocal(data){
   gambarAdmin();
 }
 
-function muatAntrianLocal(){
-  const local = localStorage.getItem(KUNCI_ANTRIAN);
-  if(local){
-    try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
-  } else {
-    dAntrian = [
-      { id:'1', detail:'Alya - 1 Order', tipe:'Fast Track', status:'Belum Dibaca', ts:Date.now() - 3600000 },
-      { id:'2', detail:'Nadia - 2 Order', tipe:'Reguler', status:'Belum Dibaca', ts:Date.now() - 7200000 },
-      { id:'3', detail:'Risa - 1 Order', tipe:'Reguler', status:'Sudah Dibaca', ts:Date.now() - 10800000 }
-    ];
-  }
-  gambarAntrian();
-  gambarAdmin();
-}
-
 async function syncToSpreadsheet(action, payload) {
   if(!GOOGLE_SCRIPT_URL) return;
   try {
@@ -187,7 +172,7 @@ async function syncToSpreadsheet(action, payload) {
 const aman = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function kapan(ts){
   const d = new Date(ts), s = (Date.now() - ts) / 1000;
-  if(s < 60) return 'baru aja';
+  if(isNaN(s) || s < 60) return 'baru aja';
   if(s < 3600) return Math.floor(s/60) + ' menit lalu';
   if(s < 86400) return Math.floor(s/3600) + ' jam lalu';
   return d.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
@@ -252,7 +237,7 @@ function gambarAntrian(){
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
         <span class="${statusClass}">${aman(x.status)}</span>
-        <span class="waktu">${kapan(x.ts)}</span>
+        <span class="waktu">${kapan(Number(x.ts))}</span>
       </div>
     </article>`;
   }).join('');
@@ -283,36 +268,121 @@ $('#btn-logout').addEventListener('click', () => {
   $('#form-login').reset();
 });
 
-/* ══════ INPUT ANTRIAN BARU (ADMIN) ══════ */
+/* ══════ MULTI-INPUT HELPER ══════ */
+function bindPillsEvents(parentEl) {
+  const btnReg = parentEl.querySelector('.btn-reg');
+  const btnFt = parentEl.querySelector('.btn-ft');
+  const inputVal = parentEl.querySelector('.i-tipe-val');
+
+  btnReg.addEventListener('click', () => {
+    inputVal.value = 'Reguler';
+    btnReg.classList.add('aktif');
+    btnFt.classList.remove('aktif');
+  });
+  btnFt.addEventListener('click', () => {
+    inputVal.value = 'Fast Track';
+    btnFt.classList.add('aktif');
+    btnReg.classList.remove('aktif');
+  });
+}
+bindPillsEvents($('.baris-input-item'));
+
+$('#btn-tambah-baris').addEventListener('click', () => {
+  const container = $('#container-multi-input');
+  const divBaru = document.createElement('div');
+  divBaru.className = 'baris-input-item baris';
+  divBaru.style.cssText = 'align-items: flex-end; animation: masuk .3s ease both;';
+  divBaru.innerHTML = `
+    <div>
+      <label for="i-detail">Nama &amp; Jumlah Order</label>
+      <input type="text" class="i-detail" placeholder="Anisa 10k" required>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: flex-end;">
+      <div style="flex: 1;">
+        <label>Status Tipe Antrian</label>
+        <div class="pills-tipe-input">
+          <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
+          <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
+        </div>
+        <input type="hidden" class="i-tipe-val" value="Reguler">
+      </div>
+      <button type="button" class="mini btn-hapus-baris" style="height:47px; color:#a9526f;" title="Hapus baris">✕</button>
+    </div>
+  `;
+  bindPillsEvents(divBaru);
+  divBaru.querySelector('.btn-hapus-baris').addEventListener('click', () => {
+    divBaru.remove();
+  });
+  container.appendChild(divBaru);
+});
+
+/* ══════ INPUT ANTRIAN BARU (ADMIN) - PARALEL ══════ */
 $('#form-input').addEventListener('submit', async e => {
   e.preventDefault();
-  const detail = $('#i-detail').value.trim();
-  const tipe = $('#i-tipe').value;
   const st = $('#i-status');
   const btn = $('#btn-input');
 
-  if(!detail) return status(st, 'Nama dan Jumlah Order harus diisi.', 'err');
+  const items = document.querySelectorAll('.baris-input-item');
+  if(!items.length) return status(st, 'Minimal isi 1 antrian.', 'err');
 
   btn.disabled = true;
-  btn.textContent = 'Menyimpan...';
+  btn.textContent = 'Menyimpan ke Spreadsheet...';
 
-  const itemBaru = {
-    id: 'q_' + Date.now(),
-    detail: detail,
-    tipe: tipe,
-    status: 'Belum Dibaca',
-    ts: Date.now()
-  };
+  let timestampBase = Date.now();
+  let listBaru = [];
 
-  dAntrian.unshift(itemBaru);
+  items.forEach((el, index) => {
+    const detail = el.querySelector('.i-detail').value.trim();
+    const tipe = el.querySelector('.i-tipe-val').value;
+    if(detail) {
+      listBaru.push({
+        id: 'q_' + (timestampBase + index),
+        detail: detail,
+        tipe: tipe,
+        status: 'Belum Dibaca',
+        ts: timestampBase + index
+      });
+    }
+  });
+
+  if(!listBaru.length){
+    btn.disabled = false;
+    btn.textContent = 'Kirim Semua ke Antrian ♡';
+    return status(st, 'Semua field nama masih kosong!', 'err');
+  }
+
+  dAntrian = [...listBaru.reverse(), ...dAntrian];
   simpanAntrianLocal(dAntrian);
 
-  await syncToSpreadsheet('ADD', itemBaru);
+  // Kirim semua data secara paralel (bersamaan) agar jauh lebih cepat
+  await Promise.all(listBaru.map(item => syncToSpreadsheet('ADD', item)));
+
+  await muatAntrianServer();
+
+  $('#container-multi-input').innerHTML = `
+    <div class="baris-input-item baris" style="align-items: flex-end;">
+      <div>
+        <label for="i-detail">Nama &amp; Jumlah Order</label>
+        <input type="text" class="i-detail" placeholder="Anisa 10k" required>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: flex-end;">
+        <div style="flex: 1;">
+          <label>Status Tipe Antrian</label>
+          <div class="pills-tipe-input">
+            <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
+            <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
+          </div>
+          <input type="hidden" class="i-tipe-val" value="Reguler">
+        </div>
+        <button type="button" class="mini btn-hapus-baris" style="display:none; height:47px; color:#a9526f;">✕</button>
+      </div>
+    </div>
+  `;
+  bindPillsEvents($('.baris-input-item'));
 
   btn.disabled = false;
-  btn.textContent = 'Kirim Ke Antrian & Spreadsheet ♡';
-  status(st, 'Antrian berhasil ditambahkan ♡', 'ok');
-  $('#i-detail').value = '';
+  btn.textContent = 'Kirim Semua ke Antrian ♡';
+  status(st, `Berhasil mengirim ${listBaru.length} antrian ke Spreadsheet & Web! ♡`, 'ok');
 });
 
 /* ══════ RENDER KELOLA ANTRIAN (ADMIN) ══════ */
@@ -342,7 +412,7 @@ function gambarAdmin(){
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
         <span class="lencana kilat">${aman(x.tipe)}</span>
-        <span class="waktu">${kapan(x.ts)}</span>
+        <span class="waktu">${kapan(Number(x.ts))}</span>
       </div>
       <div class="alat">
         <label style="font-size:11px;margin:0;color:var(--tinta-muda)">Status Tarot:</label>
@@ -373,9 +443,7 @@ window.hapusAntrian = async function(id){
   await syncToSpreadsheet('DELETE', { id });
 };
 
-muatAntrianLocal();
 async function muatAntrianLocal(){
-  // Coba ambil data terbaru langsung dari Spreadsheet (doGet)
   if(GOOGLE_SCRIPT_URL){
     try {
       const res = await fetch(GOOGLE_SCRIPT_URL);
@@ -392,7 +460,6 @@ async function muatAntrianLocal(){
     }
   }
 
-  // Fallback ke localStorage jika offline atau URL kosong
   const local = localStorage.getItem(KUNCI_ANTRIAN);
   if(local){
     try { dAntrian = JSON.parse(local); } catch(e){ dAntrian = []; }
@@ -406,3 +473,5 @@ async function muatAntrianLocal(){
   gambarAntrian();
   gambarAdmin();
 }
+
+muatAntrianLocal();
