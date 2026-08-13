@@ -357,23 +357,34 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">input_antrian_baru</span></div>
         <div class="isi">
           <h2 class="sub">Input Antrian Baru</h2>
-          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama & jumlah order dalam satu field, lalu pilih tipe antrian.</p>
+          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama & jumlah order dalam satu field, lalu pilih tipe antrian. Bisa tambah lebih dari 1 orang sekaligus!</p>
           <form class="form" id="form-input">
-            <div class="baris">
-              <div>
-                <label for="i-detail">Nama &amp; Jumlah Order</label>
-                <input type="text" id="i-detail" placeholder="Contoh: Anisa - 2 Order" required>
-              </div>
-              <div>
-                <label>Status Tipe Antrian</label>
-                <div class="pills-tipe-input">
-                  <button type="button" class="pill-tipe-opt aktif" id="btn-tipe-reg">Reguler</button>
-                  <button type="button" class="pill-tipe-opt" id="btn-tipe-ft">⚡ Fast Track</button>
+            <div id="container-multi-input" style="display: grid; gap: 14px;">
+              <div class="baris-input-item baris" style="align-items: flex-end;">
+                <div>
+                  <label for="i-detail">Nama &amp; Jumlah Order</label>
+                  <input type="text" class="i-detail" placeholder="Anisa 10k" required>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: flex-end;">
+                  <div style="flex: 1;">
+                    <label>Status Tipe Antrian</label>
+                    <div class="pills-tipe-input">
+                      <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
+                      <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
+                    </div>
+                    <input type="hidden" class="i-tipe-val" value="Reguler">
+                  </div>
+                  <button type="button" class="mini btn-hapus-baris" style="display:none; height:47px; color:#a9526f;">✕</button>
                 </div>
               </div>
             </div>
+
+            <div>
+              <button type="button" class="mini" id="btn-tambah-baris" style="border-color:var(--blush); color:#b4708f; width:100%; padding:10px;">+ Tambah Customer Lain</button>
+            </div>
+
             <div class="pesan-status" id="i-status"></div>
-            <button type="submit" class="kirim" id="btn-input">Kirim ♡</button>
+            <button type="submit" class="kirim" id="btn-input">Kirim Semua ke Antrian ♡</button>
           </form>
         </div>
       </div>
@@ -710,45 +721,118 @@ $('#btn-logout').addEventListener('click', () => {
   $('#form-login').reset();
 });
 
-let tipeAntrianInput = 'Reguler';
-$('#btn-tipe-reg').addEventListener('click', () => {
-  tipeAntrianInput = 'Reguler';
-  $('#btn-tipe-reg').classList.add('aktif');
-  $('#btn-tipe-ft').classList.remove('aktif');
-});
-$('#btn-tipe-ft').addEventListener('click', () => {
-  tipeAntrianInput = 'Fast Track';
-  $('#btn-tipe-ft').classList.add('aktif');
-  $('#btn-tipe-reg').classList.remove('aktif');
+function bindPillsEvents(parentEl) {
+  const btnReg = parentEl.querySelector('.btn-reg');
+  const btnFt = parentEl.querySelector('.btn-ft');
+  const inputVal = parentEl.querySelector('.i-tipe-val');
+
+  btnReg.addEventListener('click', () => {
+    inputVal.value = 'Reguler';
+    btnReg.classList.add('aktif');
+    btnFt.classList.remove('aktif');
+  });
+  btnFt.addEventListener('click', () => {
+    inputVal.value = 'Fast Track';
+    btnFt.classList.add('aktif');
+    btnReg.classList.remove('aktif');
+  });
+}
+bindPillsEvents($('.baris-input-item'));
+
+$('#btn-tambah-baris').addEventListener('click', () => {
+  const container = $('#container-multi-input');
+  const divBaru = document.createElement('div');
+  divBaru.className = 'baris-input-item baris';
+  divBaru.style.cssText = 'align-items: flex-end; animation: masuk .3s ease both;';
+  divBaru.innerHTML = `
+    <div>
+      <label for="i-detail">Nama &amp; Jumlah Order</label>
+      <input type="text" class="i-detail" placeholder="Anisa 10k" required>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: flex-end;">
+      <div style="flex: 1;">
+        <label>Status Tipe Antrian</label>
+        <div class="pills-tipe-input">
+          <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
+          <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
+        </div>
+        <input type="hidden" class="i-tipe-val" value="Reguler">
+      </div>
+      <button type="button" class="mini btn-hapus-baris" style="height:47px; color:#a9526f;" title="Hapus baris">✕</button>
+    </div>
+  `;
+  bindPillsEvents(divBaru);
+  divBaru.querySelector('.btn-hapus-baris').addEventListener('click', () => {
+    divBaru.remove();
+  });
+  container.appendChild(divBaru);
 });
 
 $('#form-input').addEventListener('submit', async e => {
   e.preventDefault();
-  const detail = $('#i-detail').value.trim();
   const st = $('#i-status');
   const btn = $('#btn-input');
 
-  if(!detail) return status(st, 'Nama dan Jumlah Order harus diisi.', 'err');
+  const items = document.querySelectorAll('.baris-input-item');
+  if(!items.length) return status(st, 'Minimal isi 1 antrian.', 'err');
 
   btn.disabled = true;
   btn.textContent = 'Menyimpan ke Spreadsheet...';
 
-  const itemBaru = {
-    action: 'ADD',
-    id: 'q_' + Date.now(),
-    detail: detail,
-    tipe: tipeAntrianInput,
-    status: 'Belum Dibaca',
-    ts: Date.now()
-  };
+  let timestampBase = Date.now();
+  let listBaru = [];
 
-  await kirimKeSpreadsheet(itemBaru);
+  items.forEach((el, index) => {
+    const detail = el.querySelector('.i-detail').value.trim();
+    const tipe = el.querySelector('.i-tipe-val').value;
+    if(detail) {
+      listBaru.push({
+        action: 'ADD',
+        id: 'q_' + (timestampBase + index),
+        detail: detail,
+        tipe: tipe,
+        status: 'Belum Dibaca',
+        ts: timestampBase + index
+      });
+    }
+  });
+
+  if(!listBaru.length){
+    btn.disabled = false;
+    btn.textContent = 'Kirim Semua ke Antrian ♡';
+    return status(st, 'Semua field nama masih kosong!', 'err');
+  }
+
+  for(const item of listBaru) {
+    await kirimKeSpreadsheet(item);
+  }
+
   await muatAntrianServer();
 
+  $('#container-multi-input').innerHTML = `
+    <div class="baris-input-item baris" style="align-items: flex-end;">
+      <div>
+        <label for="i-detail">Nama &amp; Jumlah Order</label>
+        <input type="text" class="i-detail" placeholder="Anisa 10k" required>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: flex-end;">
+        <div style="flex: 1;">
+          <label>Status Tipe Antrian</label>
+          <div class="pills-tipe-input">
+            <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
+            <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
+          </div>
+          <input type="hidden" class="i-tipe-val" value="Reguler">
+        </div>
+        <button type="button" class="mini btn-hapus-baris" style="display:none; height:47px; color:#a9526f;">✕</button>
+      </div>
+    </div>
+  `;
+  bindPillsEvents($('.baris-input-item'));
+
   btn.disabled = false;
-  btn.textContent = 'Kirim ♡';
-  status(st, 'Berhasil masuk ke Spreadsheet & Web! ♡', 'ok');
-  $('#i-detail').value = '';
+  btn.textContent = 'Kirim Semua ke Antrian ♡';
+  status(st, `Berhasil mengirim ${listBaru.length} antrian ke Spreadsheet & Web! ♡`, 'ok');
 });
 
 let cariAdminTeks = '';
@@ -843,4 +927,3 @@ muatAntrianServer();
 </script>
 </body>
 </html>
-
