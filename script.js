@@ -168,6 +168,21 @@ async function syncToSpreadsheet(action, payload) {
   }
 }
 
+// Fungsi Batch Request agar kirim banyak data sekaligus cukup 1 kali HTTP request (ngebut)
+async function syncBatchToSpreadsheet(items) {
+  if(!GOOGLE_SCRIPT_URL) return;
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'ADD_BATCH', items: items })
+    });
+  } catch(e) {
+    console.error("Gagal sync batch ke Spreadsheet:", e);
+  }
+}
+
 /* ══════ UTIL ══════ */
 const aman = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function kapan(ts){
@@ -316,7 +331,7 @@ $('#btn-tambah-baris').addEventListener('click', () => {
   container.appendChild(divBaru);
 });
 
-/* ══════ INPUT ANTRIAN BARU (ADMIN) - PARALEL ══════ */
+/* ══════ INPUT ANTRIAN BARU (ADMIN) - BATCH / KILAT ══════ */
 $('#form-input').addEventListener('submit', async e => {
   e.preventDefault();
   const st = $('#i-status');
@@ -354,8 +369,8 @@ $('#form-input').addEventListener('submit', async e => {
   dAntrian = [...listBaru.reverse(), ...dAntrian];
   simpanAntrianLocal(dAntrian);
 
-  // Kirim semua data secara paralel (bersamaan) agar jauh lebih cepat
-  await Promise.all(listBaru.map(item => syncToSpreadsheet('ADD', item)));
+  // Kirim seluruh data sekaligus dalam 1 request (batching) agar tidak lemot
+  await syncBatchToSpreadsheet(listBaru);
 
   await muatAntrianServer();
 
@@ -443,7 +458,7 @@ window.hapusAntrian = async function(id){
   await syncToSpreadsheet('DELETE', { id });
 };
 
-async function muatAntrianLocal(){
+async function muatAntrianServer(){
   if(GOOGLE_SCRIPT_URL){
     try {
       const res = await fetch(GOOGLE_SCRIPT_URL);
@@ -474,4 +489,4 @@ async function muatAntrianLocal(){
   gambarAdmin();
 }
 
-muatAntrianLocal();
+muatAntrianServer();
