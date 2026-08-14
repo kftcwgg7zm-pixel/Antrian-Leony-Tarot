@@ -358,6 +358,24 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
   background:#fff3e2;color:#b58146}
 .chip-orang .st.ok{background:#eef8f0;color:#5c8a68}
 
+/* KARTU STAT YANG BISA DIPENCET (FILTER STATUS) */
+.kartu-stat.bisa-pencet{cursor:pointer;transition:.22s;position:relative;width:100%;font-family:inherit;
+  -webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;user-select:none;
+  text-align:center;display:block}
+.kartu-stat.bisa-pencet:active{transform:scale(.97)}
+.kartu-stat.bisa-pencet:hover{transform:translateY(-2px);box-shadow:0 10px 20px -12px rgba(110,140,190,.9)}
+.kartu-stat.pilih-belum{background:linear-gradient(160deg,#fde2e2,#f9d0d0);border-color:#f5c2c2;
+  box-shadow:0 8px 18px -10px rgba(192,57,43,.55)}
+.kartu-stat.pilih-sudah{background:linear-gradient(160deg,#eef8f0,#dbeee1);border-color:#d3ecd9;
+  box-shadow:0 8px 18px -10px rgba(92,138,104,.5)}
+.kartu-stat .tanda-filter{position:absolute;top:6px;right:8px;font-size:9px;opacity:0;transition:.2s}
+.kartu-stat.pilih-belum .tanda-filter,
+.kartu-stat.pilih-sudah .tanda-filter{opacity:.75}
+.no-sedang{display:inline-block;background:#fff;border:1px solid #f0e2a0;color:#a67c00;
+  border-radius:9px;padding:1px 7px;font-size:12px;font-weight:700;margin-right:5px;vertical-align:middle}
+.info-lipat{font-size:12px;color:var(--tinta-muda);margin-bottom:12px;background:linear-gradient(160deg,#fdf6fa,#f7edf5);
+  border:1px dashed #f0b9d3;border-radius:13px;padding:10px 13px;text-align:center;line-height:1.5}
+.info-lipat b{color:#b4708f}
 .info-hari{font-size:12.5px;color:var(--tinta-muda);margin-bottom:12px;background:#f4f8ff;border:1px solid #dbe7f8;
   text-align:center;letter-spacing:.02em;
   border-radius:13px;padding:9px 13px;line-height:1.5}
@@ -423,19 +441,22 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Lihat urutan antrian tarot kamu di bawah ini. Antrian di-reset tiap hari ya ♡</p>
         
         <!-- Counter Statistik Antrian -->
-        <div class="papan-stat">
-          <div class="kartu-stat">
+        <div class="papan-stat" id="papan-stat-antrian">
+          <button type="button" class="kartu-stat bisa-pencet" id="kartu-belum" data-status="Belum Dibaca">
+            <span class="tanda-filter">✓</span>
             <div class="angka" id="st-belum" style="color:#c0392b">0</div>
             <div class="lbl">Belum Dibaca</div>
-          </div>
-          <div class="kartu-stat">
+          </button>
+          <!-- Kartu ini sengaja BUKAN tombol: cuma buat lihat, nggak bisa dipencet -->
+          <div class="kartu-stat" id="kartu-sedang">
             <div class="angka" id="st-hari-ini" style="color:#a67c00;font-size:15px">-</div>
             <div class="lbl">Sedang Dibaca</div>
           </div>
-          <div class="kartu-stat">
+          <button type="button" class="kartu-stat bisa-pencet" id="kartu-sudah" data-status="Sudah Dibaca">
+            <span class="tanda-filter">✓</span>
             <div class="angka" id="st-sudah" style="color:#5c8a68">0</div>
             <div class="lbl">Sudah Dibaca</div>
-          </div>
+          </button>
         </div>
 
         <!-- Tab Side-by-Side: 1. All | 2. Fast Track -->
@@ -1044,32 +1065,113 @@ function hitungNomorAntrian(){
   return peta;
 }
 
+/* ══════ SEMBUNYIIN ANTRIAN LAMA DI HALAMAN CUSTOMER ══════
+   Biar daftarnya nggak numpuk kepanjangan, tiap kelipatan 20 orang yang
+   statusnya "Sudah Dibaca" bakal disembunyiin dari TAMPILAN CUSTOMER.
+   Contoh: pas ada 20 yang udah dibaca -> 20 nama itu ilang dari tampilan.
+           pas ada 40 yang udah dibaca -> 40 nama itu ilang. Gitu seterusnya.
+   Catatan penting:
+     · Nomor antrian TETAP SAMA (nggak ikut geser), karena nomornya dihitung
+       dari semua data hari ini, bukan dari daftar yang lagi kelihatan.
+     · Di DASHBOARD ADMIN semua nama tetap kelihatan lengkap, nggak ada yang ilang.
+     · Datanya juga nggak kehapus, cuma disembunyiin dari tampilan customer. */
+const BATCH_SEMBUNYI = 20;   // ganti angka ini kalau mau tiap 10 / 30 / dst
+
+function idDisembunyiin(dataHariIni){
+  const sudah = dataHariIni
+    .filter(x => x.status === 'Sudah Dibaca')
+    .sort((a, b) => a.ts - b.ts);
+  const jumlahDilipat = Math.floor(sudah.length / BATCH_SEMBUNYI) * BATCH_SEMBUNYI;
+  return {
+    set: new Set(sudah.slice(0, jumlahDilipat).map(x => x.id)),
+    jumlah: jumlahDilipat
+  };
+}
+
+/* ══════ FILTER STATUS (KETUK KARTU STATISTIK) ══════
+   Ketuk kartu "Belum Dibaca" -> daftar cuma nampilin yang belum dibaca.
+   Ketuk kartu "Sudah Dibaca" -> daftar cuma nampilin yang udah dibaca
+                                 (yang tadinya disembunyiin per 20 ikut kebuka lagi
+                                  di sini, biar bisa dicek kalau perlu).
+   Kartu "Sedang Dibaca" cuma buat dilihat, nggak bisa dipencet.
+   Ketuk sekali lagi kartunya = balik ke semua. */
+let filterStatus = null;
+
+// Cuma "Belum Dibaca" & "Sudah Dibaca" yang bisa dipencet.
+// Kartu "Sedang Dibaca" sengaja nggak dikasih data-status, jadi nggak bisa dipencet.
+const KELAS_FILTER = {
+  'Belum Dibaca': 'pilih-belum',
+  'Sudah Dibaca': 'pilih-sudah'
+};
+
+// Pakai event delegation di wadahnya, jadi klik di mana pun dalam kartu
+// (angka, nama, label, nomor antrian) tetap kebaca.
+(function pasangFilterStatus(){
+  const wadah = $('#papan-stat-antrian');
+  if(!wadah) return;
+  wadah.addEventListener('click', e => {
+    const kartu = e.target.closest('.kartu-stat[data-status]');
+    if(!kartu) return;
+    const status = kartu.dataset.status;
+    filterStatus = (filterStatus === status) ? null : status;   // ketuk lagi = reset
+    wadah.querySelectorAll('.kartu-stat[data-status]').forEach(k => {
+      k.classList.remove('pilih-belum', 'pilih-sudah');
+    });
+    if(filterStatus) kartu.classList.add(KELAS_FILTER[filterStatus]);
+    gambarAntrian();
+  });
+})();
+
 function gambarAntrian(){
   const el = $('#feed-antrian');
-  let filtered = antrianHariIniSemua();
+  const semuaHariIni = antrianHariIniSemua();
+  let filtered = semuaHariIni;
   
   if(tipeSubTabAktif === 'Fast Track'){
     filtered = filtered.filter(x => x.tipe === 'Fast Track');
   }
 
+  // Kartu "Sedang Dibaca": tampilin nomor antriannya juga, bukan cuma nama
+  const petaNomorStat = hitungNomorAntrian();
   const sedangDibaca = filtered.find(x => x.status === 'Sedang Dibaca');
-  $('#st-hari-ini').textContent = sedangDibaca ? sedangDibaca.detail : '-';
+  $('#st-hari-ini').innerHTML = sedangDibaca
+    ? `<span class="no-sedang">#${petaNomorStat[sedangDibaca.id]}</span>${aman(sedangDibaca.detail)}`
+    : '-';
   $('#st-belum').textContent = filtered.filter(x => x.status === 'Belum Dibaca').length;
   $('#st-sudah').textContent = filtered.filter(x => x.status === 'Sudah Dibaca').length;
+
+  // Sembunyiin yang udah dibaca per kelipatan 20 (lihat penjelasan di atas).
+  // Tapi kalau lagi nyaring "Sudah Dibaca", semuanya dibuka biar bisa dicek.
+  const lipat = idDisembunyiin(semuaHariIni);
+  if(filterStatus !== 'Sudah Dibaca'){
+    filtered = filtered.filter(x => !lipat.set.has(x.id));
+  }
+
+  // Saring sesuai kartu statistik yang lagi kepilih
+  if(filterStatus){
+    filtered = filtered.filter(x => x.status === filterStatus);
+  }
 
   if(cariAntrianTeks){
     filtered = filtered.filter(x => x.detail.toLowerCase().includes(cariAntrianTeks));
   }
 
+  const infoLipat = (lipat.jumlah && filterStatus !== 'Sudah Dibaca')
+    ? `<div class="info-lipat">✨ <b>${lipat.jumlah} antrian</b> yang udah selesai dibaca disembunyiin biar nggak kepanjangan. Nomor antrian kamu tetap sama kok ♡</div>`
+    : '';
+
   if(!filtered.length){
-    el.innerHTML = '<div class="kosong"><div class="em">💌</div><div class="j">antrian kosong</div><p style="font-size:13px;margin-top:6px">Belum ada antrian hari ini untuk kategori ini.</p></div>';
+    const pesanKosong = filterStatus
+      ? `Belum ada antrian yang statusnya "${filterStatus}" hari ini.`
+      : 'Belum ada antrian hari ini untuk kategori ini.';
+    el.innerHTML = infoLipat + `<div class="kosong"><div class="em">💌</div><div class="j">antrian kosong</div><p style="font-size:13px;margin-top:6px">${pesanKosong}</p></div>`;
     return;
   }
 
   // Nomor antrian permanen (lihat hitungNomorAntrian di atas)
   const petaNomor = hitungNomorAntrian();
 
-  el.innerHTML = [...filtered].sort((a, b) => a.ts - b.ts).map((x) => {
+  el.innerHTML = infoLipat + [...filtered].sort((a, b) => a.ts - b.ts).map((x) => {
     let statusClass = 'lencana';
     if(x.status === 'Sudah Dibaca') statusClass += ' baca';
     else if(x.status === 'Sedang Dibaca') statusClass += ' proses';
@@ -1157,7 +1259,7 @@ $('#btn-tambah-baris').addEventListener('click', () => {
   divBaru.innerHTML = `
     <div>
       <label>Nama Customer</label>
-      <input type="text" class="i-detail" placeholder="Contoh: Budi" required>
+      <input type="text" class="i-detail" placeholder="Contoh: Yearly" required>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
       <div style="flex:1;min-width:160px">
