@@ -391,7 +391,7 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">input_antrian_baru</span></div>
         <div class="isi">
           <h2 class="sub">Input Antrian Baru</h2>
-          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama &amp; nominal order. Kamu bisa input lebih dari 1 orang sekaligus sebelum dikirim![cite: 1]</p>
+          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama &amp; nominal order. Kamu bisa input lebih dari 1 orang sekaligus sebelum dikirim!</p>
           
           <form class="form" id="form-input">
             <!-- Container untuk menampung baris input dinamis -->
@@ -422,7 +422,7 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
             </div>
 
             <div class="pesan-status" id="i-status"></div>
-            <button type="submit" class="kirim" id="btn-input">Kirim Semua ke Antrian ♡[cite: 1]</button>
+            <button type="submit" class="kirim" id="btn-input">Kirim Semua ke Antrian ♡</button>
           </form>
         </div>
       </div>
@@ -492,9 +492,7 @@ const hp = window.matchMedia('(max-width: 720px)').matches;
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bintang';
 
-/* ══════ KONFIGURASI SUPABASE ══════
-   Ganti SUPABASE_ANON_KEY dengan "anon public" key project kamu.
-   Ambil di: Supabase Dashboard > Project Settings > API > Project API keys > anon public */
+/* ══════ KONFIGURASI SUPABASE ══════ */
 const SUPABASE_URL = 'https://hnnqjswajdjitetvupjt.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubnFqc3dhamRqaXRldHZ1cGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTk3MDEsImV4cCI6MjEwMjIzNTcwMX0.n_WUzwPhKSGdb_JP7Q5fOPSZMWLbHho9aRUeEi6IooI';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -641,7 +639,6 @@ function simpanAntrianLocal(data){
   gambarAdmin();
 }
 
-// Ambil data awal dari Supabase, lalu pasang listener real-time
 async function muatAntrianLocal(){
   try {
     const { data, error } = await supabaseClient
@@ -659,7 +656,6 @@ async function muatAntrianLocal(){
   pasangRealtimeAntrian();
 }
 
-// Dengarkan perubahan tabel 'antrian' secara real-time (dari device/browser manapun)
 function pasangRealtimeAntrian(){
   supabaseClient
     .channel('realtime-antrian')
@@ -773,13 +769,15 @@ function gambarAntrian(){
     return;
   }
 
-  el.innerHTML = filtered.map(x => {
+  el.innerHTML = filtered.map((x, index) => {
     let statusClass = 'lencana';
     if(x.status === 'Sudah Dibaca') statusClass += ' baca';
     else if(x.status === 'Cancel') statusClass += ' batal';
 
     return `<article class="gelembung">
       <div class="kepala">
+        <!-- Badge Nomor Urut Antrian Otomatis -->
+        <span class="lencana" style="background:#e8efff; color:#5d6c8d; border-color:#dbe4f4;">#${index + 1}</span>
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
         ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡ Fast Track</span>' : ''}
