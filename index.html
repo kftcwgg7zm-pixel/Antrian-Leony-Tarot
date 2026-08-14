@@ -383,7 +383,7 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">input_antrian_baru</span></div>
         <div class="isi">
           <h2 class="sub">Input Antrian Baru</h2>
-          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama &amp; nominal order. Kamu bisa input lebih dari 1 orang sekaligus sebelum dikirim!</p>
+          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama &amp; nominal order. Kamu bisa input lebih dari 1 orang sekaligus sebelum dikirim![cite: 1]</p>
           
           <form class="form" id="form-input">
             <!-- Container untuk menampung baris input dinamis -->
@@ -413,7 +413,7 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
             </div>
 
             <div class="pesan-status" id="i-status"></div>
-            <button type="submit" class="kirim" id="btn-input">Kirim Semua ke Antrian ♡</button>
+            <button type="submit" class="kirim" id="btn-input">Kirim Semua ke Antrian ♡[cite: 1]</button>
           </form>
         </div>
       </div>
@@ -486,8 +486,8 @@ const ADMIN_PASS = 'bintang';
 /* ══════ KONFIGURASI SUPABASE ══════
    Ganti SUPABASE_ANON_KEY dengan "anon public" key project kamu.
    Ambil di: Supabase Dashboard > Project Settings > API > Project API keys > anon public */
-const SUPABASE_URL = 'https://lprhiakvqbxqggiccyyf.supabase.co';
-const SUPABASE_ANON_KEY = 'GANTI_DENGAN_ANON_KEY_KAMU';
+const SUPABASE_URL = 'https://hnnqjswajdjitetvupjt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubnFqc3dhamRqaXRldHZ1cGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTk3MDEsImV4cCI6MjEwMjIzNTcwMX0.n_WUzwPhKSGdb_JP7Q5fOPSZMWLbHho9aRUeEi6IooI';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const TABEL_ANTRIAN = 'antrian';
 
@@ -868,7 +868,7 @@ $('#form-input').addEventListener('submit', async e => {
 
   if(!itemBaruList.length){
     btn.disabled = false;
-    btn.textContent = 'Kirim Semua ke Antrian ♡';
+    btn.textContent = 'Kirim Semua ke Antrian ♡[cite: 1]';
     return status(st, 'Semua field nama masih kosong!', 'err');
   }
 
@@ -900,7 +900,7 @@ $('#form-input').addEventListener('submit', async e => {
   `;
 
   btn.disabled = false;
-  btn.textContent = 'Kirim Semua ke Antrian ♡';
+  btn.textContent = 'Kirim Semua ke Antrian ♡[cite: 1]';
   if(!errInsert){
     status(st, `Berhasil menambahkan ${itemBaruList.length} antrian sekaligus! ♡`, 'ok');
   }
