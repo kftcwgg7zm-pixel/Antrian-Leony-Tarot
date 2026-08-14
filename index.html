@@ -373,6 +373,18 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
 .kartu-stat.pilih-sudah .tanda-filter{opacity:.75}
 .no-sedang{display:inline-block;background:#fff;border:1px solid #f0e2a0;color:#a67c00;
   border-radius:9px;padding:1px 7px;font-size:12px;font-weight:700;margin-right:5px;vertical-align:middle}
+/* ═════════ CATATAN ADMIN ═════════ */
+.area-catatan{width:100%;min-height:170px;resize:vertical;border:1px solid var(--garis);
+  background:rgba(255,255,255,.94);border-radius:16px;padding:14px 16px;font-family:inherit;
+  font-size:14.5px;line-height:1.6;color:var(--tinta);transition:.2s}
+.area-catatan:focus{outline:0;border-color:var(--blush);box-shadow:0 0 0 4px rgba(239,156,191,.18)}
+.baris-catatan{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+.status-catatan{font-size:11.5px;letter-spacing:.05em;color:var(--tinta-muda);transition:.25s}
+.status-catatan.ok{color:#5c8a68}
+.status-catatan.nulis{color:#b58146}
+.status-catatan.err{color:#a9526f}
+.status-catatan.lokal{color:#a9526f;background:#fdeaf0;border:1px solid #f6cddb;
+  border-radius:11px;padding:6px 11px;line-height:1.45;display:inline-block;max-width:100%}
 .info-lipat{font-size:12px;color:var(--tinta-muda);margin-bottom:12px;background:linear-gradient(160deg,#fdf6fa,#f7edf5);
   border:1px dashed #f0b9d3;border-radius:13px;padding:10px 13px;text-align:center;line-height:1.5}
 .info-lipat b{color:#b4708f}
@@ -608,8 +620,19 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
           <div class="info-hari">📅 <b id="teks-tgl-hari-ini">hari ini</b></div>
           <div class="cari"><input type="text" id="cari-admin" placeholder="Cari nama pelanggan…"></div>
           <div class="feed" id="feed-admin"><div class="memuat">Memuat data admin</div></div>
+        </div>
+      </div>
 
-
+      <!-- CATATAN BEBAS (ADMIN) -->
+      <div class="jendela">
+        <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">catatan</span></div>
+        <div class="isi">
+          <h2 class="sub" style="margin-bottom:14px">Catatan</h2>
+          <textarea class="area-catatan" id="isi-catatan" placeholder="Tulis catatan kamu di sini…"></textarea>
+          <div class="baris-catatan">
+            <span class="status-catatan" id="status-catatan">Memuat catatan…</span>
+            <button class="mini" id="btn-hapus-catatan">Kosongkan</button>
+          </div>
         </div>
       </div>
 
@@ -852,6 +875,121 @@ $('#btn-suara').addEventListener('click', e => {
   e.currentTarget.textContent = on ? '♫' : '♪';
 });
 $('#btn-atas').addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
+
+
+/* ══════ CATATAN ADMIN (DIPAKAI BARENG MODERATOR) ══════
+   Catatan ini SATU untuk semua orang — kamu sama moderator lihat & ngedit isi
+   yang sama, dan updatenya langsung kelihatan real-time tanpa perlu refresh.
+   Isinya PERMANEN, nggak bakal kehapus sendiri, kecuali dikosongkan manual.
+
+   ⚠️ Biar bisa kebaca semua orang, catatan HARUS disimpan di Supabase.
+   Jalanin SQL ini SEKALI aja di Supabase > SQL Editor:
+
+     create table if not exists catatan (
+       id text primary key,
+       isi text,
+       ts  bigint
+     );
+     alter table catatan enable row level security;
+     create policy "bebas akses catatan" on catatan for all using (true) with check (true);
+     alter publication supabase_realtime add table catatan;
+
+   Kalau tabelnya belum dibuat, catatan tetap kesimpan tapi CUMA di perangkat
+   yang lagi kamu pakai (moderator nggak bakal lihat), dan bakal ada peringatan
+   merah di bawah kotak catatannya. */
+const TABEL_CATATAN = 'catatan';
+const ID_CATATAN = 'utama';
+const KUNCI_CATATAN_LOKAL = 'catatan_leony_tarot';
+
+(function pasangCatatan(){
+  const kotak = $('#isi-catatan');
+  const st = $('#status-catatan');
+  const btnKosong = $('#btn-hapus-catatan');
+  if(!kotak) return;
+
+  let timer = null;
+  let pakaiSupabase = true;     // dimatiin otomatis kalau tabelnya belum ada
+  let lagiNgetik = false;       // biar update dari orang lain nggak nimpa ketikan kita
+
+  const tulisStatus = (teks, jenis) => {
+    st.textContent = teks;
+    st.className = 'status-catatan' + (jenis ? ' ' + jenis : '');
+  };
+  const statusOnline = () => tulisStatus('Tersimpan ✓ · kelihatan sama kamu & moderator', 'ok');
+  const statusLokal  = () => tulisStatus('⚠️ Kesimpan di perangkat ini aja — moderator belum bisa lihat. Bikin tabel "catatan" di Supabase biar kebaca semua orang.', 'lokal');
+
+  const simpanLokal = isi => { try { localStorage.setItem(KUNCI_CATATAN_LOKAL, isi); } catch(e){} };
+  const bacaLokal   = ()  => { try { return localStorage.getItem(KUNCI_CATATAN_LOKAL) || ''; } catch(e){ return ''; } };
+
+  async function muat(){
+    kotak.value = bacaLokal();
+    try {
+      const { data, error } = await supabaseClient
+        .from(TABEL_CATATAN).select('isi').eq('id', ID_CATATAN).maybeSingle();
+      if(error) throw error;
+      if(data && typeof data.isi === 'string'){
+        kotak.value = data.isi;
+        simpanLokal(data.isi);
+      }
+      statusOnline();
+      pasangRealtimeCatatan();
+    } catch(e){
+      pakaiSupabase = false;
+      statusLokal();
+    }
+  }
+
+  // Dengerin perubahan dari orang lain (moderator) secara real-time
+  function pasangRealtimeCatatan(){
+    supabaseClient
+      .channel('realtime-catatan')
+      .on('postgres_changes', { event: '*', schema: 'public', table: TABEL_CATATAN }, payload => {
+        const isiBaru = payload.new && payload.new.isi;
+        if(typeof isiBaru !== 'string') return;
+        if(lagiNgetik) return;                 // jangan ganggu kalau lagi ngetik
+        if(isiBaru === kotak.value) return;
+        kotak.value = isiBaru;
+        simpanLokal(isiBaru);
+        tulisStatus('Diperbarui dari perangkat lain ✓', 'ok');
+      })
+      .subscribe();
+  }
+
+  async function simpan(){
+    lagiNgetik = false;
+    const isi = kotak.value;
+    simpanLokal(isi);
+    if(!pakaiSupabase) return statusLokal();
+    try {
+      const { error } = await supabaseClient
+        .from(TABEL_CATATAN)
+        .upsert({ id: ID_CATATAN, isi: isi, ts: Date.now() });
+      if(error) throw error;
+      statusOnline();
+    } catch(e){
+      pakaiSupabase = false;
+      statusLokal();
+    }
+  }
+
+  // Nyimpen otomatis 700ms setelah berhenti ngetik
+  kotak.addEventListener('input', () => {
+    lagiNgetik = true;
+    tulisStatus('Menyimpan…', 'nulis');
+    clearTimeout(timer);
+    timer = setTimeout(simpan, 700);
+  });
+
+  btnKosong.addEventListener('click', () => {
+    if(!kotak.value.trim()) return;
+    if(!confirm('Kosongkan semua isi catatan?\n\nCatatan ini juga kehapus buat moderator ya.')) return;
+    kotak.value = '';
+    simpan();
+    kotak.focus();
+  });
+
+  muat();
+})();
 
 /* ══════ DATA ANTRIAN (SUPABASE, REAL-TIME) ══════ */
 let dAntrian = [];
