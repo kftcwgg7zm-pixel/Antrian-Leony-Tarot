@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="utf-8">
@@ -171,6 +171,14 @@ p{margin:0 0 12px}
 .sub-tab{flex:1;border:1px solid var(--garis);background:rgba(255,255,255,.6);border-radius:14px;padding:10px;
   text-align:center;font-weight:600;font-size:13px;cursor:pointer;color:var(--tinta-muda);transition:.25s}
 .sub-tab.aktif{background:linear-gradient(160deg,#fde6f0,#f5d1e4);color:#b4708f;border-color:#f0b9d3;box-shadow:var(--bayang-lembut)}
+
+/* PILL PILIHAN TIPE ANTRIAN (GANTI DROPDOWN) */
+.pills-tipe-input{display:flex;gap:6px}
+.pill-tipe-opt{flex:1;border:1px solid var(--garis);background:rgba(255,255,255,.7);border-radius:12px;
+  padding:0 10px;height:47px;text-align:center;font-weight:600;font-size:12.5px;cursor:pointer;
+  color:var(--tinta-muda);transition:.2s;white-space:nowrap}
+.pill-tipe-opt:hover{color:var(--tinta)}
+.pill-tipe-opt.aktif{background:linear-gradient(160deg,#fde6f0,#f5d1e4);color:#b4708f;border-color:#f0b9d3;box-shadow:var(--bayang-lembut)}
 
 /* ═════════ LAYOUT ═════════ */
 .bungkus{position:relative;z-index:2;max-width:950px;margin:0 auto;padding:22px 16px 10px}
@@ -397,10 +405,11 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
                 <div style="display: flex; gap: 8px; align-items: flex-end;">
                   <div style="flex: 1;">
                     <label>Status Tipe Antrian</label>
-                    <select class="i-tipe">
-                      <option value="Reguler">Reguler</option>
-                      <option value="Fast Track">Fast Track</option>
-                    </select>
+                    <div class="pills-tipe-input">
+                      <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
+                      <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
+                    </div>
+                    <input type="hidden" class="i-tipe-val" value="Reguler">
                   </div>
                   <button type="button" class="mini btn-hapus-baris" style="display:none; height: 47px; color:#a9526f;">✕</button>
                 </div>
@@ -807,6 +816,24 @@ $('#btn-logout').addEventListener('click', () => {
 });
 
 /* ══════ MULTI-INPUT ANTRIAN BARU (ADMIN) ══════ */
+function bindPillsTipe(scopeEl){
+  const btnReg = scopeEl.querySelector('.btn-reg');
+  const btnFt = scopeEl.querySelector('.btn-ft');
+  const inputVal = scopeEl.querySelector('.i-tipe-val');
+
+  btnReg.addEventListener('click', () => {
+    inputVal.value = 'Reguler';
+    btnReg.classList.add('aktif');
+    btnFt.classList.remove('aktif');
+  });
+  btnFt.addEventListener('click', () => {
+    inputVal.value = 'Fast Track';
+    btnFt.classList.add('aktif');
+    btnReg.classList.remove('aktif');
+  });
+}
+bindPillsTipe($('#daftar-input-container .baris-input-item'));
+
 $('#btn-tambah-baris').addEventListener('click', () => {
   const container = $('#daftar-input-container');
   const divBaru = document.createElement('div');
@@ -821,14 +848,17 @@ $('#btn-tambah-baris').addEventListener('click', () => {
     <div style="display: flex; gap: 8px; align-items: flex-end;">
       <div style="flex: 1;">
         <label>Status Tipe Antrian</label>
-        <select class="i-tipe">
-          <option value="Reguler">Reguler</option>
-          <option value="Fast Track">Fast Track</option>
-        </select>
+        <div class="pills-tipe-input">
+          <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
+          <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
+        </div>
+        <input type="hidden" class="i-tipe-val" value="Reguler">
       </div>
       <button type="button" class="mini btn-hapus-baris" style="height: 47px; color:#a9526f;" title="Hapus baris">✕</button>
     </div>
   `;
+
+  bindPillsTipe(divBaru);
 
   divBaru.querySelector('.btn-hapus-baris').addEventListener('click', () => {
     divBaru.remove();
@@ -853,7 +883,7 @@ $('#form-input').addEventListener('submit', async e => {
 
   barisItems.forEach((el, index) => {
     const detail = el.querySelector('.i-detail').value.trim();
-    const tipe = el.querySelector('.i-tipe').value;
+    const tipe = el.querySelector('.i-tipe-val').value;
 
     if(detail){
       itemBaruList.push({
@@ -889,15 +919,17 @@ $('#form-input').addEventListener('submit', async e => {
       <div style="display: flex; gap: 8px; align-items: flex-end;">
         <div style="flex: 1;">
           <label>Status Tipe Antrian</label>
-          <select class="i-tipe">
-            <option value="Reguler">Reguler</option>
-            <option value="Fast Track">Fast Track</option>
-          </select>
+          <div class="pills-tipe-input">
+            <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
+            <button type="button" class="pill-tipe-opt btn-ft">⚡ Fast Track</button>
+          </div>
+          <input type="hidden" class="i-tipe-val" value="Reguler">
         </div>
         <button type="button" class="mini btn-hapus-baris" style="display:none; height: 47px; color:#a9526f;">✕</button>
       </div>
     </div>
   `;
+  bindPillsTipe($('#daftar-input-container .baris-input-item'));
 
   btn.disabled = false;
   btn.textContent = 'Kirim Semua ke Antrian ♡[cite: 1]';
