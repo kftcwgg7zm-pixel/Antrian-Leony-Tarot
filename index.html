@@ -898,7 +898,7 @@ $('#form-input').addEventListener('submit', async e => {
 
   if(!itemBaruList.length){
     btn.disabled = false;
-    btn.textContent = 'Kirim Semua ke Antrian ♡[cite: 1]';
+    btn.textContent = 'Kirim Semua ke Antrian ♡';
     return status(st, 'Semua field nama masih kosong!', 'err');
   }
 
@@ -932,7 +932,7 @@ $('#form-input').addEventListener('submit', async e => {
   bindPillsTipe($('#daftar-input-container .baris-input-item'));
 
   btn.disabled = false;
-  btn.textContent = 'Kirim Semua ke Antrian ♡[cite: 1]';
+  btn.textContent = 'Kirim Semua ke Antrian ♡';
   if(!errInsert){
     status(st, `Berhasil menambahkan ${itemBaruList.length} antrian sekaligus! ♡`, 'ok');
   }
