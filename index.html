@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="utf-8">
@@ -488,7 +488,7 @@ const ADMIN_PASS = 'bintang';
    Ambil di: Supabase Dashboard > Project Settings > API > Project API keys > anon public */
 const SUPABASE_URL = 'https://hnnqjswajdjitetvupjt.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubnFqc3dhamRqaXRldHZ1cGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTk3MDEsImV4cCI6MjEwMjIzNTcwMX0.n_WUzwPhKSGdb_JP7Q5fOPSZMWLbHho9aRUeEi6IooI';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const TABEL_ANTRIAN = 'antrian';
 
 /* ══════ GERBANG ══════ */
@@ -635,7 +635,7 @@ function simpanAntrianLocal(data){
 // Ambil data awal dari Supabase, lalu pasang listener real-time
 async function muatAntrianLocal(){
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from(TABEL_ANTRIAN)
       .select('*')
       .order('ts', { ascending: false });
@@ -652,7 +652,7 @@ async function muatAntrianLocal(){
 
 // Dengarkan perubahan tabel 'antrian' secara real-time (dari device/browser manapun)
 function pasangRealtimeAntrian(){
-  supabase
+  supabaseClient
     .channel('realtime-antrian')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: TABEL_ANTRIAN }, payload => {
       if(!dAntrian.some(x => x.id === payload.new.id)){
@@ -677,19 +677,19 @@ function pasangRealtimeAntrian(){
 }
 
 async function tambahAntrianKeSupabase(items){
-  const { error } = await supabase.from(TABEL_ANTRIAN).insert(items);
+  const { error } = await supabaseClient.from(TABEL_ANTRIAN).insert(items);
   if(error) console.error('Gagal insert ke Supabase:', error);
   return error;
 }
 
 async function ubahStatusKeSupabase(id, status){
-  const { error } = await supabase.from(TABEL_ANTRIAN).update({ status }).eq('id', id);
+  const { error } = await supabaseClient.from(TABEL_ANTRIAN).update({ status }).eq('id', id);
   if(error) console.error('Gagal update status di Supabase:', error);
   return error;
 }
 
 async function hapusAntrianDiSupabase(id){
-  const { error } = await supabase.from(TABEL_ANTRIAN).delete().eq('id', id);
+  const { error } = await supabaseClient.from(TABEL_ANTRIAN).delete().eq('id', id);
   if(error) console.error('Gagal hapus di Supabase:', error);
   return error;
 }
