@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Leony Tarot ♡ Reading Antrian</title>
+<meta name="theme-color" content="#dcebfe">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Italianno&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Italianno&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ═════════ TOKEN ═════════ */
 :root{
@@ -393,10 +394,480 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
   border-radius:13px;padding:9px 13px;line-height:1.5}
 .info-hari b{color:#5d6c8d}
 
+
+/* ═════════════════════════════════════════════════════════════
+   TOKEN SEMANTIK — TEMA TERANG (bawaan)
+   Warna-warna yang tadinya ditulis langsung sekarang dikasih nama,
+   biar tema gelap tinggal nimpa namanya doang.
+   ═════════════════════════════════════════════════════════════ */
+:root{
+  --teks:#4c5a7a; --teks-lemah:#8b96b0; --teks-samar:#a3adc4;
+  --panel:rgba(255,255,255,.88);
+  --panel-2:rgba(255,255,255,.92);
+  --panel-3:rgba(244,248,255,.85);
+  --panel-4:rgba(255,255,255,.8);
+  --tepi:rgba(120,140,180,.18); --tepi-terang:rgba(120,140,180,.34);
+  --kilau:rgba(255,255,255,.6); --blur:12px;
+
+  --rose:#b4708f; --rose-terang:#f7b4d0; --rose-tua:#dd7ba6;
+  --rose-bg:#fde6f0; --rose-bg2:#f5d1e4; --rose-tepi:#f0b9d3;
+  --rose-glow:rgba(220,120,165,.55);
+
+  --biru:#4a6f9e; --biru-bg:#e8f1ff; --biru-tepi:#bcd6f4; --biru-glow:rgba(90,130,190,.5);
+  --emas-w:#a67c00; --emas-bg:#fff6d6; --emas-tepi:#f0e2a0; --emas-glow:rgba(166,124,0,.25);
+  --hijau:#5c8a68; --hijau-bg:#eef8f0; --hijau-tepi:#d3ecd9; --hijau-glow:rgba(92,138,104,.25);
+  --merah:#c0392b; --merah-bg:#fde2e2; --merah-tepi:#f5c2c2; --merah-glow:rgba(192,57,43,.25);
+  --ungu:#8b6fc7; --ungu-bg:#f3ecff; --ungu-tepi:#e2d4f7;
+}
+html{color-scheme:light}
+
+/* kelas pengganti inline-style (dulu warnanya ditempel langsung di HTML) */
+.lencana.no-urut{background:#e8efff;color:#5d6c8d;border-color:#dbe4f4;font-weight:700}
+.lencana.harga{background:#f3ecff;color:#8b6fc7;border-color:#e2d4f7;font-weight:700}
+.tabel-laporan td.td-hijau{color:#5c8a68;font-weight:600}
+.tabel-laporan td.td-hijau.kuat{font-weight:700}
+.tabel-laporan td.td-emas{color:#a67c00;font-weight:600}
+.tabel-laporan td.td-kuat{color:var(--tinta);font-weight:700}
+
+/* ═════════════════════════════════════════════════════════════
+   TOMBOL SELESAIKAN LIVE + PANEL ARSIP + MENU PILIH TAMPILAN
+   ═════════════════════════════════════════════════════════════ */
+.baris-selesai{display:flex;gap:9px;align-items:stretch;margin-top:16px}
+.btn-selesai{flex:1;border:0;cursor:pointer;border-radius:16px;padding:15px 18px;font-family:inherit;
+  font-size:15px;font-weight:800;letter-spacing:.02em;color:#fff;
+  background:linear-gradient(165deg,var(--rose-terang),var(--rose-tua));
+  box-shadow:0 14px 28px -14px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5);transition:.22s}
+.btn-selesai:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.btn-selesai:disabled{opacity:.6;cursor:wait;transform:none}
+.btn-balikin{border:1px solid var(--tepi-terang);background:var(--panel-2);color:var(--teks-lemah);
+  border-radius:16px;padding:0 16px;font-family:inherit;font-size:13.5px;font-weight:700;
+  cursor:pointer;transition:.2s;white-space:nowrap}
+.btn-balikin:hover{color:var(--rose);border-color:var(--rose-tepi)}
+
+.baris-arsip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px;
+  padding-top:14px;border-top:1px solid var(--tepi)}
+.btn-arsip{font-size:13px}
+.ket-arsip{font-size:12.5px;color:var(--teks-samar);font-weight:600}
+.feed-arsip{margin-top:12px;gap:12px}
+.grup-arsip{background:var(--panel-2);border:1px solid var(--tepi);border-radius:18px;overflow:hidden}
+.kepala-arsip{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:11px 15px;background:var(--panel-3);border-bottom:1px solid var(--tepi)}
+.tgl-arsip{font-size:13.5px;font-weight:800;color:var(--teks)}
+.ringkas-arsip{font-size:13px;color:var(--teks-lemah);font-weight:600}
+.ringkas-arsip b{color:var(--hijau);font-weight:800}
+.isi-arsip{display:grid;gap:8px;padding:13px 15px}
+.baris-arsip-item{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nama-arsip{font-size:15px;font-weight:700;color:var(--teks);margin-right:auto}
+
+/* menu pilih tampilan */
+.bungkus-tema{position:relative}
+.menu-tema{position:absolute;top:50px;right:0;min-width:178px;border-radius:18px;padding:7px;
+  background:var(--panel-4);border:1px solid var(--tepi-terang);backdrop-filter:blur(18px);
+  box-shadow:0 20px 44px -18px rgba(60,80,140,.55);display:grid;gap:3px;
+  opacity:0;visibility:hidden;transform:translateY(-8px) scale(.96);transform-origin:top right;
+  transition:.2s cubic-bezier(.3,1.3,.5,1)}
+.menu-tema.buka{opacity:1;visibility:visible;transform:none}
+.jdl-menu-tema{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;
+  color:var(--teks-samar);padding:7px 11px 5px}
+.opsi-tema{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;
+  border-radius:13px;padding:10px 11px;cursor:pointer;font-family:inherit;font-size:14px;
+  font-weight:700;color:var(--teks-lemah);transition:.18s;text-align:left}
+.opsi-tema:hover{background:var(--panel-3);color:var(--teks)}
+.opsi-tema span{flex:1}
+.opsi-tema b{opacity:0;color:var(--rose);font-size:13px}
+.opsi-tema.kepilih{color:var(--rose);background:var(--rose-bg)}
+.opsi-tema.kepilih b{opacity:1}
+.opsi-tema .contoh{width:19px;height:19px;border-radius:50%;flex:0 0 auto;
+  border:1.5px solid var(--tepi-terang);box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+.opsi-tema .contoh.ct{background:linear-gradient(150deg,#eaf3ff,#f7e3f0)}
+.opsi-tema .contoh.cg1{background:linear-gradient(150deg,#131539,#2a1a3a)}
+.opsi-tema .contoh.cg2{background:linear-gradient(150deg,#000,#1a0a16)}
+
+@media (max-width:560px){
+  .baris-selesai{flex-wrap:wrap}
+  .btn-balikin{flex:1 1 100%;padding:12px 16px}
+}
+
+/* ═════════════════════════════════════════════════════════════
+   TIPOGRAFI LEBIH JELAS
+   Huruf terang di atas latar gelap kelihatan lebih tipis daripada
+   sebaliknya, jadi ukuran & ketebalannya sengaja dinaikin, dan
+   letter-spacing yang tadinya terlalu renggang dirapetin.
+   ═════════════════════════════════════════════════════════════ */
+body{font-size:16px;line-height:1.62;font-weight:400;
+  text-rendering:optimizeLegibility;font-synthesis-weight:none}
+
+/* label kecil-kecil: paling ngaruh ke keterbacaan */
+.eyebrow{font-size:12px;letter-spacing:.26em;font-weight:600}
+.bar .nama{font-size:12px;letter-spacing:.16em;font-weight:700}
+label{font-size:12px;letter-spacing:.12em;font-weight:700}
+.kartu-stat .lbl{font-size:11.5px;letter-spacing:.04em;font-weight:700}
+.kartu-stat .angka{font-size:29px;font-weight:800;letter-spacing:-.01em}
+.lencana{font-size:11.5px;letter-spacing:.06em;font-weight:700;padding:5px 11px}
+.tab{font-size:12.5px;font-weight:700;letter-spacing:.02em}
+.tab .ikon{font-size:19px}
+.sub-tab{font-size:14.5px;font-weight:700}
+.tab-sesi{font-size:14.5px;font-weight:800}
+.tab-sesi small{font-size:11px;letter-spacing:.06em;font-weight:700;opacity:1}
+.kotak-mode .jdl-mode{font-size:11.5px;letter-spacing:.14em}
+.pita-mode{font-size:11px;letter-spacing:.06em;padding:5px 12px}
+.pill-opt{font-size:13px;font-weight:700;padding:7px 13px}
+.pill-tipe-opt{font-size:14px;font-weight:700}
+.pill-harga-opt{font-size:14px;font-weight:800}
+.mini,.btn-edit,.btn-hapus{font-size:13px;font-weight:700;padding:8px 14px}
+
+/* isi utama */
+.nama-p{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.waktu{font-size:12.5px;font-weight:500}
+.avatar{width:34px;height:34px;font-size:15px;font-weight:700}
+.daftar-harga li{font-size:16px;font-weight:500;padding:14px 2px}
+.daftar-harga li b{font-size:17px;font-weight:800}
+.tag-fast,.tag-privat{font-size:11.5px;letter-spacing:.1em}
+.langkah-order .baris-langkah{font-size:15px;line-height:1.55}
+.langkah-order .no{width:25px;height:25px;font-size:13px;font-weight:800}
+.kartu-info-biru{font-size:14.5px;line-height:1.6}
+.akun-tuju{font-size:14.5px}
+.jam-jawab{font-size:14px}
+.privasi-aman{font-size:11.5px;letter-spacing:.1em;padding:12px}
+.kotak-qris .ket{font-size:13px}
+.tabel-laporan{font-size:14.5px}
+.tabel-laporan th{font-size:12.5px;letter-spacing:.04em;font-weight:800;padding:12px 10px}
+.tabel-laporan td{padding:12px 10px;font-weight:500}
+.chip-orang{font-size:13.5px;font-weight:600;padding:6px 12px}
+.chip-orang b{font-size:12.5px}
+.chip-orang .st{font-size:10.5px;letter-spacing:.06em}
+.rinci-judul{font-size:11.5px;letter-spacing:.1em}
+.kosong{padding:38px 18px;font-size:15px}
+.kosong .em{font-size:36px}
+.kosong .j{font-size:42px}
+.info-lipat{font-size:13.5px;line-height:1.6;padding:12px 15px}
+.info-hari{font-size:14px;padding:11px 14px;font-weight:600}
+.pesan-status{font-size:14px;padding:12px 15px;font-weight:600}
+.status-catatan{font-size:13px;font-weight:600}
+.memuat{font-size:14px}
+.no-sedang{font-size:13.5px;font-weight:800;padding:2px 9px}
+.hero .tagline{font-size:13.5px;letter-spacing:.16em;font-weight:600}
+footer .kecil{font-size:13px;letter-spacing:.06em;font-weight:600}
+.gerbang-teks .kt{font-size:12px;letter-spacing:.3em;font-weight:600}
+.gerbang-teks .kt2{font-size:12.5px;letter-spacing:.14em;font-weight:600}
+
+/* input: 16px biar Safari iOS nggak auto-zoom pas diketik */
+input[type=text],input[type=password],textarea,select{
+  font-size:16px;font-weight:600;padding:14px 16px}
+input::placeholder,textarea::placeholder{font-weight:500;opacity:.75}
+.area-catatan{font-size:16px;line-height:1.65;font-weight:500}
+.kirim{font-size:15.5px;font-weight:700;padding:15px 22px;letter-spacing:.02em}
+
+/* angka statistik uang: jangan kekecilan */
+#lap-total-pendapatan,#lap-potongan-mod,#lap-sisa-kamu{font-size:20px!important;font-weight:800}
+#st-hari-ini{font-size:16.5px!important;font-weight:700;line-height:1.35}
+
+@media (max-width:520px){
+  .kartu-stat .angka{font-size:25px}
+  .kartu-stat .lbl{font-size:10.5px;letter-spacing:.02em}
+  #lap-total-pendapatan,#lap-potongan-mod,#lap-sisa-kamu{font-size:16.5px!important}
+  .lencana{font-size:11px;padding:5px 9px}
+  .nama-p{font-size:16px}
+  .tabel-laporan{font-size:13.5px}
+}
+
+
+/* ╔═══════════════════════════════════════════════════════════╗
+   ║  TEMA GELAP 1 — "MIDNIGHT CELESTIAL"                      ║
+   ║  Biru malam kelembutan. Pastel aslinya dipertahanin tapi   ║
+   ║  diredupin, jadi masih terasa lembut & manis, enak dilihat ║
+   ║  lama-lama tanpa bikin mata perih.                         ║
+   ╚═══════════════════════════════════════════════════════════╝ */
+html[data-tema="gelap1"]{
+  --bg1:#070c1e; --bg2:#0c1332; --bg3:#131539; --bg4:#1e173c; --bg5:#2a1a3a;
+
+  --panel:rgba(28,37,70,.70);  --panel-2:rgba(38,49,88,.58);
+  --panel-3:rgba(16,23,48,.80); --panel-4:rgba(19,26,52,.86);
+  --kilau:rgba(255,255,255,.07); --blur:14px;
+
+  --tepi:rgba(155,182,246,.17); --tepi-terang:rgba(178,204,255,.30);
+
+  --teks:#eaeffd; --teks-lemah:#aab7d8; --teks-samar:#8290b2;
+
+  --rose:#f7a8cb; --rose-terang:#ffc6de; --rose-tua:#e885b3;
+  --rose-bg:rgba(247,168,203,.14); --rose-bg2:rgba(247,168,203,.07);
+  --rose-tepi:rgba(247,168,203,.34); --rose-glow:rgba(247,168,203,.55);
+
+  --biru:#9ac4f8; --biru-bg:rgba(154,196,248,.13);
+  --biru-tepi:rgba(154,196,248,.30); --biru-glow:rgba(154,196,248,.5);
+
+  --emas-w:#f2d29a; --emas-bg:rgba(242,210,154,.13);
+  --emas-tepi:rgba(242,210,154,.30); --emas-glow:rgba(242,210,154,.35);
+
+  --hijau:#93dfb2; --hijau-bg:rgba(147,223,178,.13);
+  --hijau-tepi:rgba(147,223,178,.30); --hijau-glow:rgba(147,223,178,.35);
+
+  --merah:#f7959f; --merah-bg:rgba(247,149,159,.14);
+  --merah-tepi:rgba(247,149,159,.32); --merah-glow:rgba(247,149,159,.38);
+
+  --ungu:#c6b2f7; --ungu-bg:rgba(198,178,247,.14); --ungu-tepi:rgba(198,178,247,.30);
+
+  --bar-1:rgba(247,168,203,.15); --bar-2:rgba(247,168,203,.07);
+  --bar-biru-1:rgba(154,196,248,.15); --bar-biru-2:rgba(154,196,248,.07);
+
+  --grad-judul:linear-gradient(168deg,#ffffff 4%,#ffdcee 26%,#f7a2cb 52%,#c6b2f7 74%,#9ac4f8 100%);
+  --grad-sub:linear-gradient(150deg,#9ac4f8,#f7a8cb);
+  --grad-sub-biru:linear-gradient(165deg,#bcd9fb 6%,#7fb0ee 52%,#c6d9f8 100%);
+  --glow:rgba(160,150,255,.42);
+
+  --tirai-1:#1a2450; --tirai-2:#141c3e; --tirai-3:#0d1330;
+  --rays-op:.16; --rays-c:rgba(190,215,255,.5);
+  --gloria-1:rgba(190,210,255,.26); --gloria-2:rgba(225,190,255,.13);
+  --kabut-1:rgba(120,150,235,.24); --kabut-2:rgba(150,120,220,.12);
+  --ombak-1:rgba(35,46,92,.85); --ombak-2:rgba(28,37,76,.7);
+  --sabun-op:.5; --bulu-c:rgba(210,225,255,.55); --bulu-garis:rgba(150,175,230,.5);
+  --bintang:#e8f0ff; --sayap-op:.30;
+}
+
+/* ╔═══════════════════════════════════════════════════════════╗
+   ║  TEMA GELAP 2 — "NOIR ROSE"                               ║
+   ║  Hitam pekat ala OLED + aksen pink-ungu terang. Kontras    ║
+   ║  paling tinggi dari dua-duanya, jadi paling gampang kebaca ║
+   ║  dari jauh — cocok kalau layarnya dishare pas live atau    ║
+   ║  ditampilin di TV/monitor besar.                           ║
+   ╚═══════════════════════════════════════════════════════════╝ */
+html[data-tema="gelap2"]{
+  --bg1:#000000; --bg2:#050308; --bg3:#08050f; --bg4:#0b0612; --bg5:#0e0613;
+
+  --panel:rgba(255,255,255,.045); --panel-2:rgba(255,255,255,.062);
+  --panel-3:rgba(255,255,255,.05); --panel-4:rgba(9,7,13,.92);
+  --kilau:rgba(255,255,255,.09); --blur:10px;
+
+  --tepi:rgba(255,255,255,.11); --tepi-terang:rgba(255,255,255,.22);
+
+  --teks:#f8f8fc; --teks-lemah:#b5b2c6; --teks-samar:#8b8799;
+
+  --rose:#ff90c2; --rose-terang:#ffc4dd; --rose-tua:#f56ba9;
+  --rose-bg:rgba(255,144,194,.15); --rose-bg2:rgba(255,144,194,.07);
+  --rose-tepi:rgba(255,144,194,.42); --rose-glow:rgba(255,144,194,.7);
+
+  --biru:#8ac2ff; --biru-bg:rgba(138,194,255,.14);
+  --biru-tepi:rgba(138,194,255,.38); --biru-glow:rgba(138,194,255,.6);
+
+  --emas-w:#ffd68f; --emas-bg:rgba(255,214,143,.14);
+  --emas-tepi:rgba(255,214,143,.38); --emas-glow:rgba(255,214,143,.45);
+
+  --hijau:#7ff2b4; --hijau-bg:rgba(127,242,180,.13);
+  --hijau-tepi:rgba(127,242,180,.36); --hijau-glow:rgba(127,242,180,.42);
+
+  --merah:#ff8397; --merah-bg:rgba(255,131,151,.14);
+  --merah-tepi:rgba(255,131,151,.4); --merah-glow:rgba(255,131,151,.45);
+
+  --ungu:#cda9ff; --ungu-bg:rgba(205,169,255,.15); --ungu-tepi:rgba(205,169,255,.38);
+
+  --bar-1:rgba(255,144,194,.16); --bar-2:rgba(255,144,194,.05);
+  --bar-biru-1:rgba(138,194,255,.16); --bar-biru-2:rgba(138,194,255,.05);
+
+  --grad-judul:linear-gradient(168deg,#ffffff 2%,#ffc6e0 24%,#ff90c2 50%,#cda9ff 76%,#8ac2ff 100%);
+  --grad-sub:linear-gradient(150deg,#8ac2ff,#ff90c2);
+  --grad-sub-biru:linear-gradient(165deg,#bcdcff 6%,#6faeff 52%,#c9dcff 100%);
+  --glow:rgba(255,120,200,.4);
+
+  --tirai-1:#170a18; --tirai-2:#0e0610; --tirai-3:#060309;
+  --rays-op:.10; --rays-c:rgba(255,190,230,.45);
+  --gloria-1:rgba(255,160,215,.18); --gloria-2:rgba(180,140,255,.10);
+  --kabut-1:rgba(190,90,160,.20); --kabut-2:rgba(110,80,200,.11);
+  --ombak-1:rgba(24,12,26,.92); --ombak-2:rgba(17,9,19,.8);
+  --sabun-op:.4; --bulu-c:rgba(255,215,238,.4); --bulu-garis:rgba(255,160,210,.42);
+  --bintang:#ffe9f6; --sayap-op:.22;
+}
+
+
+/* ═════════════════════════════════════════════════════════════
+   MODE GELAP
+   Semua token lama (--tinta, --garis, dst) diarahkan ulang ke token
+   tema, jadi bagian lain yang masih pakai var() ikut berubah sendiri.
+   ═════════════════════════════════════════════════════════════ */
+html[data-tema="gelap1"]{
+  --tinta:var(--teks); --tinta-muda:var(--teks-lemah); --garis:var(--tepi);
+  --blush:var(--rose); --mawar:var(--rose-bg); --emas:var(--emas-w);
+  --awan:var(--panel-2); --langit:var(--biru-bg);
+  --bayang:0 26px 54px -24px rgba(0,0,0,.85);
+  --bayang-lembut:0 14px 30px -18px rgba(0,0,0,.8);
+}html[data-tema="gelap1"]{color-scheme:dark}html[data-tema="gelap1"] body{color:var(--teks);
+  background:linear-gradient(177deg,var(--bg1) 0%,var(--bg2) 24%,var(--bg3) 50%,var(--bg4) 76%,var(--bg5) 100%);
+  background-attachment:fixed}html[data-tema="gelap1"] ::selection{background:var(--rose);color:#12080f}html[data-tema="gelap1"] ::-webkit-scrollbar{width:11px;height:11px}html[data-tema="gelap1"] ::-webkit-scrollbar-track{background:transparent}html[data-tema="gelap1"] ::-webkit-scrollbar-thumb{background:var(--tepi-terang);border-radius:10px;
+  border:3px solid transparent;background-clip:content-box}html[data-tema="gelap1"] ::-webkit-scrollbar-thumb:hover{background:var(--rose-tepi);background-clip:content-box}
+
+/* ── GERBANG PEMBUKA ── */
+html[data-tema="gelap1"] #gerbang{background:linear-gradient(180deg,var(--bg1),var(--bg4))}html[data-tema="gelap1"] .tirai{background:radial-gradient(ellipse 62% 48% at 50% 30%,
+  var(--tirai-1) 0%,var(--tirai-2) 44%,var(--tirai-3) 72%,transparent 100%)}html[data-tema="gelap1"] .tirai.kr{box-shadow:26px 0 70px rgba(0,0,0,.55)}html[data-tema="gelap1"] .tirai.kn{box-shadow:-26px 0 70px rgba(0,0,0,.55)}html[data-tema="gelap1"] .gerbang-teks .nm{background:var(--grad-judul);-webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 6px 26px var(--glow))}html[data-tema="gelap1"] .gerbang-teks .kt{color:var(--teks-lemah)}html[data-tema="gelap1"] .gerbang-teks .kt2{color:var(--rose)}
+
+/* ── LATAR LANGIT ── */
+html[data-tema="gelap1"] .rays{opacity:var(--rays-op);
+  background:repeating-conic-gradient(from 0deg,rgba(255,255,255,0) 0 5deg,
+    var(--rays-c) 5.2deg 6.6deg,rgba(255,255,255,0) 6.8deg 13deg)}html[data-tema="gelap1"] .gloria{background:radial-gradient(circle,var(--gloria-1) 0%,var(--gloria-2) 28%,transparent 62%)}html[data-tema="gelap1"] .awan{background:radial-gradient(ellipse at 42% 40%,var(--kabut-1) 0%,var(--kabut-2) 46%,transparent 76%);
+  filter:blur(42px)}html[data-tema="gelap1"] .laut-awan .lap1 path{fill:var(--ombak-1)}html[data-tema="gelap1"] .laut-awan .lap2 path{fill:var(--ombak-2)}html[data-tema="gelap1"] .sabun .film{opacity:var(--sabun-op)}html[data-tema="gelap1"] .bulu svg path:first-child{fill:var(--bulu-c)}html[data-tema="gelap1"] .bulu svg path:last-child{stroke:var(--bulu-garis)}html[data-tema="gelap1"] .bulu{opacity:.5}html[data-tema="gelap1"] .kerlip{color:var(--bintang);text-shadow:0 0 12px var(--bintang)}html[data-tema="gelap1"] .jejak{color:var(--rose);text-shadow:0 0 10px var(--rose),0 0 20px var(--glow)}
+
+/* ── HERO ── */
+html[data-tema="gelap1"] .sayap{opacity:var(--sayap-op);filter:drop-shadow(0 12px 34px var(--glow))}html[data-tema="gelap1"] .halo{box-shadow:0 0 34px var(--emas-w),inset 0 0 26px rgba(255,240,205,.55)}html[data-tema="gelap1"] h1.judul{background:var(--grad-judul);-webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 4px 30px var(--glow))}html[data-tema="gelap1"] .eyebrow{color:var(--teks-lemah)}html[data-tema="gelap1"] .hero .tagline{color:var(--teks-lemah)}html[data-tema="gelap1"] h2.sub{background:var(--grad-sub);-webkit-background-clip:text;background-clip:text}
+
+/* ── PANEL / JENDELA ── */
+html[data-tema="gelap1"] .jendela{background:var(--panel);border:1px solid var(--tepi);
+  box-shadow:var(--bayang);backdrop-filter:blur(var(--blur))}html[data-tema="gelap1"] .jendela::before{background:linear-gradient(150deg,var(--kilau) 0%,transparent 36%)}html[data-tema="gelap1"] .bar{background:linear-gradient(180deg,var(--bar-1),var(--bar-2));border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .bar.biru{background:linear-gradient(180deg,var(--bar-biru-1),var(--bar-biru-2))}html[data-tema="gelap1"] .titik{background:var(--tepi-terang);box-shadow:inset -1px -1px 2px rgba(0,0,0,.4)}html[data-tema="gelap1"] .bar .nama{color:var(--rose)}html[data-tema="gelap1"] .bar.biru .nama{color:var(--biru)}
+
+/* ── KARTU STATISTIK ── */
+html[data-tema="gelap1"] .kartu-stat{background:var(--panel-2);border:1px solid var(--tepi);
+  box-shadow:0 10px 22px -16px rgba(0,0,0,.9)}html[data-tema="gelap1"] .kartu-stat .angka{color:var(--teks)}html[data-tema="gelap1"] .kartu-stat .lbl{color:var(--teks-lemah)}html[data-tema="gelap1"] .kartu-stat.bisa-pencet:hover{box-shadow:0 12px 26px -14px rgba(0,0,0,.95);border-color:var(--tepi-terang)}html[data-tema="gelap1"] .kartu-stat.pilih-belum{background:var(--merah-bg);border-color:var(--merah-tepi);
+  box-shadow:0 10px 24px -12px var(--merah-glow)}html[data-tema="gelap1"] .kartu-stat.pilih-sudah{background:var(--hijau-bg);border-color:var(--hijau-tepi);
+  box-shadow:0 10px 24px -12px var(--hijau-glow)}html[data-tema="gelap1"] #st-belum{color:var(--merah)!important}html[data-tema="gelap1"] #st-sudah{color:var(--hijau)!important}html[data-tema="gelap1"] #st-hari-ini{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-total-pendapatan{color:var(--teks)!important}html[data-tema="gelap1"] #lap-potongan-mod{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-sisa-kamu{color:var(--hijau)!important}html[data-tema="gelap1"] .no-sedang{background:var(--emas-bg);border:1px solid var(--emas-tepi);color:var(--emas-w)}
+
+/* ── TABEL LAPORAN ── */
+html[data-tema="gelap1"] .tabel-laporan th{background:var(--panel-3);color:var(--teks-lemah);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .tabel-laporan td{color:var(--teks);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .tabel-laporan tr.baris-tgl:hover{background:var(--panel-2)}html[data-tema="gelap1"] .tabel-laporan td.td-hijau{color:var(--hijau);font-weight:700}html[data-tema="gelap1"] .tabel-laporan td.td-hijau.kuat{font-weight:800}html[data-tema="gelap1"] .tabel-laporan td.td-emas{color:var(--emas-w);font-weight:700}html[data-tema="gelap1"] .tabel-laporan td.td-kuat{color:var(--teks);font-weight:800}html[data-tema="gelap1"] .panah-buka{color:var(--teks-lemah)}html[data-tema="gelap1"] .baris-rinci td{background:var(--panel-3);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .rinci-judul{color:var(--teks-lemah)}html[data-tema="gelap1"] .chip-orang{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap1"] .chip-orang b{color:var(--ungu)}html[data-tema="gelap1"] .chip-orang .st{background:var(--emas-bg);color:var(--emas-w)}html[data-tema="gelap1"] .chip-orang .st.ok{background:var(--hijau-bg);color:var(--hijau)}
+
+/* ── NAVIGASI ── */
+html[data-tema="gelap1"] .nav{background:var(--panel-4);border:1px solid var(--tepi-terang);
+  box-shadow:0 24px 50px -20px rgba(0,0,0,.95);backdrop-filter:blur(20px)}html[data-tema="gelap1"] .tab{color:var(--teks-lemah)}html[data-tema="gelap1"] .tab:hover{color:var(--teks)}html[data-tema="gelap1"] .tab[aria-selected="true"]{background:linear-gradient(180deg,var(--rose-bg),var(--rose-bg2));
+  color:var(--rose);box-shadow:inset 0 1px 0 var(--kilau),0 8px 18px -10px var(--rose-glow)}html[data-tema="gelap1"] .layang button{background:var(--panel-4);border:1px solid var(--tepi-terang);
+  color:var(--teks-lemah);box-shadow:var(--bayang-lembut);backdrop-filter:blur(14px)}html[data-tema="gelap1"] .layang button:hover{color:var(--teks);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .layang button.on{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}
+
+/* ── SUB-TAB & PILL ── */
+html[data-tema="gelap1"] .sub-tabs{border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .sub-tab{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .sub-tab:hover{color:var(--teks);border-color:var(--tepi-terang)}html[data-tema="gelap1"] .sub-tab.aktif{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi);
+  box-shadow:0 10px 22px -14px var(--rose-glow)}html[data-tema="gelap1"] .sub-tab.aktif.biru{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);
+  box-shadow:0 10px 22px -14px var(--biru-glow)}html[data-tema="gelap1"] .pill-tipe-opt, html[data-tema="gelap1"] .pill-harga-opt{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .pill-tipe-opt:hover, html[data-tema="gelap1"] .pill-harga-opt:hover{color:var(--teks);border-color:var(--tepi-terang)}html[data-tema="gelap1"] .pill-tipe-opt.aktif, html[data-tema="gelap1"] .pill-harga-opt.aktif{background:var(--rose-bg);color:var(--rose);
+  border-color:var(--rose-tepi);box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap1"] .pills-status{background:var(--panel-3);border:1px solid var(--tepi)}html[data-tema="gelap1"] .pill-opt{color:var(--teks-lemah)}html[data-tema="gelap1"] .pill-opt:hover{color:var(--teks)}html[data-tema="gelap1"] .pill-opt.sel-belum{background:var(--merah-bg);color:var(--merah);box-shadow:0 2px 8px var(--merah-glow)}html[data-tema="gelap1"] .pill-opt.sel-sudah{background:var(--hijau-bg);color:var(--hijau);box-shadow:0 2px 8px var(--hijau-glow)}html[data-tema="gelap1"] .pill-opt.sel-sedang{background:var(--emas-bg);color:var(--emas-w);box-shadow:0 2px 8px var(--emas-glow)}
+
+/* ── MODE SESI ── */
+html[data-tema="gelap1"] .kotak-mode{background:var(--panel);border:1px solid var(--tepi);box-shadow:var(--bayang-lembut)}html[data-tema="gelap1"] .kotak-mode .jdl-mode{color:var(--teks-lemah)}html[data-tema="gelap1"] .tab-sesi{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .tab-sesi:hover{color:var(--teks);border-color:var(--tepi-terang)}html[data-tema="gelap1"] .tab-sesi.aktif{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .tab-sesi.aktif.solo{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .pita-mode{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap1"] .pita-mode.mod{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}
+
+/* ── FORM ── */
+html[data-tema="gelap1"] label{color:var(--teks-lemah)}html[data-tema="gelap1"] input[type=text], html[data-tema="gelap1"] input[type=password], html[data-tema="gelap1"] textarea, html[data-tema="gelap1"] select, html[data-tema="gelap1"] .area-catatan{
+  background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap1"] input::placeholder, html[data-tema="gelap1"] textarea::placeholder{color:var(--teks-samar)}html[data-tema="gelap1"] input:focus, html[data-tema="gelap1"] textarea:focus, html[data-tema="gelap1"] select:focus, html[data-tema="gelap1"] .area-catatan:focus{
+  border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-bg);background:var(--panel-2)}html[data-tema="gelap1"] .cari::before{color:var(--teks-samar)}html[data-tema="gelap1"] .kirim{color:#1a1024;background:linear-gradient(165deg,var(--rose-terang),var(--rose) 62%,var(--rose-tua));
+  box-shadow:0 16px 30px -14px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.45)}html[data-tema="gelap1"] #btn-tambah-baris{color:var(--rose)!important;border-color:var(--rose-tepi)!important;background:var(--rose-bg)}html[data-tema="gelap1"] #btn-logout{color:var(--rose)!important;border-color:var(--rose-tepi)!important}html[data-tema="gelap1"] .btn-hapus-baris{color:var(--merah)!important}html[data-tema="gelap1"] .pesan-status.ok{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap1"] .pesan-status.err{background:var(--merah-bg);color:var(--merah);border:1px solid var(--merah-tepi)}
+
+/* ── KARTU ANTRIAN ── */
+html[data-tema="gelap1"] .gelembung{background:var(--panel-2);border:1px solid var(--tepi);
+  box-shadow:0 10px 22px -18px rgba(0,0,0,.95)}html[data-tema="gelap1"] .gelembung:hover{border-color:var(--tepi-terang)}html[data-tema="gelap1"] .avatar{color:#150d18;background:linear-gradient(160deg,var(--biru),var(--rose));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}html[data-tema="gelap1"] .nama-p{color:var(--teks)}html[data-tema="gelap1"] .waktu{color:var(--teks-samar)}html[data-tema="gelap1"] .lencana{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap1"] .lencana.baca{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}html[data-tema="gelap1"] .lencana.proses{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}html[data-tema="gelap1"] .lencana.tunggu{background:var(--merah-bg);color:var(--merah);border-color:var(--merah-tepi)}html[data-tema="gelap1"] .lencana.kilat{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .lencana.no-urut{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);font-weight:800}html[data-tema="gelap1"] .lencana.harga{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi);font-weight:800}html[data-tema="gelap1"] .kosong{color:var(--teks-lemah)}html[data-tema="gelap1"] .kosong .j{color:var(--teks-samar)}html[data-tema="gelap1"] .btn-hapus{background:var(--panel-3);border:1px solid var(--tepi);color:var(--merah)}html[data-tema="gelap1"] .btn-hapus:hover{background:var(--merah-bg);border-color:var(--merah-tepi)}html[data-tema="gelap1"] .btn-edit{background:var(--panel-3);border:1px solid var(--tepi);color:var(--biru)}html[data-tema="gelap1"] .btn-edit:hover{background:var(--biru-bg);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .mini{background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .mini:hover{color:var(--rose);border-color:var(--rose-tepi)}
+
+/* ── PRICELIST ── */
+html[data-tema="gelap1"] .daftar-harga li{color:var(--teks);border-bottom:1px dashed var(--tepi)}html[data-tema="gelap1"] .daftar-harga li b{color:var(--rose)}html[data-tema="gelap1"] .tag-fast{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi);
+  box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap1"] .langkah-order .baris-langkah{color:var(--teks)}html[data-tema="gelap1"] .langkah-order .no{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi)}html[data-tema="gelap1"] .blok-biru .daftar-harga li{border-bottom-color:var(--tepi)}html[data-tema="gelap1"] .blok-biru .daftar-harga li b{color:var(--biru)}html[data-tema="gelap1"] .blok-biru .langkah-order .no{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .blok-biru .sub{background:var(--grad-sub-biru);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap1"] .tag-privat{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap1"] .kartu-info-biru{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks)}html[data-tema="gelap1"] .kartu-info-biru b{color:var(--biru)}html[data-tema="gelap1"] .akun-tuju{background:var(--panel-3);border:1px dashed var(--biru-tepi);color:var(--biru)}html[data-tema="gelap1"] .jam-jawab{color:var(--teks-lemah)}html[data-tema="gelap1"] .privasi-aman{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap1"] .kotak-qris{border-top:1px solid var(--tepi)}
+/* QR dikasih bantalan putih biar tetap kebaca kamera di layar gelap */
+html[data-tema="gelap1"] .kotak-qris img{background:#fff;padding:12px;border:1px solid var(--tepi-terang);
+  box-shadow:0 14px 32px -16px rgba(0,0,0,.9)}html[data-tema="gelap1"] .kotak-qris .ket{color:var(--teks-lemah)}
+
+/* ── CATATAN & INFO ── */
+html[data-tema="gelap1"] .status-catatan{color:var(--teks-lemah)}html[data-tema="gelap1"] .status-catatan.ok{color:var(--hijau)}html[data-tema="gelap1"] .status-catatan.nulis{color:var(--emas-w)}html[data-tema="gelap1"] .status-catatan.err{color:var(--merah)}html[data-tema="gelap1"] .status-catatan.lokal{color:var(--merah);background:var(--merah-bg);border:1px solid var(--merah-tepi)}html[data-tema="gelap1"] .info-lipat{background:var(--rose-bg);border:1px dashed var(--rose-tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .info-lipat b{color:var(--rose)}html[data-tema="gelap1"] .info-hari{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .info-hari b{color:var(--biru)}html[data-tema="gelap1"] .memuat{color:var(--teks-lemah)}html[data-tema="gelap1"] .memuat::after{border:2px solid var(--tepi-terang);border-top-color:var(--rose)}html[data-tema="gelap1"] footer .skrip{background:var(--grad-sub);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap1"] footer .kecil{color:var(--teks-samar)}
+
+/* ── KOMPONEN BARU DI MODE GELAP ── */
+html[data-tema="gelap1"] .btn-selesai{color:#1a1024;
+  background:linear-gradient(165deg,var(--rose-terang),var(--rose));
+  box-shadow:0 14px 30px -13px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5)}html[data-tema="gelap1"] .btn-balikin{background:var(--panel-2);border-color:var(--tepi-terang);color:var(--teks-lemah)}html[data-tema="gelap1"] .btn-balikin:hover{color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .menu-tema{box-shadow:0 22px 48px -18px rgba(0,0,0,.92)}html[data-tema="gelap1"] .opsi-tema .contoh{border-color:var(--tepi-terang);box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}html[data-tema="gelap1"] .grup-arsip{box-shadow:0 10px 22px -18px rgba(0,0,0,.9)}
+
+/* ═════════════════════════════════════════════════════════════
+   MODE GELAP
+   Semua token lama (--tinta, --garis, dst) diarahkan ulang ke token
+   tema, jadi bagian lain yang masih pakai var() ikut berubah sendiri.
+   ═════════════════════════════════════════════════════════════ */
+html[data-tema="gelap2"]{
+  --tinta:var(--teks); --tinta-muda:var(--teks-lemah); --garis:var(--tepi);
+  --blush:var(--rose); --mawar:var(--rose-bg); --emas:var(--emas-w);
+  --awan:var(--panel-2); --langit:var(--biru-bg);
+  --bayang:0 26px 54px -24px rgba(0,0,0,.85);
+  --bayang-lembut:0 14px 30px -18px rgba(0,0,0,.8);
+}html[data-tema="gelap2"]{color-scheme:dark}html[data-tema="gelap2"] body{color:var(--teks);
+  background:linear-gradient(177deg,var(--bg1) 0%,var(--bg2) 24%,var(--bg3) 50%,var(--bg4) 76%,var(--bg5) 100%);
+  background-attachment:fixed}html[data-tema="gelap2"] ::selection{background:var(--rose);color:#12080f}html[data-tema="gelap2"] ::-webkit-scrollbar{width:11px;height:11px}html[data-tema="gelap2"] ::-webkit-scrollbar-track{background:transparent}html[data-tema="gelap2"] ::-webkit-scrollbar-thumb{background:var(--tepi-terang);border-radius:10px;
+  border:3px solid transparent;background-clip:content-box}html[data-tema="gelap2"] ::-webkit-scrollbar-thumb:hover{background:var(--rose-tepi);background-clip:content-box}
+
+/* ── GERBANG PEMBUKA ── */
+html[data-tema="gelap2"] #gerbang{background:linear-gradient(180deg,var(--bg1),var(--bg4))}html[data-tema="gelap2"] .tirai{background:radial-gradient(ellipse 62% 48% at 50% 30%,
+  var(--tirai-1) 0%,var(--tirai-2) 44%,var(--tirai-3) 72%,transparent 100%)}html[data-tema="gelap2"] .tirai.kr{box-shadow:26px 0 70px rgba(0,0,0,.55)}html[data-tema="gelap2"] .tirai.kn{box-shadow:-26px 0 70px rgba(0,0,0,.55)}html[data-tema="gelap2"] .gerbang-teks .nm{background:var(--grad-judul);-webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 6px 26px var(--glow))}html[data-tema="gelap2"] .gerbang-teks .kt{color:var(--teks-lemah)}html[data-tema="gelap2"] .gerbang-teks .kt2{color:var(--rose)}
+
+/* ── LATAR LANGIT ── */
+html[data-tema="gelap2"] .rays{opacity:var(--rays-op);
+  background:repeating-conic-gradient(from 0deg,rgba(255,255,255,0) 0 5deg,
+    var(--rays-c) 5.2deg 6.6deg,rgba(255,255,255,0) 6.8deg 13deg)}html[data-tema="gelap2"] .gloria{background:radial-gradient(circle,var(--gloria-1) 0%,var(--gloria-2) 28%,transparent 62%)}html[data-tema="gelap2"] .awan{background:radial-gradient(ellipse at 42% 40%,var(--kabut-1) 0%,var(--kabut-2) 46%,transparent 76%);
+  filter:blur(42px)}html[data-tema="gelap2"] .laut-awan .lap1 path{fill:var(--ombak-1)}html[data-tema="gelap2"] .laut-awan .lap2 path{fill:var(--ombak-2)}html[data-tema="gelap2"] .sabun .film{opacity:var(--sabun-op)}html[data-tema="gelap2"] .bulu svg path:first-child{fill:var(--bulu-c)}html[data-tema="gelap2"] .bulu svg path:last-child{stroke:var(--bulu-garis)}html[data-tema="gelap2"] .bulu{opacity:.5}html[data-tema="gelap2"] .kerlip{color:var(--bintang);text-shadow:0 0 12px var(--bintang)}html[data-tema="gelap2"] .jejak{color:var(--rose);text-shadow:0 0 10px var(--rose),0 0 20px var(--glow)}
+
+/* ── HERO ── */
+html[data-tema="gelap2"] .sayap{opacity:var(--sayap-op);filter:drop-shadow(0 12px 34px var(--glow))}html[data-tema="gelap2"] .halo{box-shadow:0 0 34px var(--emas-w),inset 0 0 26px rgba(255,240,205,.55)}html[data-tema="gelap2"] h1.judul{background:var(--grad-judul);-webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 4px 30px var(--glow))}html[data-tema="gelap2"] .eyebrow{color:var(--teks-lemah)}html[data-tema="gelap2"] .hero .tagline{color:var(--teks-lemah)}html[data-tema="gelap2"] h2.sub{background:var(--grad-sub);-webkit-background-clip:text;background-clip:text}
+
+/* ── PANEL / JENDELA ── */
+html[data-tema="gelap2"] .jendela{background:var(--panel);border:1px solid var(--tepi);
+  box-shadow:var(--bayang);backdrop-filter:blur(var(--blur))}html[data-tema="gelap2"] .jendela::before{background:linear-gradient(150deg,var(--kilau) 0%,transparent 36%)}html[data-tema="gelap2"] .bar{background:linear-gradient(180deg,var(--bar-1),var(--bar-2));border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .bar.biru{background:linear-gradient(180deg,var(--bar-biru-1),var(--bar-biru-2))}html[data-tema="gelap2"] .titik{background:var(--tepi-terang);box-shadow:inset -1px -1px 2px rgba(0,0,0,.4)}html[data-tema="gelap2"] .bar .nama{color:var(--rose)}html[data-tema="gelap2"] .bar.biru .nama{color:var(--biru)}
+
+/* ── KARTU STATISTIK ── */
+html[data-tema="gelap2"] .kartu-stat{background:var(--panel-2);border:1px solid var(--tepi);
+  box-shadow:0 10px 22px -16px rgba(0,0,0,.9)}html[data-tema="gelap2"] .kartu-stat .angka{color:var(--teks)}html[data-tema="gelap2"] .kartu-stat .lbl{color:var(--teks-lemah)}html[data-tema="gelap2"] .kartu-stat.bisa-pencet:hover{box-shadow:0 12px 26px -14px rgba(0,0,0,.95);border-color:var(--tepi-terang)}html[data-tema="gelap2"] .kartu-stat.pilih-belum{background:var(--merah-bg);border-color:var(--merah-tepi);
+  box-shadow:0 10px 24px -12px var(--merah-glow)}html[data-tema="gelap2"] .kartu-stat.pilih-sudah{background:var(--hijau-bg);border-color:var(--hijau-tepi);
+  box-shadow:0 10px 24px -12px var(--hijau-glow)}html[data-tema="gelap2"] #st-belum{color:var(--merah)!important}html[data-tema="gelap2"] #st-sudah{color:var(--hijau)!important}html[data-tema="gelap2"] #st-hari-ini{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-total-pendapatan{color:var(--teks)!important}html[data-tema="gelap2"] #lap-potongan-mod{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-sisa-kamu{color:var(--hijau)!important}html[data-tema="gelap2"] .no-sedang{background:var(--emas-bg);border:1px solid var(--emas-tepi);color:var(--emas-w)}
+
+/* ── TABEL LAPORAN ── */
+html[data-tema="gelap2"] .tabel-laporan th{background:var(--panel-3);color:var(--teks-lemah);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .tabel-laporan td{color:var(--teks);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .tabel-laporan tr.baris-tgl:hover{background:var(--panel-2)}html[data-tema="gelap2"] .tabel-laporan td.td-hijau{color:var(--hijau);font-weight:700}html[data-tema="gelap2"] .tabel-laporan td.td-hijau.kuat{font-weight:800}html[data-tema="gelap2"] .tabel-laporan td.td-emas{color:var(--emas-w);font-weight:700}html[data-tema="gelap2"] .tabel-laporan td.td-kuat{color:var(--teks);font-weight:800}html[data-tema="gelap2"] .panah-buka{color:var(--teks-lemah)}html[data-tema="gelap2"] .baris-rinci td{background:var(--panel-3);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .rinci-judul{color:var(--teks-lemah)}html[data-tema="gelap2"] .chip-orang{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap2"] .chip-orang b{color:var(--ungu)}html[data-tema="gelap2"] .chip-orang .st{background:var(--emas-bg);color:var(--emas-w)}html[data-tema="gelap2"] .chip-orang .st.ok{background:var(--hijau-bg);color:var(--hijau)}
+
+/* ── NAVIGASI ── */
+html[data-tema="gelap2"] .nav{background:var(--panel-4);border:1px solid var(--tepi-terang);
+  box-shadow:0 24px 50px -20px rgba(0,0,0,.95);backdrop-filter:blur(20px)}html[data-tema="gelap2"] .tab{color:var(--teks-lemah)}html[data-tema="gelap2"] .tab:hover{color:var(--teks)}html[data-tema="gelap2"] .tab[aria-selected="true"]{background:linear-gradient(180deg,var(--rose-bg),var(--rose-bg2));
+  color:var(--rose);box-shadow:inset 0 1px 0 var(--kilau),0 8px 18px -10px var(--rose-glow)}html[data-tema="gelap2"] .layang button{background:var(--panel-4);border:1px solid var(--tepi-terang);
+  color:var(--teks-lemah);box-shadow:var(--bayang-lembut);backdrop-filter:blur(14px)}html[data-tema="gelap2"] .layang button:hover{color:var(--teks);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .layang button.on{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}
+
+/* ── SUB-TAB & PILL ── */
+html[data-tema="gelap2"] .sub-tabs{border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .sub-tab{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .sub-tab:hover{color:var(--teks);border-color:var(--tepi-terang)}html[data-tema="gelap2"] .sub-tab.aktif{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi);
+  box-shadow:0 10px 22px -14px var(--rose-glow)}html[data-tema="gelap2"] .sub-tab.aktif.biru{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);
+  box-shadow:0 10px 22px -14px var(--biru-glow)}html[data-tema="gelap2"] .pill-tipe-opt, html[data-tema="gelap2"] .pill-harga-opt{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .pill-tipe-opt:hover, html[data-tema="gelap2"] .pill-harga-opt:hover{color:var(--teks);border-color:var(--tepi-terang)}html[data-tema="gelap2"] .pill-tipe-opt.aktif, html[data-tema="gelap2"] .pill-harga-opt.aktif{background:var(--rose-bg);color:var(--rose);
+  border-color:var(--rose-tepi);box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap2"] .pills-status{background:var(--panel-3);border:1px solid var(--tepi)}html[data-tema="gelap2"] .pill-opt{color:var(--teks-lemah)}html[data-tema="gelap2"] .pill-opt:hover{color:var(--teks)}html[data-tema="gelap2"] .pill-opt.sel-belum{background:var(--merah-bg);color:var(--merah);box-shadow:0 2px 8px var(--merah-glow)}html[data-tema="gelap2"] .pill-opt.sel-sudah{background:var(--hijau-bg);color:var(--hijau);box-shadow:0 2px 8px var(--hijau-glow)}html[data-tema="gelap2"] .pill-opt.sel-sedang{background:var(--emas-bg);color:var(--emas-w);box-shadow:0 2px 8px var(--emas-glow)}
+
+/* ── MODE SESI ── */
+html[data-tema="gelap2"] .kotak-mode{background:var(--panel);border:1px solid var(--tepi);box-shadow:var(--bayang-lembut)}html[data-tema="gelap2"] .kotak-mode .jdl-mode{color:var(--teks-lemah)}html[data-tema="gelap2"] .tab-sesi{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .tab-sesi:hover{color:var(--teks);border-color:var(--tepi-terang)}html[data-tema="gelap2"] .tab-sesi.aktif{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .tab-sesi.aktif.solo{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .pita-mode{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap2"] .pita-mode.mod{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}
+
+/* ── FORM ── */
+html[data-tema="gelap2"] label{color:var(--teks-lemah)}html[data-tema="gelap2"] input[type=text], html[data-tema="gelap2"] input[type=password], html[data-tema="gelap2"] textarea, html[data-tema="gelap2"] select, html[data-tema="gelap2"] .area-catatan{
+  background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap2"] input::placeholder, html[data-tema="gelap2"] textarea::placeholder{color:var(--teks-samar)}html[data-tema="gelap2"] input:focus, html[data-tema="gelap2"] textarea:focus, html[data-tema="gelap2"] select:focus, html[data-tema="gelap2"] .area-catatan:focus{
+  border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-bg);background:var(--panel-2)}html[data-tema="gelap2"] .cari::before{color:var(--teks-samar)}html[data-tema="gelap2"] .kirim{color:#1a1024;background:linear-gradient(165deg,var(--rose-terang),var(--rose) 62%,var(--rose-tua));
+  box-shadow:0 16px 30px -14px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.45)}html[data-tema="gelap2"] #btn-tambah-baris{color:var(--rose)!important;border-color:var(--rose-tepi)!important;background:var(--rose-bg)}html[data-tema="gelap2"] #btn-logout{color:var(--rose)!important;border-color:var(--rose-tepi)!important}html[data-tema="gelap2"] .btn-hapus-baris{color:var(--merah)!important}html[data-tema="gelap2"] .pesan-status.ok{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap2"] .pesan-status.err{background:var(--merah-bg);color:var(--merah);border:1px solid var(--merah-tepi)}
+
+/* ── KARTU ANTRIAN ── */
+html[data-tema="gelap2"] .gelembung{background:var(--panel-2);border:1px solid var(--tepi);
+  box-shadow:0 10px 22px -18px rgba(0,0,0,.95)}html[data-tema="gelap2"] .gelembung:hover{border-color:var(--tepi-terang)}html[data-tema="gelap2"] .avatar{color:#150d18;background:linear-gradient(160deg,var(--biru),var(--rose));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}html[data-tema="gelap2"] .nama-p{color:var(--teks)}html[data-tema="gelap2"] .waktu{color:var(--teks-samar)}html[data-tema="gelap2"] .lencana{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap2"] .lencana.baca{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}html[data-tema="gelap2"] .lencana.proses{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}html[data-tema="gelap2"] .lencana.tunggu{background:var(--merah-bg);color:var(--merah);border-color:var(--merah-tepi)}html[data-tema="gelap2"] .lencana.kilat{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .lencana.no-urut{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);font-weight:800}html[data-tema="gelap2"] .lencana.harga{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi);font-weight:800}html[data-tema="gelap2"] .kosong{color:var(--teks-lemah)}html[data-tema="gelap2"] .kosong .j{color:var(--teks-samar)}html[data-tema="gelap2"] .btn-hapus{background:var(--panel-3);border:1px solid var(--tepi);color:var(--merah)}html[data-tema="gelap2"] .btn-hapus:hover{background:var(--merah-bg);border-color:var(--merah-tepi)}html[data-tema="gelap2"] .btn-edit{background:var(--panel-3);border:1px solid var(--tepi);color:var(--biru)}html[data-tema="gelap2"] .btn-edit:hover{background:var(--biru-bg);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .mini{background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .mini:hover{color:var(--rose);border-color:var(--rose-tepi)}
+
+/* ── PRICELIST ── */
+html[data-tema="gelap2"] .daftar-harga li{color:var(--teks);border-bottom:1px dashed var(--tepi)}html[data-tema="gelap2"] .daftar-harga li b{color:var(--rose)}html[data-tema="gelap2"] .tag-fast{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi);
+  box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap2"] .langkah-order .baris-langkah{color:var(--teks)}html[data-tema="gelap2"] .langkah-order .no{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi)}html[data-tema="gelap2"] .blok-biru .daftar-harga li{border-bottom-color:var(--tepi)}html[data-tema="gelap2"] .blok-biru .daftar-harga li b{color:var(--biru)}html[data-tema="gelap2"] .blok-biru .langkah-order .no{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .blok-biru .sub{background:var(--grad-sub-biru);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap2"] .tag-privat{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap2"] .kartu-info-biru{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks)}html[data-tema="gelap2"] .kartu-info-biru b{color:var(--biru)}html[data-tema="gelap2"] .akun-tuju{background:var(--panel-3);border:1px dashed var(--biru-tepi);color:var(--biru)}html[data-tema="gelap2"] .jam-jawab{color:var(--teks-lemah)}html[data-tema="gelap2"] .privasi-aman{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap2"] .kotak-qris{border-top:1px solid var(--tepi)}
+/* QR dikasih bantalan putih biar tetap kebaca kamera di layar gelap */
+html[data-tema="gelap2"] .kotak-qris img{background:#fff;padding:12px;border:1px solid var(--tepi-terang);
+  box-shadow:0 14px 32px -16px rgba(0,0,0,.9)}html[data-tema="gelap2"] .kotak-qris .ket{color:var(--teks-lemah)}
+
+/* ── CATATAN & INFO ── */
+html[data-tema="gelap2"] .status-catatan{color:var(--teks-lemah)}html[data-tema="gelap2"] .status-catatan.ok{color:var(--hijau)}html[data-tema="gelap2"] .status-catatan.nulis{color:var(--emas-w)}html[data-tema="gelap2"] .status-catatan.err{color:var(--merah)}html[data-tema="gelap2"] .status-catatan.lokal{color:var(--merah);background:var(--merah-bg);border:1px solid var(--merah-tepi)}html[data-tema="gelap2"] .info-lipat{background:var(--rose-bg);border:1px dashed var(--rose-tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .info-lipat b{color:var(--rose)}html[data-tema="gelap2"] .info-hari{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .info-hari b{color:var(--biru)}html[data-tema="gelap2"] .memuat{color:var(--teks-lemah)}html[data-tema="gelap2"] .memuat::after{border:2px solid var(--tepi-terang);border-top-color:var(--rose)}html[data-tema="gelap2"] footer .skrip{background:var(--grad-sub);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap2"] footer .kecil{color:var(--teks-samar)}
+
+/* ── KOMPONEN BARU DI MODE GELAP ── */
+html[data-tema="gelap2"] .btn-selesai{color:#1a1024;
+  background:linear-gradient(165deg,var(--rose-terang),var(--rose));
+  box-shadow:0 14px 30px -13px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5)}html[data-tema="gelap2"] .btn-balikin{background:var(--panel-2);border-color:var(--tepi-terang);color:var(--teks-lemah)}html[data-tema="gelap2"] .btn-balikin:hover{color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .menu-tema{box-shadow:0 22px 48px -18px rgba(0,0,0,.92)}html[data-tema="gelap2"] .opsi-tema .contoh{border-color:var(--tepi-terang);box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}html[data-tema="gelap2"] .grup-arsip{box-shadow:0 10px 22px -18px rgba(0,0,0,.9)}
+/* Noir sengaja dibikin lebih tegas: sudut agak lebih tajam,
+   garis lebih kelihatan, aksen lebih menyala. */
+html[data-tema="gelap2"]{--r:20px}html[data-tema="gelap2"] .jendela{border-width:1px}html[data-tema="gelap2"] .gelembung{border-radius:16px 16px 16px 6px}html[data-tema="gelap2"] .lencana{border-width:1.5px}html[data-tema="gelap2"] .kartu-stat{background:var(--panel-2);border-width:1px}html[data-tema="gelap2"] .btn-selesai{box-shadow:0 14px 30px -12px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.55)}html[data-tema="gelap2"] .kirim{box-shadow:0 18px 34px -12px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5)}html[data-tema="gelap2"] .tab[aria-selected="true"]{box-shadow:inset 0 1px 0 var(--kilau),0 8px 22px -8px var(--rose-glow)}html[data-tema="gelap2"] h1.judul{filter:drop-shadow(0 4px 36px var(--glow)) drop-shadow(0 0 2px rgba(255,255,255,.3))}
+
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 </style>
+<script>
+/* Dijalanin paling awal biar temanya udah nempel sebelum halaman digambar —
+   kalau nggak, bakal ada kedipan putih sepersekian detik pas buka di mode gelap. */
+(function(){
+  var t;
+  try { t = localStorage.getItem('tema_leony'); } catch(e){}
+  if(t !== 'terang' && t !== 'gelap1' && t !== 'gelap2'){
+    // belum pernah milih -> ngikutin setelan HP/laptopnya
+    t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'gelap1' : 'terang';
+  }
+  document.documentElement.setAttribute('data-tema', t);
+})();
+</script>
 </head>
 <body>
 
@@ -427,6 +898,15 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
 </div>
 
 <div class="layang">
+  <div class="bungkus-tema">
+    <button id="btn-tema" title="Ganti tampilan" aria-label="Ganti tampilan" aria-expanded="false">🌙</button>
+    <div class="menu-tema" id="menu-tema" role="menu">
+      <div class="jdl-menu-tema">Tampilan</div>
+      <button type="button" class="opsi-tema" data-tema="terang"  role="menuitem"><i class="contoh ct"></i><span>Terang</span><b>✓</b></button>
+      <button type="button" class="opsi-tema" data-tema="gelap1"  role="menuitem"><i class="contoh cg1"></i><span>Midnight</span><b>✓</b></button>
+      <button type="button" class="opsi-tema" data-tema="gelap2"  role="menuitem"><i class="contoh cg2"></i><span>Noir</span><b>✓</b></button>
+    </div>
+  </div>
   <button id="btn-suara" title="Musik kayangan" aria-label="Nyalakan musik">♪</button>
   <button id="btn-atas" title="Kembali ke atas" aria-label="Kembali ke atas">↑</button>
 </div>
@@ -450,7 +930,7 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
       <div class="bar biru"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">customer_queue</span></div>
       <div class="isi">
         <h2 class="sub">Daftar Antrian</h2>
-        <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Lihat urutan antrian tarot kamu di bawah ini. Antrian di-reset tiap hari ya ♡</p>
+        <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Lihat urutan antrian tarot kamu di bawah ini. Antrian tetap ada sampai sesinya diselesaikan admin ya ♡</p>
         
         <!-- Counter Statistik Antrian -->
         <div class="papan-stat" id="papan-stat-antrian">
@@ -573,7 +1053,7 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         <div class="isi">
           <h2 class="sub" style="margin-bottom:6px">Laporan Pendapatan</h2>
           <div style="margin-bottom:10px"><span class="pita-mode" id="pita-laporan">🌷 Live Sendiri</span></div>
-          <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Rekap semua orang yang order per tanggal. Data lama tetap kesimpan di sini walaupun antrian hariannya udah direset ♡</p>
+          <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Rekap semua orang yang order per tanggal. Semua data lama tetap kesimpan di sini selamanya, walaupun antrian berjalannya udah dikosongin ♡</p>
 
           <!-- Ringkasan Total Keseluruhan -->
           <div class="papan-stat" id="papan-lap" style="grid-template-columns:repeat(3,1fr)">
@@ -612,14 +1092,29 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
         <div class="isi">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
             <div>
-              <h2 class="sub" style="margin:0 0 4px">Antrian Hari Ini</h2>
+              <h2 class="sub" style="margin:0 0 4px">Antrian Berjalan</h2>
               <span class="pita-mode" id="pita-kelola">🌷 Live Sendiri</span>
             </div>
             <button class="mini" id="btn-logout" style="border-color:#f0b9d3;color:#b4708f">Keluar Admin</button>
           </div>
           <div class="info-hari">📅 <b id="teks-tgl-hari-ini">hari ini</b></div>
+
           <div class="cari"><input type="text" id="cari-admin" placeholder="Cari nama pelanggan…"></div>
           <div class="feed" id="feed-admin"><div class="memuat">Memuat data admin</div></div>
+
+          <!-- Antrian di atas nggak ilang sendiri walaupun ganti hari.
+               Baru dikosongin kalau tombol ini ditekan. -->
+          <div class="baris-selesai">
+            <button class="btn-selesai" id="btn-selesai-sesi">✓ Selesaikan Live Hari Ini</button>
+            <button class="btn-balikin" id="btn-balikin-sesi" style="display:none" title="Balikin antrian yang barusan dikosongin">↩ Balikin</button>
+          </div>
+
+          <!-- ═══ ARSIP: ANTRIAN DARI SESI-SESI SEBELUMNYA ═══ -->
+          <div class="baris-arsip">
+            <button class="mini btn-arsip" id="btn-toggle-arsip">📦 Tampilkan arsip sesi sebelumnya</button>
+            <span class="ket-arsip" id="ket-arsip"></span>
+          </div>
+          <div class="feed feed-arsip" id="feed-arsip" style="display:none"></div>
         </div>
       </div>
 
@@ -944,6 +1439,9 @@ const KUNCI_CATATAN_LOKAL = 'catatan_leony_tarot';
     supabaseClient
       .channel('realtime-catatan')
       .on('postgres_changes', { event: '*', schema: 'public', table: TABEL_CATATAN }, payload => {
+        // Tabel ini juga dipakai buat nyimpen penanda "batas sesi".
+        // Jadi cuma baris catatan asli yang boleh nimpa isi textarea.
+        if(!payload.new || payload.new.id !== ID_CATATAN) return;
         const isiBaru = payload.new && payload.new.isi;
         if(typeof isiBaru !== 'string') return;
         if(lagiNgetik) return;                 // jangan ganggu kalau lagi ngetik
@@ -1001,6 +1499,7 @@ function simpanAntrianLocal(data){
 }
 
 async function muatAntrianLocal(){
+  await muatBatasSesi();      // penanda sesi harus kebaca dulu sebelum digambar
   try {
     const { data, error } = await supabaseClient
       .from(TABEL_ANTRIAN)
@@ -1015,6 +1514,7 @@ async function muatAntrianLocal(){
   gambarAntrian();
   gambarAdmin();
   pasangRealtimeAntrian();
+  pasangRealtimeBatas();
 }
 
 function pasangRealtimeAntrian(){
@@ -1103,28 +1603,115 @@ function formatK(n){
   return (Number(n || 0) / 1000) + 'K';
 }
 
-/* ══════ FILTER HARIAN ══════
-   Antrian di halaman customer & di panel "Kelola Antrian" admin cuma nampilin
-   order HARI INI. Besok otomatis kosong lagi & keisi data baru.
-   Data lama TIDAK dihapus — tetap kesimpan dan muncul di Laporan Pendapatan,
-   lengkap sama nama siapa aja yang order di tanggal itu. */
+/* ══════ BATAS SESI (PENGGANTI RESET HARIAN) ══════
+   DULU: antrian otomatis ilang tiap ganti hari.
+   SEKARANG: antrian TIDAK PERNAH hilang sendiri. Walaupun besok, lusa, atau
+   seminggu kemudian dibuka, daftarnya tetap sama persis.
+
+   Antrian cuma dikosongin kalau admin nekan tombol "Selesai & Kosongkan"
+   di dashboard. Waktu tombol itu ditekan, kita nyimpen satu penanda waktu
+   (namanya "batas sesi"). Semua antrian yang masuk SEBELUM penanda itu
+   dianggap ARSIP, dan otomatis ilang dari:
+     · halaman antrian customer
+     · panel "Antrian Berjalan" di dashboard
+   Tapi datanya SAMA SEKALI NGGAK DIHAPUS. Tetap kelihatan di:
+     · Laporan Pendapatan (lengkap sama nama & nominalnya)
+     · tombol "Tampilkan arsip" di dashboard
+
+   Tiap mode sesi (Live Sendiri / Live + Moderator) punya batasnya sendiri,
+   jadi menyelesaikan sesi solo nggak ngaruh ke antrian mode moderator.
+
+   Penandanya nebeng di tabel "catatan" (kolomnya udah pas: id / isi / ts),
+   jadi NGGAK PERLU bikin tabel atau kolom baru di Supabase. Kalau tabel
+   "catatan" belum dibuat, penandanya tetap jalan tapi cuma di perangkat ini. */
+const ID_BATAS = { solo: 'batas_sesi_solo', mod: 'batas_sesi_mod' };
+const KUNCI_BATAS_LOKAL = 'batas_sesi_leony_tarot';
+let batasSesi     = { solo: 0, mod: 0 };   // antrian sebelum waktu ini = arsip
+let batasSebelumnya = { solo: 0, mod: 0 }; // buat tombol "Balikin" (undo)
+
+function bacaBatasLokal(){
+  try {
+    const r = JSON.parse(localStorage.getItem(KUNCI_BATAS_LOKAL) || '{}');
+    return {
+      batas: { solo: Number(r.solo) || 0, mod: Number(r.mod) || 0 },
+      undo:  { solo: Number(r.uSolo) || 0, mod: Number(r.uMod) || 0 }
+    };
+  } catch(e){ return { batas:{solo:0,mod:0}, undo:{solo:0,mod:0} }; }
+}
+function simpanBatasLokal(){
+  try {
+    localStorage.setItem(KUNCI_BATAS_LOKAL, JSON.stringify({
+      solo: batasSesi.solo, mod: batasSesi.mod,
+      uSolo: batasSebelumnya.solo, uMod: batasSebelumnya.mod
+    }));
+  } catch(e){}
+}
+
+async function muatBatasSesi(){
+  const lokal = bacaBatasLokal();
+  batasSesi = lokal.batas;
+  batasSebelumnya = lokal.undo;
+  try {
+    const { data, error } = await supabaseClient
+      .from(TABEL_CATATAN).select('id,isi').in('id', [ID_BATAS.solo, ID_BATAS.mod]);
+    if(error) throw error;
+    (data || []).forEach(r => {
+      if(r.id === ID_BATAS.solo) batasSesi.solo = Number(r.isi) || 0;
+      if(r.id === ID_BATAS.mod)  batasSesi.mod  = Number(r.isi) || 0;
+    });
+    simpanBatasLokal();
+  } catch(e){
+    console.warn('Batas sesi cuma kesimpan di perangkat ini:', e);
+  }
+}
+
+async function setBatasSesi(mode, nilai){
+  batasSebelumnya[mode] = batasSesi[mode];
+  batasSesi[mode] = nilai;
+  simpanBatasLokal();
+  try {
+    await supabaseClient.from(TABEL_CATATAN)
+      .upsert({ id: ID_BATAS[mode], isi: String(nilai), ts: Date.now() });
+  } catch(e){
+    console.warn('Batas sesi gagal disimpan ke server:', e);
+  }
+}
+
+// Dengerin kalau moderator/perangkat lain yang nekan tombol Selesai
+function pasangRealtimeBatas(){
+  supabaseClient
+    .channel('realtime-batas-sesi')
+    .on('postgres_changes', { event: '*', schema: 'public', table: TABEL_CATATAN }, payload => {
+      const b = payload.new;
+      if(!b) return;
+      let berubah = false;
+      if(b.id === ID_BATAS.solo && Number(b.isi) !== batasSesi.solo){ batasSesi.solo = Number(b.isi) || 0; berubah = true; }
+      if(b.id === ID_BATAS.mod  && Number(b.isi) !== batasSesi.mod ){ batasSesi.mod  = Number(b.isi) || 0; berubah = true; }
+      if(berubah){ simpanBatasLokal(); gambarAntrian(); gambarAdmin(); }
+    })
+    .subscribe();
+}
+
+/* Antrian ini masih "berjalan" (belum diarsipkan) atau nggak? */
+function masihBerjalan(x){
+  return Number(x.ts) > (batasSesi[ambilSesi(x)] || 0);
+}
+// Semua antrian berjalan dari dua mode -> dipakai di halaman customer
+function antrianAktifSemua(){ return dAntrian.filter(masihBerjalan); }
+// Antrian berjalan di mode yang lagi kepilih -> dipakai di dashboard admin
+function antrianAktif(){ return dataSesi().filter(masihBerjalan); }
+// Antrian yang udah diarsipkan (mode yang lagi kepilih)
+function antrianArsip(){ return dataSesi().filter(x => !masihBerjalan(x)); }
+
 function tglKunci(ts){
   const d = new Date(ts);
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
-function kunciHariIni(){ return tglKunci(Date.now()); }
-// Semua antrian hari ini (tanpa lihat sesi) -> dipakai di halaman customer
-function antrianHariIniSemua(){
-  const k = kunciHariIni();
-  return dAntrian.filter(x => tglKunci(x.ts) === k);
-}
-// Antrian hari ini untuk sesi yang lagi aktif -> dipakai di dashboard admin
-function antrianHariIni(){
-  const k = kunciHariIni();
-  return dataSesi().filter(x => tglKunci(x.ts) === k);
-}
 function labelHariIni(){
   return new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+}
+function labelTgl(ts){
+  return new Date(ts).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
 }
 
 /* ══════ MODE SESI ══════
@@ -1196,24 +1783,26 @@ $('#cari-antrian').addEventListener('input', e => {
 // BUKAN dari posisi array. Jadi antrian lama tetap di nomor awal dia diinput,
 // walaupun ada antrian baru yang masuk duluan ke array dAntrian.
 function hitungNomorAntrian(){
-  // Nomor dihitung dari data HARI INI aja, jadi tiap hari nomornya mulai dari #1 lagi.
-  const urutan = antrianHariIniSemua().sort((a, b) => a.ts - b.ts);
+  // Nomor dihitung dari antrian yang MASIH BERJALAN aja. Jadi nomornya baru
+  // balik ke #1 setelah admin nekan tombol "Selesai & Kosongkan", bukan tiap ganti hari.
+  const urutan = antrianAktifSemua().sort((a, b) => a.ts - b.ts);
   const peta = {};
   urutan.forEach((x, i) => { peta[x.id] = i + 1; });
   return peta;
 }
 
 /* ══════ SEMBUNYIIN ANTRIAN LAMA DI HALAMAN CUSTOMER ══════
-   Biar daftarnya nggak numpuk kepanjangan, tiap kelipatan 20 orang yang
+   Biar daftarnya nggak numpuk kepanjangan, tiap kelipatan 5 orang yang
    statusnya "Sudah Dibaca" bakal disembunyiin dari TAMPILAN CUSTOMER.
-   Contoh: pas ada 20 yang udah dibaca -> 20 nama itu ilang dari tampilan.
-           pas ada 40 yang udah dibaca -> 40 nama itu ilang. Gitu seterusnya.
+   Contoh: pas ada 5 yang udah dibaca (antrian #1-#5) -> 5 nama itu ilang.
+           pas ada 10 yang udah dibaca -> 10 nama itu ilang. Gitu seterusnya.
    Catatan penting:
      · Nomor antrian TETAP SAMA (nggak ikut geser), karena nomornya dihitung
        dari semua data hari ini, bukan dari daftar yang lagi kelihatan.
      · Di DASHBOARD ADMIN semua nama tetap kelihatan lengkap, nggak ada yang ilang.
-     · Datanya juga nggak kehapus, cuma disembunyiin dari tampilan customer. */
-const BATCH_SEMBUNYI = 20;   // ganti angka ini kalau mau tiap 10 / 30 / dst
+     · Datanya juga nggak kehapus, cuma disembunyiin dari tampilan customer.
+     · Customer masih bisa lihat semuanya dengan ketuk kartu "Sudah Dibaca". */
+const BATCH_SEMBUNYI = 5;    // ganti angka ini kalau mau tiap 10 / 20 / dst
 
 function idDisembunyiin(dataHariIni){
   const sudah = dataHariIni
@@ -1262,7 +1851,7 @@ const KELAS_FILTER = {
 
 function gambarAntrian(){
   const el = $('#feed-antrian');
-  const semuaHariIni = antrianHariIniSemua();
+  const semuaHariIni = antrianAktifSemua();
   let filtered = semuaHariIni;
   
   if(tipeSubTabAktif === 'Fast Track'){
@@ -1295,13 +1884,13 @@ function gambarAntrian(){
   }
 
   const infoLipat = (lipat.jumlah && filterStatus !== 'Sudah Dibaca')
-    ? `<div class="info-lipat">✨ <b>${lipat.jumlah} antrian</b> yang udah selesai dibaca disembunyiin biar nggak kepanjangan. Nomor antrian kamu tetap sama kok ♡</div>`
+    ? `<div class="info-lipat">✨ <b>${lipat.jumlah} antrian</b> yang udah selesai dibaca disembunyiin biar daftarnya nggak kepanjangan. Nomor antrian kamu tetap sama kok — ketuk kartu <b>Sudah Dibaca</b> di atas kalau mau lihat semuanya ♡</div>`
     : '';
 
   if(!filtered.length){
     const pesanKosong = filterStatus
-      ? `Belum ada antrian yang statusnya "${filterStatus}" hari ini.`
-      : 'Belum ada antrian hari ini untuk kategori ini.';
+      ? `Belum ada antrian yang statusnya "${filterStatus}" sekarang.`
+      : 'Belum ada antrian untuk kategori ini.';
     el.innerHTML = infoLipat + `<div class="kosong"><div class="em">💌</div><div class="j">antrian kosong</div><p style="font-size:13px;margin-top:6px">${pesanKosong}</p></div>`;
     return;
   }
@@ -1318,10 +1907,10 @@ function gambarAntrian(){
     return `<article class="gelembung">
       <div class="kepala">
         <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
-        <span class="lencana" style="background:#e8efff; color:#5d6c8d; border-color:#dbe4f4;">#${petaNomor[x.id]}</span>
+        <span class="lencana no-urut">#${petaNomor[x.id]}</span>
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
-        <span class="lencana" style="background:#f3ecff;color:#8b6fc7;border-color:#e2d4f7;">${formatK(ambilHarga(x))}</span>
+        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
         ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡ Fast Track</span>' : ''}
         <span class="${statusClass}">${aman(x.status)}</span>
         <span class="waktu">${kapan(x.ts)}</span>
@@ -1531,17 +2120,24 @@ function gambarAdmin(){
   const elTgl = $('#teks-tgl-hari-ini');
   if(elTgl) elTgl.textContent = labelHariIni();
 
+  // Angka di kotak kontrol sesi + tombol "Balikin" cuma muncul kalau ada yang bisa dibalikin
+  const btnBalik = $('#btn-balikin-sesi');
+  if(btnBalik) btnBalik.style.display = batasSebelumnya[sesiAktif] !== batasSesi[sesiAktif] ? 'block' : 'none';
+
   const el = $('#feed-admin');
-  let data = antrianHariIni();
+  let data = antrianAktif();
 
   if(cariAdminTeks){
     data = data.filter(x => x.detail.toLowerCase().includes(cariAdminTeks));
   }
 
   if(!data.length){
-    el.innerHTML = `<div class="kosong"><div class="em">📋</div><div class="j">belum ada antrian hari ini</div><p style="font-size:13px;margin-top:6px">Mode: <b>${LABEL_SESI[sesiAktif]}</b> · data kemarin tetap aman di Laporan Pendapatan di atas ya ♡</p></div>`;
+    el.innerHTML = `<div class="kosong"><div class="em">📋</div><div class="j">antrian lagi kosong</div><p style="font-size:13.5px;margin-top:6px">Mode: <b>${LABEL_SESI[sesiAktif]}</b> · semua data sebelumnya tetap aman di Laporan Pendapatan &amp; Arsip ya ♡</p></div>`;
+    gambarArsip();
     return;
   }
+
+  gambarArsip();
 
   const petaNomor = hitungNomorAntrian();
   const opsiHarga = [5000, 10000, 15000, 25000];
@@ -1584,10 +2180,10 @@ function gambarAdmin(){
     return `<article class="gelembung">
       <div class="kepala">
         <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
-        <span class="lencana" style="background:#e8efff; color:#5d6c8d; border-color:#dbe4f4;">#${petaNomor[x.id]}</span>
+        <span class="lencana no-urut">#${petaNomor[x.id]}</span>
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
-        <span class="lencana" style="background:#f3ecff;color:#8b6fc7;border-color:#e2d4f7;">${formatK(ambilHarga(x))}</span>
+        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
         <span class="lencana kilat">${aman(x.tipe)}</span>
         <span class="waktu">${kapan(x.ts)}</span>
       </div>
@@ -1620,6 +2216,7 @@ function pasangTabSesi(){
     sesiAktif = mode;
     editingId = null;
     tglTerbuka = {};
+    arsipTerbuka = false;
     tSolo.classList.toggle('aktif', mode === 'solo');
     tSolo.classList.toggle('solo', mode === 'solo');
     tMod.classList.toggle('aktif', mode === 'mod');
@@ -1710,13 +2307,13 @@ function renderLaporanTgl(){
     const barisUtama = `<tr class="baris-tgl" onclick="bukaTutupTgl('${kunci}')">
       <td><span class="panah-buka ${dibuka ? 'buka' : ''}">▶</span><strong>${r.label}</strong></td>
       <td>${r.total} order</td>
-      <td style="color:#5c8a68;font-weight:600">${r.sudah}</td>
-      <td style="color:#b58146;font-weight:600">${r.belum}</td>
+      <td class="td-hijau">${r.sudah}</td>
+      <td class="td-emas">${r.belum}</td>
       ${solo
-        ? `<td style="color:#5c8a68;font-weight:700">${formatRp(r.pendapatan)}</td>`
-        : `<td style="font-weight:600">${formatRp(r.pendapatan)}</td>
-           <td style="color:#a67c00">${formatRp(potongan)}</td>
-           <td style="color:#5c8a68;font-weight:600">${formatRp(sisa)}</td>`}
+        ? `<td class="td-hijau kuat">${formatRp(r.pendapatan)}</td>`
+        : `<td class="td-kuat">${formatRp(r.pendapatan)}</td>
+           <td class="td-emas">${formatRp(potongan)}</td>
+           <td class="td-hijau">${formatRp(sisa)}</td>`}
     </tr>`;
 
     if(!dibuka) return barisUtama;
@@ -1751,6 +2348,116 @@ function renderLaporanTgl(){
     $('#lap-sisa-kamu').textContent = formatRp(grandSisa);
   }
 }
+
+/* ══════ ARSIP: ANTRIAN DARI SESI YANG UDAH DISELESAIKAN ══════
+   Ini yang bikin datanya "tetap munculin di dashboard". Antrian yang udah
+   dikosongin dari halaman customer tetap bisa dibuka lagi di sini, dikelompokin
+   per tanggal, lengkap sama nama, harga, dan statusnya. */
+let arsipTerbuka = false;
+
+function gambarArsip(){
+  const el = $('#feed-arsip');
+  const btn = $('#btn-toggle-arsip');
+  const ket = $('#ket-arsip');
+  if(!el || !btn) return;
+
+  let data = antrianArsip();
+  if(ket) ket.textContent = data.length ? `${data.length} antrian tersimpan` : 'belum ada arsip';
+
+  if(!arsipTerbuka){
+    el.style.display = 'none';
+    btn.textContent = '📦 Tampilkan arsip sesi sebelumnya';
+    return;
+  }
+
+  el.style.display = 'grid';
+  btn.textContent = '📦 Sembunyikan arsip';
+
+  if(cariAdminTeks){
+    data = data.filter(x => (x.detail || '').toLowerCase().includes(cariAdminTeks));
+  }
+
+  if(!data.length){
+    el.innerHTML = `<div class="kosong"><div class="em">📦</div><div class="j">arsip masih kosong</div><p style="font-size:13.5px;margin-top:6px">Antrian bakal pindah ke sini setelah kamu nekan tombol <b>Selesai &amp; Kosongkan</b> ♡</p></div>`;
+    return;
+  }
+
+  // Kelompokin per tanggal, yang paling baru di atas
+  const grup = {};
+  data.forEach(x => {
+    const k = tglKunci(x.ts);
+    (grup[k] = grup[k] || []).push(x);
+  });
+
+  el.innerHTML = Object.keys(grup).sort((a, b) => b.localeCompare(a)).map(k => {
+    const isi = grup[k].sort((a, b) => a.ts - b.ts);
+    const total = isi.reduce((s, x) => s + ambilHarga(x), 0);
+    const baris = isi.map((x, i) => `<div class="baris-arsip-item">
+        <span class="lencana no-urut">#${i + 1}</span>
+        <span class="nama-arsip">${aman(x.detail)}</span>
+        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
+        ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡</span>' : ''}
+        <span class="lencana ${x.status === 'Sudah Dibaca' ? 'baca' : x.status === 'Sedang Dibaca' ? 'proses' : 'tunggu'}">${aman(x.status || '-')}</span>
+      </div>`).join('');
+    return `<article class="grup-arsip">
+      <div class="kepala-arsip">
+        <span class="tgl-arsip">📅 ${aman(labelTgl(isi[0].ts))}</span>
+        <span class="ringkas-arsip">${isi.length} orang · <b>${formatRp(total)}</b></span>
+      </div>
+      <div class="isi-arsip">${baris}</div>
+    </article>`;
+  }).join('');
+}
+
+/* ══════ TOMBOL "SELESAI & KOSONGKAN" ══════
+   Nggak menghapus apa pun. Cuma nyimpen penanda waktu, terus semua antrian
+   sebelum penanda itu pindah ke arsip. */
+(function pasangKontrolSesi(){
+  const btnSelesai = $('#btn-selesai-sesi');
+  const btnBalikin = $('#btn-balikin-sesi');
+  const btnArsip   = $('#btn-toggle-arsip');
+  if(!btnSelesai) return;
+
+  btnSelesai.addEventListener('click', async () => {
+    const jalan = antrianAktif();
+    if(!jalan.length){
+      return alert('Antriannya udah kosong kok ♡');
+    }
+    const setuju = confirm(
+      `Selesaikan live ${LABEL_SESI[sesiAktif]}?\n\n` +
+      `${jalan.length} antrian dikosongin, nomor balik ke #1.\n` +
+      `Datanya tetap aman di Laporan & Arsip.`
+    );
+    if(!setuju) return;
+
+    btnSelesai.disabled = true;
+    btnSelesai.textContent = 'Menyimpan…';
+
+    const batasBaru = Math.max.apply(null, jalan.map(x => Number(x.ts)));
+    await setBatasSesi(sesiAktif, batasBaru);
+
+    btnSelesai.disabled = false;
+    btnSelesai.textContent = '✓ Selesaikan Live Hari Ini';
+    gambarAntrian();
+    gambarAdmin();
+  });
+
+  btnBalikin.addEventListener('click', async () => {
+    if(batasSebelumnya[sesiAktif] === batasSesi[sesiAktif]) return;
+    if(!confirm('Balikin antrian yang barusan dikosongin?')) return;
+    const balikKe = batasSebelumnya[sesiAktif];
+    await setBatasSesi(sesiAktif, balikKe);
+    batasSebelumnya[sesiAktif] = balikKe;   // sekali balikin aja
+    simpanBatasLokal();
+    gambarAntrian();
+    gambarAdmin();
+  });
+
+  btnArsip.addEventListener('click', () => {
+    arsipTerbuka = !arsipTerbuka;
+    gambarArsip();
+  });
+})();
 
 window.ubahStatusTarot = async function(id, val){
   const idx = dAntrian.findIndex(x => x.id === id);
@@ -1820,6 +2527,80 @@ window.simpanEditAntrian = async function(id){
 
   await editAntrianKeSupabase(id, { detail: detailBaru, harga: hargaBaru, tipe: tipeBaru });
 };
+
+/* ══════ PILIH TAMPILAN: TERANG / MIDNIGHT / NOIR ══════
+   Pilihannya kesimpen di perangkat masing-masing (localStorage), jadi tiap
+   orang yang buka halaman ini bisa punya tampilan sendiri-sendiri. Customer
+   milih terang, kamu milih gelap — nggak saling ganggu.
+   Kalau belum pernah milih, otomatis ngikutin setelan HP/laptopnya. */
+(function pengaturTema(){
+  const KUNCI_TEMA = 'tema_leony';
+  const btn  = $('#btn-tema');
+  const menu = $('#menu-tema');
+  if(!btn || !menu) return;
+
+  const IKON  = { terang:'☀️', gelap1:'🌙', gelap2:'✦' };
+  const WARNA = { terang:'#dcebfe', gelap1:'#0c1332', gelap2:'#050308' };
+  const NAMA  = { terang:'Terang', gelap1:'Midnight', gelap2:'Noir' };
+
+  function temaSekarang(){
+    const t = document.documentElement.getAttribute('data-tema');
+    return IKON[t] ? t : 'terang';
+  }
+
+  function pasang(t, simpan){
+    if(!IKON[t]) t = 'terang';
+    document.documentElement.setAttribute('data-tema', t);
+    btn.textContent = IKON[t];
+    btn.title = 'Tampilan: ' + NAMA[t];
+
+    // warna bar browser di HP ikut nyesuain
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if(!meta){
+      meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      document.head.appendChild(meta);
+    }
+    meta.content = WARNA[t];
+
+    menu.querySelectorAll('.opsi-tema').forEach(o => {
+      o.classList.toggle('kepilih', o.dataset.tema === t);
+    });
+
+    if(simpan){ try { localStorage.setItem(KUNCI_TEMA, t); } catch(e){} }
+  }
+
+  function tutup(){ menu.classList.remove('buka'); btn.setAttribute('aria-expanded','false'); }
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const buka = !menu.classList.contains('buka');
+    menu.classList.toggle('buka', buka);
+    btn.setAttribute('aria-expanded', String(buka));
+  });
+
+  menu.querySelectorAll('.opsi-tema').forEach(o => {
+    o.addEventListener('click', e => {
+      e.stopPropagation();
+      pasang(o.dataset.tema, true);
+      tutup();
+    });
+  });
+
+  document.addEventListener('click', tutup);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') tutup(); });
+
+  // Kalau user belum pernah milih sendiri, ikutin kalau setelan HP-nya berubah
+  if(window.matchMedia){
+    matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', ev => {
+      let tersimpan = null;
+      try { tersimpan = localStorage.getItem(KUNCI_TEMA); } catch(e){}
+      if(!tersimpan) pasang(ev.matches ? 'gelap1' : 'terang', false);
+    });
+  }
+
+  pasang(temaSekarang(), false);
+})();
 
 muatAntrianLocal();
 </script>
