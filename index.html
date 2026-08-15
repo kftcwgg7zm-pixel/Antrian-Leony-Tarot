@@ -250,9 +250,12 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--blush);box-
 .pesan-status.err{background:#fdeaf0;color:#a9526f;border:1px solid #f6cddb}
 
 /* ═════════ FEED & LIST ═════════ */
-.cari{position:relative;margin-bottom:14px}
-.cari input{padding-left:38px}
-.cari::before{content:"⌕";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--tinta-muda);font-size:19px}
+.cari{display:flex;align-items:stretch;gap:9px;margin-bottom:14px}
+.cari input{flex:1;min-width:0}
+.ikon-cari{flex:0 0 auto;width:50px;display:grid;place-items:center;font-size:22px;line-height:1;
+  color:var(--tinta-muda);border:1px solid var(--garis);border-radius:14px;
+  background:rgba(255,255,255,.94);transition:.2s;user-select:none}
+.cari:focus-within .ikon-cari{color:var(--blush);border-color:var(--blush)}
 .feed{display:grid;gap:12px}
 .gelembung{background:linear-gradient(165deg,#fff,#f8fbff);border:1px solid var(--garis);border-radius:19px 19px 19px 6px;
   padding:15px 17px;box-shadow:0 8px 18px -14px rgba(110,140,190,.9);animation:masuk .4s ease both}
@@ -346,18 +349,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
 /* ═════════ RIWAYAT PER TANGGAL ═════════ */
 .tabel-laporan tr.baris-tgl{cursor:pointer;transition:.2s}
 .tabel-laporan tr.baris-tgl:hover{background:rgba(232,241,255,.55)}
-.panah-buka{display:inline-block;transition:transform .25s;color:var(--tinta-muda);font-size:11px;margin-right:5px}
-.panah-buka.buka{transform:rotate(90deg)}
-.baris-rinci td{background:#f7faff;padding:0!important;border-bottom:1px solid var(--garis)}
-.rinci-isi{padding:12px 14px;display:grid;gap:7px}
-.rinci-judul{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--tinta-muda)}
-.rinci-orang{display:flex;flex-wrap:wrap;gap:7px}
-.chip-orang{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--garis);
-  border-radius:20px;padding:5px 11px;font-size:12px;color:#5d6c8d}
-.chip-orang b{color:#8b6fc7;font-weight:700;font-size:11px}
-.chip-orang .st{font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:12px;
-  background:#fff3e2;color:#b58146}
-.chip-orang .st.ok{background:#eef8f0;color:#5c8a68}
 
 /* KARTU STAT YANG BISA DIPENCET (FILTER STATUS) */
 .kartu-stat.bisa-pencet{cursor:pointer;transition:.22s;position:relative;width:100%;font-family:inherit;
@@ -386,9 +377,6 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
 .status-catatan.err{color:#a9526f}
 .status-catatan.lokal{color:#a9526f;background:#fdeaf0;border:1px solid #f6cddb;
   border-radius:11px;padding:6px 11px;line-height:1.45;display:inline-block;max-width:100%}
-.info-lipat{font-size:12px;color:var(--tinta-muda);margin-bottom:12px;background:linear-gradient(160deg,#fdf6fa,#f7edf5);
-  border:1px dashed #f0b9d3;border-radius:13px;padding:10px 13px;text-align:center;line-height:1.5}
-.info-lipat b{color:#b4708f}
 .info-hari{font-size:12.5px;color:var(--tinta-muda);margin-bottom:12px;background:#f4f8ff;border:1px solid #dbe7f8;
   text-align:center;letter-spacing:.02em;
   border-radius:13px;padding:9px 13px;line-height:1.5}
@@ -459,29 +447,27 @@ html{color-scheme:light}
 .baris-arsip-item{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .nama-arsip{font-size:15px;font-weight:700;color:var(--teks);margin-right:auto}
 
-/* menu pilih tampilan */
-.bungkus-tema{position:relative}
-.menu-tema{position:absolute;top:50px;right:0;min-width:178px;border-radius:18px;padding:7px;
-  background:var(--panel-4);border:1px solid var(--tepi-terang);backdrop-filter:blur(18px);
-  box-shadow:0 20px 44px -18px rgba(60,80,140,.55);display:grid;gap:3px;
-  opacity:0;visibility:hidden;transform:translateY(-8px) scale(.96);transform-origin:top right;
-  transition:.2s cubic-bezier(.3,1.3,.5,1)}
-.menu-tema.buka{opacity:1;visibility:visible;transform:none}
-.jdl-menu-tema{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;
-  color:var(--teks-samar);padding:7px 11px 5px}
-.opsi-tema{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;
-  border-radius:13px;padding:10px 11px;cursor:pointer;font-family:inherit;font-size:14px;
-  font-weight:700;color:var(--teks-lemah);transition:.18s;text-align:left}
-.opsi-tema:hover{background:var(--panel-3);color:var(--teks)}
-.opsi-tema span{flex:1}
-.opsi-tema b{opacity:0;color:var(--rose);font-size:13px}
-.opsi-tema.kepilih{color:var(--rose);background:var(--rose-bg)}
-.opsi-tema.kepilih b{opacity:1}
-.opsi-tema .contoh{width:19px;height:19px;border-radius:50%;flex:0 0 auto;
-  border:1.5px solid var(--tepi-terang);box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
-.opsi-tema .contoh.ct{background:linear-gradient(150deg,#eaf3ff,#f7e3f0)}
-.opsi-tema .contoh.cg1{background:linear-gradient(150deg,#131539,#2a1a3a)}
-.opsi-tema .contoh.cg2{background:linear-gradient(150deg,#000,#1a0a16)}
+/* ── PEMILIH TAMPILAN: tombol geser 3 segmen ──
+   Nggak ada menu yang kebuka-tutup. Tiga ikon selalu kelihatan, dan
+   lingkaran penandanya meluncur ke pilihan yang lagi aktif. Sekali ketuk,
+   langsung ganti. */
+.pemilih-tema{position:relative;display:flex;gap:3px;padding:4px;border-radius:26px;
+  background:var(--panel-4);border:1px solid var(--tepi-terang);
+  backdrop-filter:blur(14px);box-shadow:var(--bayang-lembut)}
+.pemilih-tema .penanda{position:absolute;top:4px;left:4px;width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(160deg,var(--rose-bg),var(--rose-bg2));
+  border:1px solid var(--rose-tepi);box-shadow:0 4px 12px -6px var(--rose-glow);
+  transition:transform .34s cubic-bezier(.34,1.5,.5,1);pointer-events:none}
+.pemilih-tema[data-aktif="1"] .penanda{transform:translateX(37px)}
+.pemilih-tema[data-aktif="2"] .penanda{transform:translateX(74px)}
+.segmen{position:relative;z-index:1;width:34px;height:34px;flex:0 0 auto;border:0;
+  background:transparent;border-radius:50%;cursor:pointer;font-family:inherit;font-size:16px;
+  line-height:1;color:var(--teks-samar);display:grid;place-items:center;transition:color .22s,transform .22s;
+  -webkit-tap-highlight-color:transparent;padding:0}
+.segmen:hover{color:var(--teks-lemah);transform:scale(1.12)}
+.segmen.aktif{color:var(--rose);transform:none}
+.segmen:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.layang{align-items:center}
 
 @media (max-width:560px){
   .baris-selesai{flex-wrap:wrap}
@@ -533,14 +519,9 @@ label{font-size:12px;letter-spacing:.12em;font-weight:700}
 .tabel-laporan{font-size:14.5px}
 .tabel-laporan th{font-size:12.5px;letter-spacing:.04em;font-weight:800;padding:12px 10px}
 .tabel-laporan td{padding:12px 10px;font-weight:500}
-.chip-orang{font-size:13.5px;font-weight:600;padding:6px 12px}
-.chip-orang b{font-size:12.5px}
-.chip-orang .st{font-size:10.5px;letter-spacing:.06em}
-.rinci-judul{font-size:11.5px;letter-spacing:.1em}
 .kosong{padding:38px 18px;font-size:15px}
 .kosong .em{font-size:36px}
 .kosong .j{font-size:42px}
-.info-lipat{font-size:13.5px;line-height:1.6;padding:12px 15px}
 .info-hari{font-size:14px;padding:11px 14px;font-weight:600}
 .pesan-status{font-size:14px;padding:12px 15px;font-weight:600}
 .status-catatan{font-size:13px;font-weight:600}
@@ -720,7 +701,7 @@ html[data-tema="gelap1"] .kartu-stat{background:var(--panel-2);border:1px solid 
   box-shadow:0 10px 24px -12px var(--hijau-glow)}html[data-tema="gelap1"] #st-belum{color:var(--merah)!important}html[data-tema="gelap1"] #st-sudah{color:var(--hijau)!important}html[data-tema="gelap1"] #st-hari-ini{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-total-pendapatan{color:var(--teks)!important}html[data-tema="gelap1"] #lap-potongan-mod{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-sisa-kamu{color:var(--hijau)!important}html[data-tema="gelap1"] .no-sedang{background:var(--emas-bg);border:1px solid var(--emas-tepi);color:var(--emas-w)}
 
 /* ── TABEL LAPORAN ── */
-html[data-tema="gelap1"] .tabel-laporan th{background:var(--panel-3);color:var(--teks-lemah);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .tabel-laporan td{color:var(--teks);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .tabel-laporan tr.baris-tgl:hover{background:var(--panel-2)}html[data-tema="gelap1"] .tabel-laporan td.td-hijau{color:var(--hijau);font-weight:700}html[data-tema="gelap1"] .tabel-laporan td.td-hijau.kuat{font-weight:800}html[data-tema="gelap1"] .tabel-laporan td.td-emas{color:var(--emas-w);font-weight:700}html[data-tema="gelap1"] .tabel-laporan td.td-kuat{color:var(--teks);font-weight:800}html[data-tema="gelap1"] .panah-buka{color:var(--teks-lemah)}html[data-tema="gelap1"] .baris-rinci td{background:var(--panel-3);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .rinci-judul{color:var(--teks-lemah)}html[data-tema="gelap1"] .chip-orang{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap1"] .chip-orang b{color:var(--ungu)}html[data-tema="gelap1"] .chip-orang .st{background:var(--emas-bg);color:var(--emas-w)}html[data-tema="gelap1"] .chip-orang .st.ok{background:var(--hijau-bg);color:var(--hijau)}
+html[data-tema="gelap1"] .tabel-laporan th{background:var(--panel-3);color:var(--teks-lemah);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .tabel-laporan td{color:var(--teks);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .tabel-laporan tr.baris-tgl:hover{background:var(--panel-2)}html[data-tema="gelap1"] .tabel-laporan td.td-hijau{color:var(--hijau);font-weight:700}html[data-tema="gelap1"] .tabel-laporan td.td-hijau.kuat{font-weight:800}html[data-tema="gelap1"] .tabel-laporan td.td-emas{color:var(--emas-w);font-weight:700}html[data-tema="gelap1"] .tabel-laporan td.td-kuat{color:var(--teks);font-weight:800}
 
 /* ── NAVIGASI ── */
 html[data-tema="gelap1"] .nav{background:var(--panel-4);border:1px solid var(--tepi-terang);
@@ -740,7 +721,7 @@ html[data-tema="gelap1"] .kotak-mode{background:var(--panel);border:1px solid va
 /* ── FORM ── */
 html[data-tema="gelap1"] label{color:var(--teks-lemah)}html[data-tema="gelap1"] input[type=text], html[data-tema="gelap1"] input[type=password], html[data-tema="gelap1"] textarea, html[data-tema="gelap1"] select, html[data-tema="gelap1"] .area-catatan{
   background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap1"] input::placeholder, html[data-tema="gelap1"] textarea::placeholder{color:var(--teks-samar)}html[data-tema="gelap1"] input:focus, html[data-tema="gelap1"] textarea:focus, html[data-tema="gelap1"] select:focus, html[data-tema="gelap1"] .area-catatan:focus{
-  border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-bg);background:var(--panel-2)}html[data-tema="gelap1"] .cari::before{color:var(--teks-samar)}html[data-tema="gelap1"] .kirim{color:#1a1024;background:linear-gradient(165deg,var(--rose-terang),var(--rose) 62%,var(--rose-tua));
+  border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-bg);background:var(--panel-2)}html[data-tema="gelap1"] .kirim{color:#1a1024;background:linear-gradient(165deg,var(--rose-terang),var(--rose) 62%,var(--rose-tua));
   box-shadow:0 16px 30px -14px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.45)}html[data-tema="gelap1"] #btn-tambah-baris{color:var(--rose)!important;border-color:var(--rose-tepi)!important;background:var(--rose-bg)}html[data-tema="gelap1"] #btn-logout{color:var(--rose)!important;border-color:var(--rose-tepi)!important}html[data-tema="gelap1"] .btn-hapus-baris{color:var(--merah)!important}html[data-tema="gelap1"] .pesan-status.ok{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap1"] .pesan-status.err{background:var(--merah-bg);color:var(--merah);border:1px solid var(--merah-tepi)}
 
 /* ── KARTU ANTRIAN ── */
@@ -756,12 +737,12 @@ html[data-tema="gelap1"] .kotak-qris img{background:#fff;padding:12px;border:1px
   box-shadow:0 14px 32px -16px rgba(0,0,0,.9)}html[data-tema="gelap1"] .kotak-qris .ket{color:var(--teks-lemah)}
 
 /* ── CATATAN & INFO ── */
-html[data-tema="gelap1"] .status-catatan{color:var(--teks-lemah)}html[data-tema="gelap1"] .status-catatan.ok{color:var(--hijau)}html[data-tema="gelap1"] .status-catatan.nulis{color:var(--emas-w)}html[data-tema="gelap1"] .status-catatan.err{color:var(--merah)}html[data-tema="gelap1"] .status-catatan.lokal{color:var(--merah);background:var(--merah-bg);border:1px solid var(--merah-tepi)}html[data-tema="gelap1"] .info-lipat{background:var(--rose-bg);border:1px dashed var(--rose-tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .info-lipat b{color:var(--rose)}html[data-tema="gelap1"] .info-hari{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .info-hari b{color:var(--biru)}html[data-tema="gelap1"] .memuat{color:var(--teks-lemah)}html[data-tema="gelap1"] .memuat::after{border:2px solid var(--tepi-terang);border-top-color:var(--rose)}html[data-tema="gelap1"] footer .skrip{background:var(--grad-sub);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap1"] footer .kecil{color:var(--teks-samar)}
+html[data-tema="gelap1"] .status-catatan{color:var(--teks-lemah)}html[data-tema="gelap1"] .status-catatan.ok{color:var(--hijau)}html[data-tema="gelap1"] .status-catatan.nulis{color:var(--emas-w)}html[data-tema="gelap1"] .status-catatan.err{color:var(--merah)}html[data-tema="gelap1"] .status-catatan.lokal{color:var(--merah);background:var(--merah-bg);border:1px solid var(--merah-tepi)}html[data-tema="gelap1"] .info-hari{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .info-hari b{color:var(--biru)}html[data-tema="gelap1"] .memuat{color:var(--teks-lemah)}html[data-tema="gelap1"] .memuat::after{border:2px solid var(--tepi-terang);border-top-color:var(--rose)}html[data-tema="gelap1"] footer .skrip{background:var(--grad-sub);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap1"] footer .kecil{color:var(--teks-samar)}
 
 /* ── KOMPONEN BARU DI MODE GELAP ── */
 html[data-tema="gelap1"] .btn-selesai{color:#1a1024;
   background:linear-gradient(165deg,var(--rose-terang),var(--rose));
-  box-shadow:0 14px 30px -13px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5)}html[data-tema="gelap1"] .btn-balikin{background:var(--panel-2);border-color:var(--tepi-terang);color:var(--teks-lemah)}html[data-tema="gelap1"] .btn-balikin:hover{color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .menu-tema{box-shadow:0 22px 48px -18px rgba(0,0,0,.92)}html[data-tema="gelap1"] .opsi-tema .contoh{border-color:var(--tepi-terang);box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}html[data-tema="gelap1"] .grup-arsip{box-shadow:0 10px 22px -18px rgba(0,0,0,.9)}
+  box-shadow:0 14px 30px -13px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5)}html[data-tema="gelap1"] .btn-balikin{background:var(--panel-2);border-color:var(--tepi-terang);color:var(--teks-lemah)}html[data-tema="gelap1"] .btn-balikin:hover{color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .grup-arsip{box-shadow:0 10px 22px -18px rgba(0,0,0,.9)}
 
 /* ═════════════════════════════════════════════════════════════
    MODE GELAP
@@ -805,7 +786,7 @@ html[data-tema="gelap2"] .kartu-stat{background:var(--panel-2);border:1px solid 
   box-shadow:0 10px 24px -12px var(--hijau-glow)}html[data-tema="gelap2"] #st-belum{color:var(--merah)!important}html[data-tema="gelap2"] #st-sudah{color:var(--hijau)!important}html[data-tema="gelap2"] #st-hari-ini{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-total-pendapatan{color:var(--teks)!important}html[data-tema="gelap2"] #lap-potongan-mod{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-sisa-kamu{color:var(--hijau)!important}html[data-tema="gelap2"] .no-sedang{background:var(--emas-bg);border:1px solid var(--emas-tepi);color:var(--emas-w)}
 
 /* ── TABEL LAPORAN ── */
-html[data-tema="gelap2"] .tabel-laporan th{background:var(--panel-3);color:var(--teks-lemah);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .tabel-laporan td{color:var(--teks);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .tabel-laporan tr.baris-tgl:hover{background:var(--panel-2)}html[data-tema="gelap2"] .tabel-laporan td.td-hijau{color:var(--hijau);font-weight:700}html[data-tema="gelap2"] .tabel-laporan td.td-hijau.kuat{font-weight:800}html[data-tema="gelap2"] .tabel-laporan td.td-emas{color:var(--emas-w);font-weight:700}html[data-tema="gelap2"] .tabel-laporan td.td-kuat{color:var(--teks);font-weight:800}html[data-tema="gelap2"] .panah-buka{color:var(--teks-lemah)}html[data-tema="gelap2"] .baris-rinci td{background:var(--panel-3);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .rinci-judul{color:var(--teks-lemah)}html[data-tema="gelap2"] .chip-orang{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap2"] .chip-orang b{color:var(--ungu)}html[data-tema="gelap2"] .chip-orang .st{background:var(--emas-bg);color:var(--emas-w)}html[data-tema="gelap2"] .chip-orang .st.ok{background:var(--hijau-bg);color:var(--hijau)}
+html[data-tema="gelap2"] .tabel-laporan th{background:var(--panel-3);color:var(--teks-lemah);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .tabel-laporan td{color:var(--teks);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .tabel-laporan tr.baris-tgl:hover{background:var(--panel-2)}html[data-tema="gelap2"] .tabel-laporan td.td-hijau{color:var(--hijau);font-weight:700}html[data-tema="gelap2"] .tabel-laporan td.td-hijau.kuat{font-weight:800}html[data-tema="gelap2"] .tabel-laporan td.td-emas{color:var(--emas-w);font-weight:700}html[data-tema="gelap2"] .tabel-laporan td.td-kuat{color:var(--teks);font-weight:800}
 
 /* ── NAVIGASI ── */
 html[data-tema="gelap2"] .nav{background:var(--panel-4);border:1px solid var(--tepi-terang);
@@ -825,7 +806,7 @@ html[data-tema="gelap2"] .kotak-mode{background:var(--panel);border:1px solid va
 /* ── FORM ── */
 html[data-tema="gelap2"] label{color:var(--teks-lemah)}html[data-tema="gelap2"] input[type=text], html[data-tema="gelap2"] input[type=password], html[data-tema="gelap2"] textarea, html[data-tema="gelap2"] select, html[data-tema="gelap2"] .area-catatan{
   background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap2"] input::placeholder, html[data-tema="gelap2"] textarea::placeholder{color:var(--teks-samar)}html[data-tema="gelap2"] input:focus, html[data-tema="gelap2"] textarea:focus, html[data-tema="gelap2"] select:focus, html[data-tema="gelap2"] .area-catatan:focus{
-  border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-bg);background:var(--panel-2)}html[data-tema="gelap2"] .cari::before{color:var(--teks-samar)}html[data-tema="gelap2"] .kirim{color:#1a1024;background:linear-gradient(165deg,var(--rose-terang),var(--rose) 62%,var(--rose-tua));
+  border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-bg);background:var(--panel-2)}html[data-tema="gelap2"] .kirim{color:#1a1024;background:linear-gradient(165deg,var(--rose-terang),var(--rose) 62%,var(--rose-tua));
   box-shadow:0 16px 30px -14px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.45)}html[data-tema="gelap2"] #btn-tambah-baris{color:var(--rose)!important;border-color:var(--rose-tepi)!important;background:var(--rose-bg)}html[data-tema="gelap2"] #btn-logout{color:var(--rose)!important;border-color:var(--rose-tepi)!important}html[data-tema="gelap2"] .btn-hapus-baris{color:var(--merah)!important}html[data-tema="gelap2"] .pesan-status.ok{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap2"] .pesan-status.err{background:var(--merah-bg);color:var(--merah);border:1px solid var(--merah-tepi)}
 
 /* ── KARTU ANTRIAN ── */
@@ -841,15 +822,24 @@ html[data-tema="gelap2"] .kotak-qris img{background:#fff;padding:12px;border:1px
   box-shadow:0 14px 32px -16px rgba(0,0,0,.9)}html[data-tema="gelap2"] .kotak-qris .ket{color:var(--teks-lemah)}
 
 /* ── CATATAN & INFO ── */
-html[data-tema="gelap2"] .status-catatan{color:var(--teks-lemah)}html[data-tema="gelap2"] .status-catatan.ok{color:var(--hijau)}html[data-tema="gelap2"] .status-catatan.nulis{color:var(--emas-w)}html[data-tema="gelap2"] .status-catatan.err{color:var(--merah)}html[data-tema="gelap2"] .status-catatan.lokal{color:var(--merah);background:var(--merah-bg);border:1px solid var(--merah-tepi)}html[data-tema="gelap2"] .info-lipat{background:var(--rose-bg);border:1px dashed var(--rose-tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .info-lipat b{color:var(--rose)}html[data-tema="gelap2"] .info-hari{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .info-hari b{color:var(--biru)}html[data-tema="gelap2"] .memuat{color:var(--teks-lemah)}html[data-tema="gelap2"] .memuat::after{border:2px solid var(--tepi-terang);border-top-color:var(--rose)}html[data-tema="gelap2"] footer .skrip{background:var(--grad-sub);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap2"] footer .kecil{color:var(--teks-samar)}
+html[data-tema="gelap2"] .status-catatan{color:var(--teks-lemah)}html[data-tema="gelap2"] .status-catatan.ok{color:var(--hijau)}html[data-tema="gelap2"] .status-catatan.nulis{color:var(--emas-w)}html[data-tema="gelap2"] .status-catatan.err{color:var(--merah)}html[data-tema="gelap2"] .status-catatan.lokal{color:var(--merah);background:var(--merah-bg);border:1px solid var(--merah-tepi)}html[data-tema="gelap2"] .info-hari{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .info-hari b{color:var(--biru)}html[data-tema="gelap2"] .memuat{color:var(--teks-lemah)}html[data-tema="gelap2"] .memuat::after{border:2px solid var(--tepi-terang);border-top-color:var(--rose)}html[data-tema="gelap2"] footer .skrip{background:var(--grad-sub);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap2"] footer .kecil{color:var(--teks-samar)}
 
 /* ── KOMPONEN BARU DI MODE GELAP ── */
 html[data-tema="gelap2"] .btn-selesai{color:#1a1024;
   background:linear-gradient(165deg,var(--rose-terang),var(--rose));
-  box-shadow:0 14px 30px -13px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5)}html[data-tema="gelap2"] .btn-balikin{background:var(--panel-2);border-color:var(--tepi-terang);color:var(--teks-lemah)}html[data-tema="gelap2"] .btn-balikin:hover{color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .menu-tema{box-shadow:0 22px 48px -18px rgba(0,0,0,.92)}html[data-tema="gelap2"] .opsi-tema .contoh{border-color:var(--tepi-terang);box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}html[data-tema="gelap2"] .grup-arsip{box-shadow:0 10px 22px -18px rgba(0,0,0,.9)}
+  box-shadow:0 14px 30px -13px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5)}html[data-tema="gelap2"] .btn-balikin{background:var(--panel-2);border-color:var(--tepi-terang);color:var(--teks-lemah)}html[data-tema="gelap2"] .btn-balikin:hover{color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .grup-arsip{box-shadow:0 10px 22px -18px rgba(0,0,0,.9)}
 /* Noir sengaja dibikin lebih tegas: sudut agak lebih tajam,
    garis lebih kelihatan, aksen lebih menyala. */
 html[data-tema="gelap2"]{--r:20px}html[data-tema="gelap2"] .jendela{border-width:1px}html[data-tema="gelap2"] .gelembung{border-radius:16px 16px 16px 6px}html[data-tema="gelap2"] .lencana{border-width:1.5px}html[data-tema="gelap2"] .kartu-stat{background:var(--panel-2);border-width:1px}html[data-tema="gelap2"] .btn-selesai{box-shadow:0 14px 30px -12px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.55)}html[data-tema="gelap2"] .kirim{box-shadow:0 18px 34px -12px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.5)}html[data-tema="gelap2"] .tab[aria-selected="true"]{box-shadow:inset 0 1px 0 var(--kilau),0 8px 22px -8px var(--rose-glow)}html[data-tema="gelap2"] h1.judul{filter:drop-shadow(0 4px 36px var(--glow)) drop-shadow(0 0 2px rgba(255,255,255,.3))}
+
+
+/* ikon kotak cari di mode gelap */
+html[data-tema="gelap1"] .ikon-cari,
+html[data-tema="gelap2"] .ikon-cari{background:var(--panel-3);border-color:var(--tepi);color:var(--teks-samar)}
+html[data-tema="gelap1"] .cari:focus-within .ikon-cari,
+html[data-tema="gelap2"] .cari:focus-within .ikon-cari{color:var(--rose);border-color:var(--rose)}
+html[data-tema="gelap1"] .pemilih-tema,
+html[data-tema="gelap2"] .pemilih-tema{box-shadow:0 14px 30px -18px rgba(0,0,0,.85)}
 
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -898,14 +888,11 @@ html[data-tema="gelap2"]{--r:20px}html[data-tema="gelap2"] .jendela{border-width
 </div>
 
 <div class="layang">
-  <div class="bungkus-tema">
-    <button id="btn-tema" title="Ganti tampilan" aria-label="Ganti tampilan" aria-expanded="false">🌙</button>
-    <div class="menu-tema" id="menu-tema" role="menu">
-      <div class="jdl-menu-tema">Tampilan</div>
-      <button type="button" class="opsi-tema" data-tema="terang"  role="menuitem"><i class="contoh ct"></i><span>Terang</span><b>✓</b></button>
-      <button type="button" class="opsi-tema" data-tema="gelap1"  role="menuitem"><i class="contoh cg1"></i><span>Midnight</span><b>✓</b></button>
-      <button type="button" class="opsi-tema" data-tema="gelap2"  role="menuitem"><i class="contoh cg2"></i><span>Noir</span><b>✓</b></button>
-    </div>
+  <div class="pemilih-tema" id="pemilih-tema" role="radiogroup" aria-label="Pilih tampilan">
+    <span class="penanda" aria-hidden="true"></span>
+    <button type="button" class="segmen" data-tema="terang" role="radio" title="Terang"  aria-label="Terang">☀</button>
+    <button type="button" class="segmen" data-tema="gelap1" role="radio" title="Midnight" aria-label="Midnight">☾</button>
+    <button type="button" class="segmen" data-tema="gelap2" role="radio" title="Noir"     aria-label="Noir">✦</button>
   </div>
   <button id="btn-suara" title="Musik kayangan" aria-label="Nyalakan musik">♪</button>
   <button id="btn-atas" title="Kembali ke atas" aria-label="Kembali ke atas">↑</button>
@@ -957,7 +944,7 @@ html[data-tema="gelap2"]{--r:20px}html[data-tema="gelap2"] .jendela{border-width
           <button class="sub-tab" id="tab-fasttrack">⚡ Fast Track</button>
         </div>
 
-        <div class="cari"><input type="text" id="cari-antrian" placeholder="Cari namamu di antrian…"></div>
+        <div class="cari"><span class="ikon-cari" aria-hidden="true">⌕</span><input type="text" id="cari-antrian" placeholder="Cari namamu di antrian…"></div>
         <div class="feed" id="feed-antrian"><div class="memuat">Memuat data antrian</div></div>
       </div>
     </div>
@@ -1071,7 +1058,7 @@ html[data-tema="gelap2"]{--r:20px}html[data-tema="gelap2"] .jendela{border-width
             </div>
           </div>
 
-          <p style="font-size:12px;color:var(--tinta-muda);margin:0 0 10px">Ketuk barisnya buat lihat siapa aja yang order di tanggal itu 👇</p>
+          <p style="font-size:12.5px;color:var(--tinta-muda);margin:0 0 10px">Buat lihat siapa aja yang order, buka <b>Arsip</b> di panel Antrian Berjalan di bawah ♡</p>
 
           <div style="overflow-x:auto;">
             <table class="tabel-laporan">
@@ -1099,7 +1086,7 @@ html[data-tema="gelap2"]{--r:20px}html[data-tema="gelap2"] .jendela{border-width
           </div>
           <div class="info-hari">📅 <b id="teks-tgl-hari-ini">hari ini</b></div>
 
-          <div class="cari"><input type="text" id="cari-admin" placeholder="Cari nama pelanggan…"></div>
+          <div class="cari"><span class="ikon-cari" aria-hidden="true">⌕</span><input type="text" id="cari-admin" placeholder="Cari nama pelanggan…"></div>
           <div class="feed" id="feed-admin"><div class="memuat">Memuat data admin</div></div>
 
           <!-- Antrian di atas nggak ilang sendiri walaupun ganti hari.
@@ -1883,22 +1870,18 @@ function gambarAntrian(){
     filtered = filtered.filter(x => x.detail.toLowerCase().includes(cariAntrianTeks));
   }
 
-  const infoLipat = (lipat.jumlah && filterStatus !== 'Sudah Dibaca')
-    ? `<div class="info-lipat">✨ <b>${lipat.jumlah} antrian</b> yang udah selesai dibaca disembunyiin biar daftarnya nggak kepanjangan. Nomor antrian kamu tetap sama kok — ketuk kartu <b>Sudah Dibaca</b> di atas kalau mau lihat semuanya ♡</div>`
-    : '';
-
   if(!filtered.length){
     const pesanKosong = filterStatus
       ? `Belum ada antrian yang statusnya "${filterStatus}" sekarang.`
       : 'Belum ada antrian untuk kategori ini.';
-    el.innerHTML = infoLipat + `<div class="kosong"><div class="em">💌</div><div class="j">antrian kosong</div><p style="font-size:13px;margin-top:6px">${pesanKosong}</p></div>`;
+    el.innerHTML = `<div class="kosong"><div class="em">💌</div><div class="j">antrian kosong</div><p style="font-size:13px;margin-top:6px">${pesanKosong}</p></div>`;
     return;
   }
 
   // Nomor antrian permanen (lihat hitungNomorAntrian di atas)
   const petaNomor = hitungNomorAntrian();
 
-  el.innerHTML = infoLipat + [...filtered].sort((a, b) => a.ts - b.ts).map((x) => {
+  el.innerHTML = [...filtered].sort((a, b) => a.ts - b.ts).map((x) => {
     let statusClass = 'lencana';
     if(x.status === 'Sudah Dibaca') statusClass += ' baca';
     else if(x.status === 'Sedang Dibaca') statusClass += ' proses';
@@ -2207,15 +2190,12 @@ function gambarAdmin(){
    Laporan ini nampilin SEMUA tanggal (data lama nggak ikut kehapus walaupun
    antrian hariannya udah ganti), dan tiap baris tanggal bisa diketuk buat
    lihat detail siapa aja yang order di tanggal itu. */
-let tglTerbuka = {};   // tanggal mana aja yang lagi dibuka detailnya
-
 function pasangTabSesi(){
   const tSolo = $('#tab-sesi-solo'), tMod = $('#tab-sesi-mod');
   if(!tSolo || !tMod) return;
   const pilih = (mode) => {
     sesiAktif = mode;
     editingId = null;
-    tglTerbuka = {};
     arsipTerbuka = false;
     tSolo.classList.toggle('aktif', mode === 'solo');
     tSolo.classList.toggle('solo', mode === 'solo');
@@ -2231,11 +2211,6 @@ function pasangTabSesi(){
   tMod.addEventListener('click', () => pilih('mod'));
 }
 pasangTabSesi();
-
-window.bukaTutupTgl = function(kunci){
-  tglTerbuka[kunci] = !tglTerbuka[kunci];
-  renderLaporanTgl();
-};
 
 function renderLaporanTgl(){
   const tbody = $('#tabel-laporan-body');
@@ -2281,8 +2256,8 @@ function renderLaporanTgl(){
     const kunci = tglKunci(x.ts);
     if(!rekap[kunci]){
       rekap[kunci] = {
-        label: new Date(x.ts).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' }),
-        total: 0, sudah: 0, belum: 0, pendapatan: 0, orang: []
+        label: labelTgl(x.ts),
+        total: 0, sudah: 0, belum: 0, pendapatan: 0
       };
     }
     rekap[kunci].total++;
@@ -2291,7 +2266,6 @@ function renderLaporanTgl(){
 
     const harga = ambilHarga(x);
     rekap[kunci].pendapatan += harga;
-    rekap[kunci].orang.push({ nama: x.detail, harga: harga, status: x.status, tipe: x.tipe, ts: x.ts });
     grandPendapatan += harga;
   });
 
@@ -2302,10 +2276,9 @@ function renderLaporanTgl(){
     const r = rekap[kunci];
     const potongan = Math.round(r.pendapatan * 0.2);
     const sisa = r.pendapatan - potongan;
-    const dibuka = !!tglTerbuka[kunci];
 
-    const barisUtama = `<tr class="baris-tgl" onclick="bukaTutupTgl('${kunci}')">
-      <td><span class="panah-buka ${dibuka ? 'buka' : ''}">▶</span><strong>${r.label}</strong></td>
+    return `<tr>
+      <td><strong>${aman(r.label)}</strong></td>
       <td>${r.total} order</td>
       <td class="td-hijau">${r.sudah}</td>
       <td class="td-emas">${r.belum}</td>
@@ -2315,25 +2288,6 @@ function renderLaporanTgl(){
            <td class="td-emas">${formatRp(potongan)}</td>
            <td class="td-hijau">${formatRp(sisa)}</td>`}
     </tr>`;
-
-    if(!dibuka) return barisUtama;
-
-    // Detail: siapa aja yang order di tanggal ini
-    const chips = [...r.orang].sort((a, b) => a.ts - b.ts).map(o => {
-      const ok = o.status === 'Sudah Dibaca' ? ' ok' : '';
-      const ft = o.tipe === 'Fast Track' ? ' ⚡' : '';
-      return `<span class="chip-orang">${aman(o.nama)}${ft} <b>${formatK(o.harga)}</b>
-        <span class="st${ok}">${aman(o.status || '-')}</span></span>`;
-    }).join('');
-
-    const barisRinci = `<tr class="baris-rinci"><td colspan="${kolom}">
-      <div class="rinci-isi">
-        <div class="rinci-judul">👥 Yang order tanggal ${aman(r.label)} (${r.total} orang)</div>
-        <div class="rinci-orang">${chips}</div>
-      </div>
-    </td></tr>`;
-
-    return barisUtama + barisRinci;
   }).join('');
 
   // Ringkasan total keseluruhan (semua tanggal digabung)
@@ -2535,24 +2489,22 @@ window.simpanEditAntrian = async function(id){
    Kalau belum pernah milih, otomatis ngikutin setelan HP/laptopnya. */
 (function pengaturTema(){
   const KUNCI_TEMA = 'tema_leony';
-  const btn  = $('#btn-tema');
-  const menu = $('#menu-tema');
-  if(!btn || !menu) return;
+  const wadah = $('#pemilih-tema');
+  if(!wadah) return;
 
-  const IKON  = { terang:'☀️', gelap1:'🌙', gelap2:'✦' };
+  const URUT  = ['terang', 'gelap1', 'gelap2'];
   const WARNA = { terang:'#dcebfe', gelap1:'#0c1332', gelap2:'#050308' };
-  const NAMA  = { terang:'Terang', gelap1:'Midnight', gelap2:'Noir' };
-
-  function temaSekarang(){
-    const t = document.documentElement.getAttribute('data-tema');
-    return IKON[t] ? t : 'terang';
-  }
 
   function pasang(t, simpan){
-    if(!IKON[t]) t = 'terang';
+    if(URUT.indexOf(t) === -1) t = 'terang';
     document.documentElement.setAttribute('data-tema', t);
-    btn.textContent = IKON[t];
-    btn.title = 'Tampilan: ' + NAMA[t];
+    wadah.setAttribute('data-aktif', URUT.indexOf(t));
+
+    wadah.querySelectorAll('.segmen').forEach(s => {
+      const on = s.dataset.tema === t;
+      s.classList.toggle('aktif', on);
+      s.setAttribute('aria-checked', String(on));
+    });
 
     // warna bar browser di HP ikut nyesuain
     let meta = document.querySelector('meta[name="theme-color"]');
@@ -2563,43 +2515,25 @@ window.simpanEditAntrian = async function(id){
     }
     meta.content = WARNA[t];
 
-    menu.querySelectorAll('.opsi-tema').forEach(o => {
-      o.classList.toggle('kepilih', o.dataset.tema === t);
-    });
-
     if(simpan){ try { localStorage.setItem(KUNCI_TEMA, t); } catch(e){} }
   }
 
-  function tutup(){ menu.classList.remove('buka'); btn.setAttribute('aria-expanded','false'); }
-
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    const buka = !menu.classList.contains('buka');
-    menu.classList.toggle('buka', buka);
-    btn.setAttribute('aria-expanded', String(buka));
+  wadah.querySelectorAll('.segmen').forEach(s => {
+    s.addEventListener('click', () => pasang(s.dataset.tema, true));
   });
 
-  menu.querySelectorAll('.opsi-tema').forEach(o => {
-    o.addEventListener('click', e => {
-      e.stopPropagation();
-      pasang(o.dataset.tema, true);
-      tutup();
-    });
-  });
-
-  document.addEventListener('click', tutup);
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') tutup(); });
-
-  // Kalau user belum pernah milih sendiri, ikutin kalau setelan HP-nya berubah
+  // Kalau belum pernah milih sendiri, ikutin setelan HP/laptopnya
   if(window.matchMedia){
-    matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', ev => {
+    const mq = matchMedia('(prefers-color-scheme: dark)');
+    const dengar = ev => {
       let tersimpan = null;
       try { tersimpan = localStorage.getItem(KUNCI_TEMA); } catch(e){}
       if(!tersimpan) pasang(ev.matches ? 'gelap1' : 'terang', false);
-    });
+    };
+    if(mq.addEventListener) mq.addEventListener('change', dengar);
   }
 
-  pasang(temaSekarang(), false);
+  pasang(document.documentElement.getAttribute('data-tema'), false);
 })();
 
 muatAntrianLocal();
