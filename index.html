@@ -958,10 +958,10 @@ html[data-tema="gelap2"] .pemilih-tema{box-shadow:0 14px 30px -18px rgba(0,0,0,.
       <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">admin_login</span></div>
       <div class="isi">
         <h2 class="sub">Admin Login</h2>
-        <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan Username dan Password untuk mengelola antrian.</p>
+        <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masuk pakai akun admin buat mengelola antrian.</p>
         <form class="form" id="form-login">
-          <div><label for="l-nama">Username Admin</label><input type="text" id="l-nama" placeholder="Masukkan nama/username admin" required></div>
-          <div><label for="l-pass">Password</label><input type="password" id="l-pass" placeholder="Masukkan password" required></div>
+          <div><label for="l-nama">Email Admin</label><input type="email" id="l-nama" placeholder="email admin kamu" autocomplete="username" required></div>
+          <div><label for="l-pass">Password</label><input type="password" id="l-pass" placeholder="Masukkan password" autocomplete="current-password" required></div>
           <div class="pesan-status" id="l-status"></div>
           <button type="submit" class="kirim">Masuk Dashboard ♡</button>
         </form>
@@ -1209,16 +1209,18 @@ const $ = s => document.querySelector(s);
 const hemat = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hp = window.matchMedia('(max-width: 720px)').matches;
 
-// Username tetap disini, tapi password TIDAK disimpan sebagai teks polos.
-// Ini adalah hasil SHA-256 dari password aslinya, bukan passwordnya sendiri.
-// Ganti username & hash ini kalau mau ganti password (lihat instruksi di bawah).
-const ADMIN_USER = 'admin';
-const ADMIN_PASS_HASH = '15964f639ea2c22614ee4f19aed1ad4461cf65672c9de7158b8b62210d83aeb9';
+/* ══════ LOGIN ADMIN ══════
+   DULU: password dicek di dalam browser (cocokin hash SHA-256 di file ini).
+   Cara itu cuma nyembunyiin tombol — datanya sendiri nggak kejaga, karena
+   orang bisa nembak Supabase langsung tanpa lewat halaman ini sama sekali.
 
-async function hashSHA256(teks){
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(teks));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
+   SEKARANG: login beneran lewat Supabase Auth. Yang ngecek password itu
+   servernya Supabase, bukan browser. Habis login, Supabase ngasih token,
+   dan token itu yang bikin kamu boleh nambah/ubah/hapus data.
+   Tanpa token = cuma bisa lihat, nggak bisa ngapa-ngapain.
+
+   Akunnya dibikin di: Supabase > Authentication > Users > Add user.
+   Nggak ada password yang ditulis di file ini lagi. */
 
 /* ══════ KONFIGURASI SUPABASE ══════ */
 const SUPABASE_URL = 'https://hnnqjswajdjitetvupjt.supabase.co';
@@ -1473,6 +1475,10 @@ const KUNCI_CATATAN_LOKAL = 'catatan_leony_tarot';
     kotak.focus();
   });
 
+  // dipanggil lagi habis login, biar catatan tetap kebaca walaupun
+  // policy Supabase-nya cuma ngebolehin admin yang lihat
+  window.muatUlangCatatan = muat;
+
   muat();
 })();
 
@@ -1558,6 +1564,22 @@ async function editAntrianKeSupabase(id, data){
   const { error } = await supabaseClient.from(TABEL_ANTRIAN).update(data).eq('id', id);
   if(error) console.error('Gagal edit di Supabase:', error);
   return error;
+}
+
+/* Supabase nolak tulisan dari orang yang belum login dengan kode 42501.
+   Tanpa ini, error-nya cuma nongol di console dan bikin bingung. */
+function ditolakIzin(error){
+  if(!error) return false;
+  const t = (error.message || '') + ' ' + (error.code || '');
+  return /42501|row-level security|permission denied|jwt/i.test(t);
+}
+function laporGagal(error, aksi){
+  if(ditolakIzin(error)){
+    alert('Gagal ' + aksi + ' — kamu belum login sebagai admin, atau sesi login-nya udah habis.\n\nCoba keluar terus masuk lagi ya ♡');
+    return true;
+  }
+  if(error){ alert('Gagal ' + aksi + ': ' + error.message); return true; }
+  return false;
 }
 
 /* ══════ UTIL ══════ */
@@ -1902,32 +1924,71 @@ function gambarAntrian(){
   }).join('');
 }
 
-/* ══════ LOGIN ADMIN (password disimpan sebagai hash, bukan teks polos) ══════ */
+/* ══════ LOGIN ADMIN (Supabase Auth) ══════ */
 let isLoggedAdmin = false;
 
-$('#form-login').addEventListener('submit', async e => {
-  e.preventDefault();
-  const u = $('#l-nama').value.trim();
-  const p = $('#l-pass').value.trim();
-  const st = $('#l-status');
+function bukaDashboard(){
+  isLoggedAdmin = true;
+  $('#jendela-login').style.display = 'none';
+  $('#panel-admin').style.display = 'block';
+  // Catatan baru bisa kebaca setelah login (kalau policy-nya diketatin),
+  // jadi dimuat ulang di sini.
+  if(typeof window.muatUlangCatatan === 'function') window.muatUlangCatatan();
+  gambarAdmin();
+}
 
-  const hashInput = await hashSHA256(p);
-
-  if(u === ADMIN_USER && hashInput === ADMIN_PASS_HASH){
-    isLoggedAdmin = true;
-    $('#jendela-login').style.display = 'none';
-    $('#panel-admin').style.display = 'block';
-    gambarAdmin();
-  } else {
-    status(st, 'Username atau Password salah!', 'err');
-  }
-});
-
-$('#btn-logout').addEventListener('click', () => {
+function tutupDashboard(){
   isLoggedAdmin = false;
   $('#jendela-login').style.display = 'block';
   $('#panel-admin').style.display = 'none';
   $('#form-login').reset();
+}
+
+$('#form-login').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('#l-nama').value.trim();
+  const pass  = $('#l-pass').value;
+  const st    = $('#l-status');
+  const btn   = $('#form-login button[type="submit"]');
+
+  btn.disabled = true;
+  btn.textContent = 'Masuk…';
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email: email, password: pass
+  });
+
+  btn.disabled = false;
+  btn.textContent = 'Masuk Dashboard ♡';
+
+  if(error){
+    const pesan = /invalid login|invalid credentials/i.test(error.message || '')
+      ? 'Email atau password salah!'
+      : /email not confirmed/i.test(error.message || '')
+        ? 'Akunnya belum dikonfirmasi. Buka Supabase > Authentication > Users, terus konfirmasi akunnya.'
+        : 'Gagal masuk: ' + error.message;
+    return status(st, pesan, 'err');
+  }
+  bukaDashboard();
+});
+
+$('#btn-logout').addEventListener('click', async () => {
+  await supabaseClient.auth.signOut();
+  tutupDashboard();
+});
+
+/* Kalau sesi login sebelumnya masih hidup, langsung buka dashboard —
+   jadi nggak perlu login ulang tiap buka halaman. */
+(async function cekSesiLogin(){
+  try {
+    const { data } = await supabaseClient.auth.getSession();
+    if(data && data.session) bukaDashboard();
+  } catch(e){ console.warn('Gagal cek sesi login:', e); }
+})();
+
+/* Kalau token-nya kedaluwarsa atau logout dari tab lain, panel ikut ketutup. */
+supabaseClient.auth.onAuthStateChange((ev, sesi) => {
+  if(!sesi && isLoggedAdmin) tutupDashboard();
 });
 
 /* ══════ MULTI-INPUT ANTRIAN BARU (ADMIN) ══════ */
@@ -2046,7 +2107,9 @@ $('#form-input').addEventListener('submit', async e => {
 
   const errInsert = await tambahAntrianKeSupabase(itemBaruList);
   if(errInsert){
-    status(st, 'Tersimpan di layar, tapi gagal sync ke server: ' + errInsert.message, 'err');
+    status(st, ditolakIzin(errInsert)
+      ? 'Gagal simpan — kamu belum login sebagai admin atau sesi login udah habis. Coba keluar terus masuk lagi ya ♡'
+      : 'Tersimpan di layar, tapi gagal sync ke server: ' + errInsert.message, 'err');
   }
 
   $('#daftar-input-container').innerHTML = `
@@ -2430,7 +2493,8 @@ window.ubahStatusTarot = async function(id, val){
 
   dAntrian[idx].status = val;
   simpanAntrianLocal(dAntrian);
-  await ubahStatusKeSupabase(id, val);
+  const errStatus = await ubahStatusKeSupabase(id, val);
+  if(laporGagal(errStatus, 'mengubah status')) muatAntrianLocal();
 
 };
 
@@ -2438,7 +2502,8 @@ window.hapusAntrian = async function(id){
   if(!confirm('Yakin mau hapus antrian ini?')) return;
   dAntrian = dAntrian.filter(x => x.id !== id);
   simpanAntrianLocal(dAntrian);
-  await hapusAntrianDiSupabase(id);
+  const errHapus = await hapusAntrianDiSupabase(id);
+  if(laporGagal(errHapus, 'menghapus antrian')) muatAntrianLocal();
 };
 
 /* ══════ EDIT ANTRIAN (Nama / Harga / Tipe) ══════ */
@@ -2479,7 +2544,8 @@ window.simpanEditAntrian = async function(id){
   editingId = null;
   gambarAdmin();
 
-  await editAntrianKeSupabase(id, { detail: detailBaru, harga: hargaBaru, tipe: tipeBaru });
+  const errEdit = await editAntrianKeSupabase(id, { detail: detailBaru, harga: hargaBaru, tipe: tipeBaru });
+  if(laporGagal(errEdit, 'menyimpan perubahan')) muatAntrianLocal();
 };
 
 /* ══════ PILIH TAMPILAN: TERANG / MIDNIGHT / NOIR ══════
