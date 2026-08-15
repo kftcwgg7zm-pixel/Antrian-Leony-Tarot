@@ -863,12 +863,12 @@ input:-webkit-autofill:focus{
    ║  (.gelembung, .kirim, .lencana, input) tetep dipinjem     ║
    ║  biar warnanya otomatis ikut tema gelap.                  ║
    ╚═══════════════════════════════════════════════════════════╝ */
-.stat-testi{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
-.stat-testi .butir{flex:1;min-width:120px;text-align:center;padding:9px 12px;border-radius:15px;
-  background:linear-gradient(160deg,rgba(255,255,255,.92),rgba(253,240,247,.72));
+.stat-testi{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;padding:7px 15px;border-radius:20px;
+  background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(253,240,247,.72));
   border:1px solid rgba(255,255,255,.95);box-shadow:var(--bayang-lembut)}
-.stat-testi .butir b{display:block;font-size:17px;line-height:1.3;color:#b4708f;font-weight:700}
-.stat-testi .butir span{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
+.stat-testi:empty{display:none}
+.stat-testi b{font-size:15px;line-height:1;color:#b4708f;font-weight:700}
+.stat-testi span{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--tinta-muda);font-weight:600}
 
 /* ── KOTAK NULIS TESTIMONY (ramping, nyatu sama jendelanya) ── */
@@ -879,16 +879,8 @@ input:-webkit-autofill:focus{
 .tanya-testi{margin:0;font-size:15px;font-weight:700;color:#a9739a;line-height:1.45}
 .tanya-testi span{display:block;font-size:13.5px;font-weight:500;color:var(--tinta-muda);margin-top:1px}
 
-.baris-foto{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
-.grup-foto{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tombol-foto{border:1px dashed rgba(205,150,180,.6);background:rgba(255,255,255,.72);border-radius:12px;
-  padding:7px 13px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;color:#b4708f;transition:.2s}
-.tombol-foto em{font-style:normal;font-weight:500;opacity:.65}
-.tombol-foto:hover{background:#fff;border-color:#e88bb1}
-.nama-foto{font-size:11px;color:var(--tinta-muda);word-break:break-all}
-.hitung-huruf{margin-left:auto;font-size:11px;color:var(--tinta-muda)}
+.hitung-huruf{display:block;margin-top:6px;text-align:right;font-size:11px;color:var(--tinta-muda)}
 .hitung-huruf.mepet{color:#c0392b}
-.pratinjau-foto{margin-top:10px;max-height:160px;border-radius:14px;border:1px solid var(--garis)}
 .jebakan{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important}
 
 /* ── KARTU TESTIMONY ── */
@@ -899,8 +891,6 @@ input:-webkit-autofill:focus{
 .gelembung.testi.disembunyiin{opacity:.55;border-style:dashed}
 .isi-testi{margin:6px 0 0;font-size:14.5px;color:var(--tinta);white-space:pre-wrap;
   word-break:break-word;overflow-wrap:anywhere;position:relative}
-.foto-testi{margin-top:12px;max-height:290px;width:auto;border-radius:15px;cursor:zoom-in;
-  border:1px solid var(--garis);box-shadow:0 10px 22px -16px rgba(110,140,190,.9)}
 .alat-testi{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;align-items:center}
 
 .balasan-list{display:grid;gap:9px;margin-top:13px;padding-left:14px;
@@ -930,34 +920,21 @@ input:-webkit-autofill:focus{
 .wadah-lainnya .isi-lainnya{overflow:hidden;min-height:0}
 .wadah-lainnya.buka .isi-lainnya{padding-top:12px}
 
-.lampu-foto{position:fixed;inset:0;z-index:950;display:none;place-items:center;padding:24px;
-  background:rgba(18,24,45,.87);backdrop-filter:blur(6px)}
-.lampu-foto.buka{display:grid}
-.lampu-foto img{max-width:100%;max-height:86vh;border-radius:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.8)}
-.lampu-foto .tutup{position:absolute;top:16px;right:16px;width:42px;height:42px;border-radius:50%;
-  border:0;cursor:pointer;background:rgba(255,255,255,.92);color:#5d6c8d;font-size:22px}
-
 /* ── testimony di tema gelap ── */
-html[data-tema="gelap1"] .stat-testi .butir,html[data-tema="gelap2"] .stat-testi .butir{
+html[data-tema="gelap1"] .stat-testi,html[data-tema="gelap2"] .stat-testi{
   background:var(--panel-2);border:1px solid var(--tepi);box-shadow:0 10px 22px -16px rgba(0,0,0,.9)}
-html[data-tema="gelap1"] .stat-testi .butir b,html[data-tema="gelap2"] .stat-testi .butir b{color:var(--rose)}
-html[data-tema="gelap1"] .stat-testi .butir span,html[data-tema="gelap2"] .stat-testi .butir span{color:var(--teks-lemah)}
+html[data-tema="gelap1"] .stat-testi b,html[data-tema="gelap2"] .stat-testi b{color:var(--rose)}
+html[data-tema="gelap1"] .stat-testi span,html[data-tema="gelap2"] .stat-testi span{color:var(--teks-lemah)}
 html[data-tema="gelap1"] .kotak-testi,html[data-tema="gelap2"] .kotak-testi{
   background:var(--panel-2);border:1px solid var(--tepi)}
 html[data-tema="gelap1"] .tanya-testi,html[data-tema="gelap2"] .tanya-testi{color:var(--rose)}
 html[data-tema="gelap1"] .tanya-testi span,html[data-tema="gelap2"] .tanya-testi span,
-html[data-tema="gelap1"] .nama-foto,html[data-tema="gelap2"] .nama-foto,
 html[data-tema="gelap1"] .hitung-huruf,html[data-tema="gelap2"] .hitung-huruf{color:var(--teks-lemah)}
 html[data-tema="gelap1"] .hitung-huruf.mepet,html[data-tema="gelap2"] .hitung-huruf.mepet{color:var(--merah)}
-html[data-tema="gelap1"] .tombol-foto,html[data-tema="gelap2"] .tombol-foto{
-  background:var(--panel-3);border:1px dashed var(--rose-tepi);color:var(--rose)}
-html[data-tema="gelap1"] .tombol-foto:hover,html[data-tema="gelap2"] .tombol-foto:hover{background:var(--rose-bg)}
 html[data-tema="gelap1"] .gelembung.testi,html[data-tema="gelap2"] .gelembung.testi{
   background:var(--panel-2);border:1px solid var(--tepi)}
 html[data-tema="gelap1"] .gelembung.testi::before,html[data-tema="gelap2"] .gelembung.testi::before{color:var(--rose-bg)}
 html[data-tema="gelap1"] .isi-testi,html[data-tema="gelap2"] .isi-testi{color:var(--teks)}
-html[data-tema="gelap1"] .pratinjau-foto,html[data-tema="gelap2"] .pratinjau-foto,
-html[data-tema="gelap1"] .foto-testi,html[data-tema="gelap2"] .foto-testi{border-color:var(--tepi)}
 html[data-tema="gelap1"] .balasan-list,html[data-tema="gelap2"] .balasan-list{border-left-color:var(--rose-tepi)}
 html[data-tema="gelap1"] .balasan-testi,html[data-tema="gelap2"] .balasan-testi{
   background:var(--panel-3);border-color:var(--tepi)}
@@ -973,8 +950,6 @@ html[data-tema="gelap1"] .buka-semua:hover,html[data-tema="gelap2"] .buka-semua:
   background:var(--rose-bg);border-color:var(--rose-tepi)}
 html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .jml{
   background:var(--rose-bg);border-color:var(--rose-tepi);color:var(--rose)}
-html[data-tema="gelap1"] .lampu-foto .tutup,html[data-tema="gelap2"] .lampu-foto .tutup{
-  background:var(--panel-4);color:var(--teks)}
 </style>
 <script>
 /* Dijalanin paling awal biar temanya udah nempel sebelum halaman digambar —
@@ -1100,18 +1075,9 @@ html[data-tema="gelap1"] .lampu-foto .tutup,html[data-tema="gelap2"] .lampu-foto
 
           <div>
             <textarea id="ts-pesan" rows="3" maxlength="1000" placeholder="tulis ceritanya di sini…" required></textarea>
-            <div class="baris-foto">
-              <span id="ts-blok-foto" class="grup-foto">
-                <button type="button" class="tombol-foto" id="ts-btn-foto">🖼 Foto <em>(opsional)</em></button>
-                <button type="button" class="mini" id="ts-batal-foto" style="display:none">Hapus</button>
-                <span class="nama-foto" id="ts-nama-foto"></span>
-              </span>
-              <span class="hitung-huruf" id="ts-hitung">1000</span>
-            </div>
-            <img id="ts-pratinjau" class="pratinjau-foto" alt="Pratinjau foto" style="display:none">
+            <span class="hitung-huruf" id="ts-hitung">1000</span>
           </div>
 
-          <input type="file" id="ts-foto" accept="image/*" hidden>
           <!-- Jebakan bot: manusia nggak bakal lihat kotak ini, robot spam biasanya ngisi. -->
           <input type="text" id="ts-jebakan" class="jebakan" tabindex="-1" autocomplete="off" aria-hidden="true">
 
@@ -1388,11 +1354,6 @@ html[data-tema="gelap1"] .lampu-foto .tutup,html[data-tema="gelap2"] .lampu-foto
   </div>
 </nav>
 
-<!-- ═══ LAYAR FOTO TESTIMONY (kalau fotonya dipencet) ═══ -->
-<div class="lampu-foto" id="lampu-foto" role="dialog" aria-label="Foto testimony">
-  <img id="lampu-gambar" alt="Foto testimony">
-  <button type="button" class="tutup" id="lampu-tutup" aria-label="Tutup foto">✕</button>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -2848,69 +2809,22 @@ window.simpanEditAntrian = async function(id){
    ║  TAROT TESTIMONY                                                  ║
    ╚═══════════════════════════════════════════════════════════════════╝
 
-   ⚠️ SEBELUM DIPAKAI: jalanin SQL di bawah ini SEKALI aja di
-   Supabase > SQL Editor. Ini bikin TABEL BARU namanya 'tarot_testimony'.
+   ⚠️ SEBELUM DIPAKAI: jalanin file 'setup-tarot-testimony.sql' SEKALI aja
+   di Supabase > SQL Editor. Itu bikin tabel baru namanya 'tarot_testimony'.
    Tabel antrian & catatan yang lama NGGAK disentuh sama sekali.
 
-     create table if not exists tarot_testimony (
-       id         bigint generated by default as identity primary key,
-       induk      bigint references tarot_testimony(id) on delete cascade,
-       nama       text not null,
-       pesan      text not null,
-       foto       text,
-       dari_admin boolean not null default false,
-       tampil     boolean not null default true,
-       ts         bigint  not null
-     );
-     create index if not exists tarot_testimony_induk_idx on tarot_testimony(induk);
-
-     alter table tarot_testimony enable row level security;
-
-     create policy "testi baca" on tarot_testimony
-       for select using (tampil = true);
-     create policy "testi baca admin" on tarot_testimony
-       for select to authenticated using (true);
-     create policy "testi tulis tamu" on tarot_testimony
-       for insert to anon with check (
-         dari_admin = false
-         and char_length(nama)  between 1 and 40
-         and char_length(pesan) between 1 and 1000
-       );
-     create policy "testi tulis admin" on tarot_testimony
-       for insert to authenticated with check (true);
-     create policy "testi ubah admin" on tarot_testimony
-       for update to authenticated using (true) with check (true);
-     create policy "testi hapus admin" on tarot_testimony
-       for delete to authenticated using (true);
-
-     alter publication supabase_realtime add table tarot_testimony;
-
-   ⚠️ KALAU MAU FITUR FOTO JALAN, satu langkah lagi:
-   Supabase > Storage > New bucket > nama: testimony-foto > centang "Public bucket".
-   Terus jalanin SQL ini:
-
-     create policy "foto testi boleh diupload" on storage.objects
-       for insert to public with check (bucket_id = 'testimony-foto');
-     create policy "foto testi boleh dilihat" on storage.objects
-       for select to public using (bucket_id = 'testimony-foto');
-     create policy "foto testi boleh dihapus" on storage.objects
-       for delete to authenticated using (bucket_id = 'testimony-foto');
-
-   Kalau nggak mau ada fitur foto sama sekali, ganti FITUR_FOTO di bawah
-   jadi false — kotak pilih fotonya bakal ilang sendiri dari halaman. */
+   Fitur kirim foto udah dihapus, jadi nggak perlu bikin bucket Storage
+   apa pun. Cukup satu tabel itu aja. */
 
 const TABEL_TESTI    = 'tarot_testimony';
-const BUCKET_TESTI   = 'testimony-foto';
-const FITUR_FOTO     = true;      // false = fitur fotonya dimatiin
 const NAMA_ADMIN     = 'Leony';   // nama yang muncul kalau kamu yang bales
-const MAKS_PESAN     = 1000;   // batas panjang cerita (huruf)
+const MAKS_PESAN     = 1000;      // batas panjang cerita (huruf)
 const TESTI_DEPAN    = 3;         // yang langsung kelihatan; sisanya di balik tombol "Lihat semua"
 const JEDA_KIRIM     = 45000;     // 45 detik jeda antar kiriman dari satu HP
 const KUNCI_JEDA_TS  = 'testi_terakhir_leony';
 
 let dTesti        = [];
 let semuaDibuka   = false;  // tombol "Lihat semua" lagi kebuka atau nggak
-let fotoTerpilih  = null;   // hasil kompres, siap diupload
 let idBalasBuka   = null;   // testimony mana yang lagi dibuka kotak balesnya
 let tabelTsSiap   = true;
 
@@ -2924,11 +2838,6 @@ function jedaKirimTersisa(){
 }
 function catatWaktuKirim(){
   try { localStorage.setItem(KUNCI_JEDA_TS, String(Date.now())); } catch(e){}
-}
-/* Cuma foto yang beneran dari Storage-nya kamu yang boleh ditampilin,
-   biar nggak ada yang nyelipin link gambar sembarangan dari luar. */
-function fotoAman(u){
-  return (typeof u === 'string' && u.indexOf(SUPABASE_URL + '/storage/') === 0) ? u : '';
 }
 
 /* ══════ AMBIL DATA ══════ */
@@ -2949,12 +2858,13 @@ async function muatTesti(){
       el.innerHTML = belumAda
         ? `<div class="kosong"><div class="em">🛠️</div><div class="j">belum disiapin</div>
              <p style="font-size:13px;margin-top:6px">Tabel <b>tarot_testimony</b>-nya belum dibikin di Supabase.
-             Buka SQL Editor terus jalanin SQL yang ada di file setup ya ♡</p></div>`
+             Buka SQL Editor terus jalanin file setup-nya ya ♡</p></div>`
         : `<div class="kosong"><div class="em">📡</div><div class="j">gagal nyambung</div>
              <p style="font-size:13px;margin-top:6px">Testimony-nya lagi nggak kebaca. Coba refresh bentar lagi ya.</p></div>`;
     }
     const btn = $('#ts-toggle'); if(btn) btn.style.display = 'none';
     const sisa = $('#feed-testi-lainnya'); if(sisa) sisa.innerHTML = '';
+    const stat = $('#stat-testi'); if(stat) stat.innerHTML = '';
   }
 }
 
@@ -2969,14 +2879,12 @@ function pasangRealtimeTesti(){
 
 /* ══════ GAMBAR SATU KARTU TESTIMONY ══════ */
 function kartuTesti(x, semuaBalasan, idUtama){
-  const foto = fotoAman(x.foto);
   const anak = semuaBalasan
     .filter(b => b.induk === x.id && idUtama.has(b.induk))
     .sort((a, b) => a.ts - b.ts);
 
-  const daftarBalasan = anak.length ? `<div class="balasan-list">${anak.map(b => {
-    const fotoB = fotoAman(b.foto);
-    return `<div class="balasan-testi ${b.dari_admin ? 'dari-admin' : ''}">
+  const daftarBalasan = anak.length ? `<div class="balasan-list">${anak.map(b => `
+    <div class="balasan-testi ${b.dari_admin ? 'dari-admin' : ''}">
       <div class="kepala">
         <span class="nama-p">${aman(b.nama)}</span>
         ${b.dari_admin ? '<span class="lencana mahkota">👑 Admin</span>' : ''}
@@ -2984,13 +2892,11 @@ function kartuTesti(x, semuaBalasan, idUtama){
         <span class="waktu">${kapan(b.ts)}</span>
       </div>
       <p class="isi-testi">${aman(b.pesan)}</p>
-      ${fotoB ? `<img class="foto-testi" src="${aman(fotoB)}" loading="lazy" alt="foto dari ${aman(b.nama)}">` : ''}
       ${isLoggedAdmin ? `<div class="alat-testi">
         <button type="button" class="mini" data-ts-sembunyi="${b.id}">${b.tampil ? '🙈 Sembunyiin' : '👁 Tampilin'}</button>
         <button type="button" class="btn-hapus" data-ts-hapus="${b.id}">Hapus</button>
       </div>` : ''}
-    </div>`;
-  }).join('')}</div>` : '';
+    </div>`).join('')}</div>` : '';
 
   const kotakBalas = (idBalasBuka === x.id) ? `
     <div class="form-balas" data-ts-form="${x.id}">
@@ -3012,7 +2918,6 @@ function kartuTesti(x, semuaBalasan, idUtama){
       <span class="waktu">${kapan(x.ts)}</span>
     </div>
     <p class="isi-testi">${aman(x.pesan)}</p>
-    ${foto ? `<img class="foto-testi" src="${aman(foto)}" loading="lazy" alt="foto dari ${aman(x.nama)}">` : ''}
     ${daftarBalasan}
     <div class="alat-testi">
       <button type="button" class="mini" data-ts-balas="${x.id}">💬 Bales${anak.length ? ' (' + anak.length + ')' : ''}</button>
@@ -3036,17 +2941,12 @@ function gambarTesti(){
   const balasan = dTesti.filter(x => x.induk);
   const idUtama = new Set(utama.map(x => x.id));
 
-  /* ── papan statistik kecil ── */
+  // jumlah testimony yang masuk
   const kotakStat = $('#stat-testi');
   if(kotakStat){
-    if(!utama.length){
-      kotakStat.innerHTML = '';
-    } else {
-      const dibales = utama.filter(x => balasan.some(b => b.induk === x.id && b.dari_admin)).length;
-      kotakStat.innerHTML =
-        `<div class="butir"><b>${utama.length}</b><span>Testimony masuk</span></div>` +
-        `<div class="butir"><b>${dibales}</b><span>Udah aku bales</span></div>`;
-    }
+    kotakStat.innerHTML = utama.length
+      ? `<b>${utama.length}</b><span>Testimony masuk</span>`
+      : '';
   }
 
   if(!utama.length){
@@ -3081,55 +2981,10 @@ function gambarTesti(){
   }
 }
 
-/* ══════ FOTO: kecilin dulu sebelum dikirim ══════
-   Foto dari HP bisa 3–8 MB. Kalau dikirim mentah, kuota Storage cepet abis
-   dan loadingnya lama. Jadi dikecilin dulu di HP-nya: sisi terpanjang jadi
-   1100px, disimpen sebagai JPEG. Hasilnya biasanya cuma ±100–200 KB. */
-function kecilinFoto(file){
-  return new Promise((selesai, gagal) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      const MAKS = 1100;
-      let w = img.naturalWidth, h = img.naturalHeight;
-      if(!w || !h) return gagal(new Error('format'));
-      if(w > MAKS || h > MAKS){
-        const skala = MAKS / Math.max(w, h);
-        w = Math.round(w * skala); h = Math.round(h * skala);
-      }
-      const kanvas = document.createElement('canvas');
-      kanvas.width = w; kanvas.height = h;
-      const ctx = kanvas.getContext('2d');
-      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);   // biar PNG transparan nggak jadi item
-      ctx.drawImage(img, 0, 0, w, h);
-      kanvas.toBlob(b => b ? selesai(b) : gagal(new Error('format')), 'image/jpeg', .72);
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); gagal(new Error('format')); };
-    img.src = url;
-  });
-}
-
-async function unggahFoto(blob){
-  const namaFile = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
-  const { error } = await supabaseClient.storage
-    .from(BUCKET_TESTI)
-    .upload(namaFile, blob, { contentType: 'image/jpeg', cacheControl: '3600' });
-  if(error) throw error;
-  const { data } = supabaseClient.storage.from(BUCKET_TESTI).getPublicUrl(namaFile);
-  return data.publicUrl;
-}
-
 /* ══════ PASANG SEMUA TOMBOL ══════ */
 (function pasangTesti(){
   const form = $('#form-testi');
   if(!form) return;
-
-  /* — fitur foto bisa dimatiin — */
-  if(!FITUR_FOTO){
-    const blok = $('#ts-blok-foto');
-    if(blok) blok.style.display = 'none';
-  }
 
   /* — penghitung huruf — */
   const kotakPesan = $('#ts-pesan'), hitung = $('#ts-hitung');
@@ -3137,44 +2992,6 @@ async function unggahFoto(blob){
     const sisa = MAKS_PESAN - kotakPesan.value.length;
     hitung.textContent = sisa;
     hitung.classList.toggle('mepet', sisa < 80);
-  });
-
-  /* — pilih foto — */
-  const inputFoto = $('#ts-foto');
-  const pratinjau = $('#ts-pratinjau');
-  const labelFoto = $('#ts-nama-foto');
-  const btnBatal  = $('#ts-batal-foto');
-
-  function resetFoto(){
-    fotoTerpilih = null;
-    inputFoto.value = '';
-    pratinjau.style.display = 'none';
-    pratinjau.removeAttribute('src');
-    labelFoto.textContent = 'belum ada foto dipilih';
-    btnBatal.style.display = 'none';
-  }
-
-  $('#ts-btn-foto').addEventListener('click', () => inputFoto.click());
-  btnBatal.addEventListener('click', resetFoto);
-
-  inputFoto.addEventListener('change', async () => {
-    const file = inputFoto.files && inputFoto.files[0];
-    if(!file) return;
-    labelFoto.textContent = 'lagi disiapin…';
-    try {
-      const kecil = await kecilinFoto(file);
-      if(kecil.size > 2 * 1024 * 1024) throw new Error('kegedean');
-      fotoTerpilih = kecil;
-      pratinjau.src = URL.createObjectURL(kecil);
-      pratinjau.style.display = 'block';
-      btnBatal.style.display = 'inline-block';
-      labelFoto.textContent = Math.round(kecil.size / 1024) + ' KB · siap dikirim';
-    } catch(e){
-      resetFoto();
-      status($('#ts-status'), e.message === 'kegedean'
-        ? 'Fotonya kegedean banget. Coba pilih foto lain ya ♡'
-        : 'Format fotonya nggak kebaca. Coba di-screenshot dulu terus kirim hasil screenshot-nya ya ♡', 'err');
-    }
   });
 
   /* — kirim testimony baru — */
@@ -3194,24 +3011,13 @@ async function unggahFoto(blob){
     if(sisaJeda > 0) return status(st, `Sabar bentar ya, ${sisaJeda} detik lagi baru bisa kirim lagi ♡`, 'err');
 
     btn.disabled = true;
-    btn.textContent = fotoTerpilih ? 'Ngirim foto…' : 'Ngirim…';
+    btn.textContent = 'Ngirim…';
 
     try {
-      let urlFoto = null;
-      if(fotoTerpilih && FITUR_FOTO){
-        try {
-          urlFoto = await unggahFoto(fotoTerpilih);
-        } catch(err){
-          console.error('Gagal upload foto:', err);
-          status(st, 'Fotonya gagal keupload, tapi ceritanya tetep aku kirim ya ♡', 'err');
-        }
-      }
-
       const { error } = await supabaseClient.from(TABEL_TESTI).insert({
         induk: null,
         nama: nama.slice(0, 40),
         pesan: pesan.slice(0, MAKS_PESAN),
-        foto: urlFoto,
         dari_admin: !!isLoggedAdmin,
         ts: Date.now()
       });
@@ -3219,7 +3025,6 @@ async function unggahFoto(blob){
 
       catatWaktuKirim();
       form.reset();
-      resetFoto();
       hitung.textContent = MAKS_PESAN;
       hitung.classList.remove('mepet');
       status(st, 'Makasih banyak ya ♡ Testimony kamu udah masuk!', 'ok');
@@ -3241,15 +3046,8 @@ async function unggahFoto(blob){
 
   /* — semua tombol di dalam daftar testimony (yang depan & yang di dalam dropdown) — */
   async function tanganiKlik(ev){
-    const t = ev.target.closest('button, img.foto-testi');
+    const t = ev.target.closest('button');
     if(!t) return;
-
-    // foto dipencet -> buka gede
-    if(t.matches('img.foto-testi')){
-      $('#lampu-gambar').src = t.src;
-      $('#lampu-foto').classList.add('buka');
-      return;
-    }
 
     // buka / tutup kotak bales
     if(t.dataset.tsBalas){
@@ -3283,7 +3081,6 @@ async function unggahFoto(blob){
         induk: id,
         nama: nama.slice(0, 40),
         pesan: isi.slice(0, MAKS_PESAN),
-        foto: null,
         dari_admin: !!isLoggedAdmin,
         ts: Date.now()
       });
@@ -3313,8 +3110,7 @@ async function unggahFoto(blob){
 
     if(t.dataset.tsHapus){
       if(!isLoggedAdmin) return;
-      const id  = Number(t.dataset.tsHapus);
-      const row = dTesti.find(x => x.id === id);
+      const id = Number(t.dataset.tsHapus);
       const punyaAnak = dTesti.some(x => x.induk === id);
       const pesan = punyaAnak
         ? 'Hapus testimony ini beserta SEMUA balesannya?\n\nSekali dihapus nggak bisa dibalikin ya.'
@@ -3322,11 +3118,6 @@ async function unggahFoto(blob){
       if(!confirm(pesan)) return;
       const { error } = await supabaseClient.from(TABEL_TESTI).delete().eq('id', id);
       if(error){ alert('Gagal hapus: ' + error.message); return; }
-      if(row && row.foto){
-        // sekalian bersihin fotonya dari Storage biar nggak numpuk
-        const namaFile = String(row.foto).split('/').pop();
-        try { await supabaseClient.storage.from(BUCKET_TESTI).remove([namaFile]); } catch(e){}
-      }
       muatTesti();
       return;
     }
@@ -3334,13 +3125,6 @@ async function unggahFoto(blob){
 
   $('#feed-testi').addEventListener('click', tanganiKlik);
   $('#feed-testi-lainnya').addEventListener('click', tanganiKlik);
-
-  /* — nutup foto yang lagi dibuka gede — */
-  const lampu = $('#lampu-foto');
-  const tutupLampu = () => { lampu.classList.remove('buka'); $('#lampu-gambar').removeAttribute('src'); };
-  $('#lampu-tutup').addEventListener('click', tutupLampu);
-  lampu.addEventListener('click', ev => { if(ev.target === lampu) tutupLampu(); });
-  document.addEventListener('keydown', ev => { if(ev.key === 'Escape' && lampu.classList.contains('buka')) tutupLampu(); });
 
   muatTesti();
   pasangRealtimeTesti();
