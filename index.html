@@ -232,7 +232,7 @@ p{margin:0 0 12px}
 /* ═════════ FORM & INPUT ═════════ */
 .form{display:grid;gap:14px}
 label{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px}
-input[type=text],input[type=password],textarea,select{width:100%;border:1px solid var(--garis);background:rgba(255,255,255,.94);border-radius:14px;
+input[type=text],input[type=email],input[type=password],textarea,select{width:100%;border:1px solid var(--garis);background:rgba(255,255,255,.94);border-radius:14px;
   padding:12px 14px;font-family:inherit;font-size:15px;color:var(--tinta);transition:.2s}
 input:focus,textarea:focus,select:focus{outline:0;border-color:var(--blush);box-shadow:0 0 0 4px rgba(239,156,191,.18)}
 .baris{display:grid;gap:14px;grid-template-columns:1.2fr 1fr}
@@ -533,7 +533,7 @@ footer .kecil{font-size:13px;letter-spacing:.06em;font-weight:600}
 .gerbang-teks .kt2{font-size:12.5px;letter-spacing:.14em;font-weight:600}
 
 /* input: 16px biar Safari iOS nggak auto-zoom pas diketik */
-input[type=text],input[type=password],textarea,select{
+input[type=text],input[type=email],input[type=password],textarea,select{
   font-size:16px;font-weight:600;padding:14px 16px}
 input::placeholder,textarea::placeholder{font-weight:500;opacity:.75}
 .area-catatan{font-size:16px;line-height:1.65;font-weight:500}
@@ -719,7 +719,7 @@ html[data-tema="gelap1"] .sub-tabs{border-bottom:1px solid var(--tepi)}html[data
 html[data-tema="gelap1"] .kotak-mode{background:var(--panel);border:1px solid var(--tepi);box-shadow:var(--bayang-lembut)}html[data-tema="gelap1"] .kotak-mode .jdl-mode{color:var(--teks-lemah)}html[data-tema="gelap1"] .tab-sesi{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .tab-sesi:hover{color:var(--teks);border-color:var(--tepi-terang)}html[data-tema="gelap1"] .tab-sesi.aktif{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .tab-sesi.aktif.solo{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .pita-mode{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap1"] .pita-mode.mod{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}
 
 /* ── FORM ── */
-html[data-tema="gelap1"] label{color:var(--teks-lemah)}html[data-tema="gelap1"] input[type=text], html[data-tema="gelap1"] input[type=password], html[data-tema="gelap1"] textarea, html[data-tema="gelap1"] select, html[data-tema="gelap1"] .area-catatan{
+html[data-tema="gelap1"] label{color:var(--teks-lemah)}html[data-tema="gelap1"] input[type=text], html[data-tema="gelap1"] input[type=email], html[data-tema="gelap1"] input[type=password], html[data-tema="gelap1"] textarea, html[data-tema="gelap1"] select, html[data-tema="gelap1"] .area-catatan{
   background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap1"] input::placeholder, html[data-tema="gelap1"] textarea::placeholder{color:var(--teks-samar)}html[data-tema="gelap1"] input:focus, html[data-tema="gelap1"] textarea:focus, html[data-tema="gelap1"] select:focus, html[data-tema="gelap1"] .area-catatan:focus{
   border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-bg);background:var(--panel-2)}html[data-tema="gelap1"] .kirim{color:#1a1024;background:linear-gradient(165deg,var(--rose-terang),var(--rose) 62%,var(--rose-tua));
   box-shadow:0 16px 30px -14px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.45)}html[data-tema="gelap1"] #btn-tambah-baris{color:var(--rose)!important;border-color:var(--rose-tepi)!important;background:var(--rose-bg)}html[data-tema="gelap1"] #btn-logout{color:var(--rose)!important;border-color:var(--rose-tepi)!important}html[data-tema="gelap1"] .btn-hapus-baris{color:var(--merah)!important}html[data-tema="gelap1"] .pesan-status.ok{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap1"] .pesan-status.err{background:var(--merah-bg);color:var(--merah);border:1px solid var(--merah-tepi)}
@@ -804,7 +804,7 @@ html[data-tema="gelap2"] .sub-tabs{border-bottom:1px solid var(--tepi)}html[data
 html[data-tema="gelap2"] .kotak-mode{background:var(--panel);border:1px solid var(--tepi);box-shadow:var(--bayang-lembut)}html[data-tema="gelap2"] .kotak-mode .jdl-mode{color:var(--teks-lemah)}html[data-tema="gelap2"] .tab-sesi{background:var(--panel-2);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .tab-sesi:hover{color:var(--teks);border-color:var(--tepi-terang)}html[data-tema="gelap2"] .tab-sesi.aktif{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .tab-sesi.aktif.solo{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .pita-mode{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap2"] .pita-mode.mod{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}
 
 /* ── FORM ── */
-html[data-tema="gelap2"] label{color:var(--teks-lemah)}html[data-tema="gelap2"] input[type=text], html[data-tema="gelap2"] input[type=password], html[data-tema="gelap2"] textarea, html[data-tema="gelap2"] select, html[data-tema="gelap2"] .area-catatan{
+html[data-tema="gelap2"] label{color:var(--teks-lemah)}html[data-tema="gelap2"] input[type=text], html[data-tema="gelap2"] input[type=email], html[data-tema="gelap2"] input[type=password], html[data-tema="gelap2"] textarea, html[data-tema="gelap2"] select, html[data-tema="gelap2"] .area-catatan{
   background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks)}html[data-tema="gelap2"] input::placeholder, html[data-tema="gelap2"] textarea::placeholder{color:var(--teks-samar)}html[data-tema="gelap2"] input:focus, html[data-tema="gelap2"] textarea:focus, html[data-tema="gelap2"] select:focus, html[data-tema="gelap2"] .area-catatan:focus{
   border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-bg);background:var(--panel-2)}html[data-tema="gelap2"] .kirim{color:#1a1024;background:linear-gradient(165deg,var(--rose-terang),var(--rose) 62%,var(--rose-tua));
   box-shadow:0 16px 30px -14px var(--rose-glow),inset 0 1px 0 rgba(255,255,255,.45)}html[data-tema="gelap2"] #btn-tambah-baris{color:var(--rose)!important;border-color:var(--rose-tepi)!important;background:var(--rose-bg)}html[data-tema="gelap2"] #btn-logout{color:var(--rose)!important;border-color:var(--rose-tepi)!important}html[data-tema="gelap2"] .btn-hapus-baris{color:var(--merah)!important}html[data-tema="gelap2"] .pesan-status.ok{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap2"] .pesan-status.err{background:var(--merah-bg);color:var(--merah);border:1px solid var(--merah-tepi)}
@@ -840,6 +840,17 @@ html[data-tema="gelap1"] .cari:focus-within .ikon-cari,
 html[data-tema="gelap2"] .cari:focus-within .ikon-cari{color:var(--rose);border-color:var(--rose)}
 html[data-tema="gelap1"] .pemilih-tema,
 html[data-tema="gelap2"] .pemilih-tema{box-shadow:0 14px 30px -18px rgba(0,0,0,.85)}
+
+
+/* Safari & Chrome nimpa warna kotak yang keisi autofill pakai kuning/putih.
+   Ini bikin warnanya balik ngikutin tema. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--tinta);
+  -webkit-box-shadow:0 0 0 60px var(--panel-3) inset;
+  caret-color:var(--tinta);
+  border-radius:14px}
 
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -1391,95 +1402,153 @@ const KUNCI_CATATAN_LOKAL = 'catatan_leony_tarot';
   const btnKosong = $('#btn-hapus-catatan');
   if(!kotak) return;
 
-  let timer = null;
-  let pakaiSupabase = true;     // dimatiin otomatis kalau tabelnya belum ada
-  let lagiNgetik = false;       // biar update dari orang lain nggak nimpa ketikan kita
+  /* ══════ ATURAN MAIN ══════
+     SERVER yang jadi patokan, bukan simpanan di perangkat.
+     Semua admin yang login lihat isi yang sama persis, dan yang paling baru.
+
+     Tiga lapis biar isinya nggak pernah basi:
+       1. REALTIME  — begitu admin lain ngetik, layarmu langsung ikut berubah.
+       2. CEK BERKALA — tiap 12 detik dicek ulang ke server. Ini jaring pengaman
+          kalau realtime-nya lagi nggak jalan (misal tabelnya belum didaftarin
+          ke publication realtime di Supabase).
+       3. MUAT ULANG — tiap habis login & tiap balik ke tab ini.
+
+     localStorage cuma dipakai sebagai SALINAN DARURAT: kalau server lagi nggak
+     kejangkau, isinya nggak ilang dari layar. Tapi salinan itu NGGAK PERNAH
+     dipakai buat nimpa isi yang ada di server. */
+  const JEDA_SIMPAN = 600;     // nyimpen 0,6 detik setelah berhenti ngetik
+  const JEDA_CEK    = 12000;   // ngecek versi terbaru tiap 12 detik
+
+  let timerSimpan = null, timerCek = null;
+  let lagiNgetik = false;      // biar update dari admin lain nggak nimpa ketikan kita
+  let realtimeNyala = false;   // biar channel-nya nggak kedaftar dua kali
+  let adaVersiServer = false;  // udah pernah berhasil baca dari server belum
 
   const tulisStatus = (teks, jenis) => {
     st.textContent = teks;
     st.className = 'status-catatan' + (jenis ? ' ' + jenis : '');
   };
-  const statusOnline = () => tulisStatus('Tersimpan ✓ · kelihatan sama kamu & moderator', 'ok');
-  const statusLokal  = () => tulisStatus('⚠️ Kesimpan di perangkat ini aja — moderator belum bisa lihat. Bikin tabel "catatan" di Supabase biar kebaca semua orang.', 'lokal');
+  const statusSinkron = () => tulisStatus('Tersimpan ✓ · semua admin lihat isi yang sama', 'ok');
+  const statusPutus   = () => tulisStatus('⚠️ Lagi nggak nyambung ke server. Yang kelihatan ini salinan darurat — admin lain belum tentu lihat isi yang sama. Nanti dicoba lagi otomatis.', 'lokal');
 
-  const simpanLokal = isi => { try { localStorage.setItem(KUNCI_CATATAN_LOKAL, isi); } catch(e){} };
-  const bacaLokal   = ()  => { try { return localStorage.getItem(KUNCI_CATATAN_LOKAL) || ''; } catch(e){ return ''; } };
+  const simpanCadangan = isi => { try { localStorage.setItem(KUNCI_CATATAN_LOKAL, isi); } catch(e){} };
+  const bacaCadangan   = ()  => { try { return localStorage.getItem(KUNCI_CATATAN_LOKAL) || ''; } catch(e){ return ''; } };
 
-  async function muat(){
-    kotak.value = bacaLokal();
+  // Nempelin isi dari server ke kotak, tanpa bikin kursor lompat
+  function terapkan(isi){
+    if(lagiNgetik) return;
+    if(isi === kotak.value) return;
+    const posisi = kotak.selectionStart;
+    kotak.value = isi;
+    try { kotak.setSelectionRange(posisi, posisi); } catch(e){}
+    simpanCadangan(isi);
+  }
+
+  async function muat(diam){
+    if(!diam) tulisStatus('Memuat catatan…', 'nulis');
     try {
       const { data, error } = await supabaseClient
         .from(TABEL_CATATAN).select('isi').eq('id', ID_CATATAN).maybeSingle();
       if(error) throw error;
+
+      // Kalau barisnya belum ada (catatan masih kosong sejak awal), jangan
+      // ngapa-ngapain — biar isi yang lagi ditulis nggak kehapus percuma.
       if(data && typeof data.isi === 'string'){
-        kotak.value = data.isi;
-        simpanLokal(data.isi);
+        adaVersiServer = true;
+        terapkan(data.isi);
       }
-      statusOnline();
-      pasangRealtimeCatatan();
+      if(!lagiNgetik) statusSinkron();
+      if(!realtimeNyala){ pasangRealtimeCatatan(); realtimeNyala = true; }
     } catch(e){
-      pakaiSupabase = false;
-      statusLokal();
+      // Baru pertama kali & server nggak kejangkau -> pakai salinan darurat
+      if(!adaVersiServer && !kotak.value){
+        const cadangan = bacaCadangan();
+        if(cadangan) kotak.value = cadangan;
+      }
+      statusPutus();
     }
+    jadwalkanCek();
   }
 
-  // Dengerin perubahan dari orang lain (moderator) secara real-time
+  // Jaring pengaman: cek ulang ke server secara berkala
+  function jadwalkanCek(){
+    clearTimeout(timerCek);
+    timerCek = setTimeout(() => {
+      if(document.visibilityState === 'visible' && !lagiNgetik) muat(true);
+      else jadwalkanCek();
+    }, JEDA_CEK);
+  }
+
+  // Dengerin perubahan dari admin lain secara langsung
   function pasangRealtimeCatatan(){
     supabaseClient
       .channel('realtime-catatan')
       .on('postgres_changes', { event: '*', schema: 'public', table: TABEL_CATATAN }, payload => {
         // Tabel ini juga dipakai buat nyimpen penanda "batas sesi".
-        // Jadi cuma baris catatan asli yang boleh nimpa isi textarea.
+        // Jadi cuma baris catatan asli yang boleh nimpa isi kotak.
         if(!payload.new || payload.new.id !== ID_CATATAN) return;
-        const isiBaru = payload.new && payload.new.isi;
-        if(typeof isiBaru !== 'string') return;
-        if(lagiNgetik) return;                 // jangan ganggu kalau lagi ngetik
-        if(isiBaru === kotak.value) return;
-        kotak.value = isiBaru;
-        simpanLokal(isiBaru);
-        tulisStatus('Diperbarui dari perangkat lain ✓', 'ok');
+        if(typeof payload.new.isi !== 'string') return;
+        adaVersiServer = true;
+        if(lagiNgetik) return;
+        terapkan(payload.new.isi);
+        tulisStatus('Baru diperbarui admin lain ✓', 'ok');
       })
       .subscribe();
   }
 
   async function simpan(){
-    lagiNgetik = false;
     const isi = kotak.value;
-    simpanLokal(isi);
-    if(!pakaiSupabase) return statusLokal();
+    lagiNgetik = false;
+    simpanCadangan(isi);
     try {
       const { error } = await supabaseClient
         .from(TABEL_CATATAN)
         .upsert({ id: ID_CATATAN, isi: isi, ts: Date.now() });
       if(error) throw error;
-      statusOnline();
+      adaVersiServer = true;
+      statusSinkron();
+      jadwalkanCek();
     } catch(e){
-      pakaiSupabase = false;
-      statusLokal();
+      statusPutus();
+      // coba kirim ulang 5 detik lagi, siapa tau koneksinya udah balik
+      clearTimeout(timerSimpan);
+      timerSimpan = setTimeout(simpan, 5000);
     }
   }
 
-  // Nyimpen otomatis 700ms setelah berhenti ngetik
   kotak.addEventListener('input', () => {
     lagiNgetik = true;
     tulisStatus('Menyimpan…', 'nulis');
-    clearTimeout(timer);
-    timer = setTimeout(simpan, 700);
+    clearTimeout(timerSimpan);
+    timerSimpan = setTimeout(simpan, JEDA_SIMPAN);
+  });
+
+  // Klik ke luar kotak = langsung simpan, nggak nunggu jeda
+  kotak.addEventListener('blur', () => {
+    if(!lagiNgetik) return;
+    clearTimeout(timerSimpan);
+    simpan();
   });
 
   btnKosong.addEventListener('click', () => {
     if(!kotak.value.trim()) return;
-    if(!confirm('Kosongkan semua isi catatan?\n\nCatatan ini juga kehapus buat moderator ya.')) return;
+    if(!confirm('Kosongkan semua isi catatan?\n\nCatatan ini kehapus buat SEMUA admin ya, bukan cuma di perangkat ini.')) return;
     kotak.value = '';
+    lagiNgetik = false;
+    clearTimeout(timerSimpan);
     simpan();
     kotak.focus();
   });
 
-  // dipanggil lagi habis login, biar catatan tetap kebaca walaupun
-  // policy Supabase-nya cuma ngebolehin admin yang lihat
-  window.muatUlangCatatan = muat;
+  // Balik ke tab ini -> langsung ambil versi terbaru
+  document.addEventListener('visibilitychange', () => {
+    if(document.visibilityState === 'visible') muat(true);
+  });
 
-  muat();
+  // dipanggil lagi habis login, biar langsung dapet versi terbaru dari server
+  window.muatUlangCatatan = () => muat(false);
+
+  muat(false);
 })();
 
 /* ══════ DATA ANTRIAN (SUPABASE, REAL-TIME) ══════ */
