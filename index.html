@@ -2819,7 +2819,7 @@ window.simpanEditAntrian = async function(id){
 const TABEL_TESTI    = 'tarot_testimony';
 const NAMA_ADMIN     = 'Leony';   // nama yang muncul kalau kamu yang bales
 const MAKS_PESAN     = 1000;      // batas panjang cerita (huruf)
-const TESTI_DEPAN    = 3;         // yang langsung kelihatan; sisanya di balik tombol "Lihat semua"
+const TESTI_DEPAN    = 10;        // yang langsung kelihatan; sisanya di balik tombol "Lihat semua"
 const JEDA_KIRIM     = 45000;     // 45 detik jeda antar kiriman dari satu HP
 const KUNCI_JEDA_TS  = 'testi_terakhir_leony';
 
@@ -2958,7 +2958,7 @@ function gambarTesti(){
     return;
   }
 
-  // 3 terbaru di depan
+  // 10 terbaru di depan
   const depan = utama.slice(0, TESTI_DEPAN);
   const sisa  = utama.slice(TESTI_DEPAN);
 
