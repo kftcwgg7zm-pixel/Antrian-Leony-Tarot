@@ -293,6 +293,34 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--blush);box-
 .mini{border:1px solid var(--garis);background:#fff;border-radius:12px;padding:6px 11px;font-size:11.5px;cursor:pointer;color:#7686aa;transition:.2s}
 .mini:hover{border-color:var(--blush);color:var(--blush)}
 
+/* ═════════ FAST TRACK — border biru-emas menyala (mewah) ═════════ */
+.gelembung.fast-track{
+  --ft-grad:linear-gradient(115deg,var(--biru) 0%,var(--emas-w) 48%,var(--biru) 100%);
+  position:relative;border:2px solid transparent;border-radius:19px 19px 19px 6px;
+  background-image:linear-gradient(165deg,#fff,#f8fbff),var(--ft-grad);
+  background-origin:border-box;background-clip:padding-box,border-box;
+  background-size:100% 100%,240% 240%;
+  animation:ft-kilau 3.6s ease-in-out infinite;
+}
+@keyframes ft-kilau{
+  0%,100%{background-position:0 0,0% 50%;box-shadow:0 8px 18px -14px rgba(110,140,190,.9),0 0 12px -2px var(--biru-glow),0 0 14px -3px var(--emas-glow)}
+  50%{background-position:0 0,100% 50%;box-shadow:0 10px 22px -12px rgba(110,140,190,.9),0 0 20px 1px var(--biru-glow),0 0 24px 2px var(--emas-glow)}
+}
+
+/* ═════════ DROPDOWN "SUDAH DIBACA" (DASHBOARD ADMIN) ═════════
+   Nama yang udah dibaca TETAP ADA (datanya nggak ilang), cuma dipindah turun
+   ke bawah dalam kotak dropdown ini. Ketutup by default, admin tinggal ketuk
+   buat buka kalau perlu ngecek / balikin status. */
+.dropdown-sudah{margin-top:2px;border:1px solid var(--garis);border-radius:18px;overflow:hidden;
+  background:rgba(235,240,250,.4);transition:.2s}
+.dropdown-sudah summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;gap:9px;
+  font-size:12.5px;font-weight:700;letter-spacing:.03em;color:var(--tinta-muda);user-select:none}
+.dropdown-sudah summary::-webkit-details-marker{display:none}
+.dropdown-sudah summary::after{content:'▾';margin-left:auto;font-size:12px;transition:transform .25s}
+.dropdown-sudah[open] summary::after{transform:rotate(180deg)}
+.dropdown-sudah-count{background:#eef8f0;color:#5c8a68;border:1px solid #d3ecd9;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700}
+.dropdown-sudah-isi{padding:2px 14px 14px;display:grid;gap:12px}
+
 /* ═════════ TOMBOL LAYANG ═════════ */
 .layang{position:fixed;top:14px;right:14px;z-index:75;display:flex;gap:8px}
 .layang button{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.95);cursor:pointer;
@@ -726,7 +754,12 @@ html[data-tema="gelap1"] label{color:var(--teks-lemah)}html[data-tema="gelap1"] 
 
 /* ── KARTU ANTRIAN ── */
 html[data-tema="gelap1"] .gelembung{background:var(--panel-2);border:1px solid var(--tepi);
-  box-shadow:0 10px 22px -18px rgba(0,0,0,.95)}html[data-tema="gelap1"] .gelembung:hover{border-color:var(--tepi-terang)}html[data-tema="gelap1"] .avatar{color:#150d18;background:linear-gradient(160deg,var(--biru),var(--rose));
+  box-shadow:0 10px 22px -18px rgba(0,0,0,.95)}html[data-tema="gelap1"] .gelembung:hover{border-color:var(--tepi-terang)}
+html[data-tema="gelap1"] .gelembung.fast-track{background-image:linear-gradient(var(--panel-2),var(--panel-2)),var(--ft-grad)}
+html[data-tema="gelap1"] .dropdown-sudah{background:var(--panel-3);border-color:var(--tepi)}
+html[data-tema="gelap1"] .dropdown-sudah summary{color:var(--teks-lemah)}
+html[data-tema="gelap1"] .dropdown-sudah-count{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}
+html[data-tema="gelap1"] .avatar{color:#150d18;background:linear-gradient(160deg,var(--biru),var(--rose));
   box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}html[data-tema="gelap1"] .nama-p{color:var(--teks)}html[data-tema="gelap1"] .waktu{color:var(--teks-samar)}html[data-tema="gelap1"] .lencana{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap1"] .lencana.baca{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}html[data-tema="gelap1"] .lencana.proses{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}html[data-tema="gelap1"] .lencana.tunggu{background:var(--merah-bg);color:var(--merah);border-color:var(--merah-tepi)}html[data-tema="gelap1"] .lencana.kilat{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .lencana.no-urut{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);font-weight:800}html[data-tema="gelap1"] .lencana.harga{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi);font-weight:800}html[data-tema="gelap1"] .kosong{color:var(--teks-lemah)}html[data-tema="gelap1"] .kosong .j{color:var(--teks-samar)}html[data-tema="gelap1"] .btn-hapus{background:var(--panel-3);border:1px solid var(--tepi);color:var(--merah)}html[data-tema="gelap1"] .btn-hapus:hover{background:var(--merah-bg);border-color:var(--merah-tepi)}html[data-tema="gelap1"] .btn-edit{background:var(--panel-3);border:1px solid var(--tepi);color:var(--biru)}html[data-tema="gelap1"] .btn-edit:hover{background:var(--biru-bg);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .mini{background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .mini:hover{color:var(--rose);border-color:var(--rose-tepi)}
 
 /* ── PRICELIST ── */
@@ -811,7 +844,12 @@ html[data-tema="gelap2"] label{color:var(--teks-lemah)}html[data-tema="gelap2"] 
 
 /* ── KARTU ANTRIAN ── */
 html[data-tema="gelap2"] .gelembung{background:var(--panel-2);border:1px solid var(--tepi);
-  box-shadow:0 10px 22px -18px rgba(0,0,0,.95)}html[data-tema="gelap2"] .gelembung:hover{border-color:var(--tepi-terang)}html[data-tema="gelap2"] .avatar{color:#150d18;background:linear-gradient(160deg,var(--biru),var(--rose));
+  box-shadow:0 10px 22px -18px rgba(0,0,0,.95)}html[data-tema="gelap2"] .gelembung:hover{border-color:var(--tepi-terang)}
+html[data-tema="gelap2"] .gelembung.fast-track{background-image:linear-gradient(var(--panel-2),var(--panel-2)),var(--ft-grad)}
+html[data-tema="gelap2"] .dropdown-sudah{background:var(--panel-3);border-color:var(--tepi)}
+html[data-tema="gelap2"] .dropdown-sudah summary{color:var(--teks-lemah)}
+html[data-tema="gelap2"] .dropdown-sudah-count{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}
+html[data-tema="gelap2"] .avatar{color:#150d18;background:linear-gradient(160deg,var(--biru),var(--rose));
   box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}html[data-tema="gelap2"] .nama-p{color:var(--teks)}html[data-tema="gelap2"] .waktu{color:var(--teks-samar)}html[data-tema="gelap2"] .lencana{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap2"] .lencana.baca{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}html[data-tema="gelap2"] .lencana.proses{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}html[data-tema="gelap2"] .lencana.tunggu{background:var(--merah-bg);color:var(--merah);border-color:var(--merah-tepi)}html[data-tema="gelap2"] .lencana.kilat{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .lencana.no-urut{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);font-weight:800}html[data-tema="gelap2"] .lencana.harga{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi);font-weight:800}html[data-tema="gelap2"] .kosong{color:var(--teks-lemah)}html[data-tema="gelap2"] .kosong .j{color:var(--teks-samar)}html[data-tema="gelap2"] .btn-hapus{background:var(--panel-3);border:1px solid var(--tepi);color:var(--merah)}html[data-tema="gelap2"] .btn-hapus:hover{background:var(--merah-bg);border-color:var(--merah-tepi)}html[data-tema="gelap2"] .btn-edit{background:var(--panel-3);border:1px solid var(--tepi);color:var(--biru)}html[data-tema="gelap2"] .btn-edit:hover{background:var(--biru-bg);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .mini{background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .mini:hover{color:var(--rose);border-color:var(--rose-tepi)}
 
 /* ── PRICELIST ── */
@@ -2016,27 +2054,21 @@ function hitungNomorAntrian(){
   return peta;
 }
 
-/* ══════ SEMBUNYIIN ANTRIAN LAMA DI HALAMAN CUSTOMER ══════
-   Biar daftarnya nggak numpuk kepanjangan, tiap kelipatan 5 orang yang
-   statusnya "Sudah Dibaca" bakal disembunyiin dari TAMPILAN CUSTOMER.
-   Contoh: pas ada 5 yang udah dibaca (antrian #1-#5) -> 5 nama itu ilang.
-           pas ada 10 yang udah dibaca -> 10 nama itu ilang. Gitu seterusnya.
+/* ══════ SEMBUNYIIN ANTRIAN YANG UDAH DIBACA DI HALAMAN CUSTOMER ══════
+   Begitu statusnya jadi "Sudah Dibaca", namanya LANGSUNG ilang dari daftar
+   utama halaman antrian (nggak nunggu kelipatan berapa pun lagi).
    Catatan penting:
      · Nomor antrian TETAP SAMA (nggak ikut geser), karena nomornya dihitung
        dari semua data hari ini, bukan dari daftar yang lagi kelihatan.
-     · Di DASHBOARD ADMIN semua nama tetap kelihatan lengkap, nggak ada yang ilang.
-     · Datanya juga nggak kehapus, cuma disembunyiin dari tampilan customer.
+     · Di DASHBOARD ADMIN nama tetap ADA (nggak ilang), cuma dipindah turun
+       ke dropdown "Sudah Dibaca" di bagian bawah — lihat gambarAdmin().
+     · Datanya nggak kehapus, cuma disembunyiin dari tampilan customer.
      · Customer masih bisa lihat semuanya dengan ketuk kartu "Sudah Dibaca". */
-const BATCH_SEMBUNYI = 5;    // ganti angka ini kalau mau tiap 10 / 20 / dst
-
 function idDisembunyiin(dataHariIni){
-  const sudah = dataHariIni
-    .filter(x => x.status === 'Sudah Dibaca')
-    .sort((a, b) => a.ts - b.ts);
-  const jumlahDilipat = Math.floor(sudah.length / BATCH_SEMBUNYI) * BATCH_SEMBUNYI;
+  const sudah = dataHariIni.filter(x => x.status === 'Sudah Dibaca');
   return {
-    set: new Set(sudah.slice(0, jumlahDilipat).map(x => x.id)),
-    jumlah: jumlahDilipat
+    set: new Set(sudah.map(x => x.id)),
+    jumlah: sudah.length
   };
 }
 
@@ -2373,6 +2405,11 @@ $('#form-input').addEventListener('submit', async e => {
 /* ══════ RENDER KELOLA ANTRIAN & LAPORAN HARIAN (ADMIN) ══════ */
 let cariAdminTeks = '';
 let editingId = null;
+// Status buka/tutup dropdown "Sudah Dibaca" di dashboard admin — dijaga di sini
+// (bukan cuma di atribut DOM) karena gambarAdmin() nge-render ulang innerHTML
+// tiap ada update realtime, jadi tanpa ini dropdown-nya bakal ketutup lagi terus.
+let sudahDibacaAdminTerbuka = false;
+window.toggleSudahAdmin = function(el){ sudahDibacaAdminTerbuka = el.open; };
 $('#cari-admin').addEventListener('input', e => {
   cariAdminTeks = e.target.value.trim().toLowerCase();
   gambarAdmin();
@@ -2408,15 +2445,17 @@ function gambarAdmin(){
   const petaNomor = hitungNomorAntrian();
   const opsiHarga = [5000, 10000, 15000, 25000];
 
-  el.innerHTML = [...data].sort((a, b) => a.ts - b.ts).map(x => {
+  // ── Kartu satu baris antrian (dipakai buat yang aktif MAUPUN yang udah dibaca) ──
+  function kartuAdmin(x){
     const isBelum = x.status === 'Belum Dibaca' ? 'sel-belum' : '';
     const isSudah = x.status === 'Sudah Dibaca' ? 'sel-sudah' : '';
     const isSedang = x.status === 'Sedang Dibaca' ? 'sel-sedang' : '';
+    const kelasFast = x.tipe === 'Fast Track' ? ' fast-track' : '';
 
     // ── MODE EDIT: tampilkan form ganti nama/harga/tipe ──
     if(editingId === x.id){
       const hargaSekarang = ambilHarga(x);
-      return `<article class="gelembung">
+      return `<article class="gelembung${kelasFast}">
         <div class="kepala" style="align-items:flex-start;flex-wrap:wrap;gap:10px">
           <input type="text" id="edit-detail-${x.id}" value="${aman(x.detail)}" style="flex:1;min-width:140px;border:1px solid var(--garis);border-radius:12px;padding:9px 12px;font-family:inherit;font-size:14px;color:var(--tinta)">
         </div>
@@ -2443,7 +2482,7 @@ function gambarAdmin(){
     }
 
     // ── MODE NORMAL ──
-    return `<article class="gelembung">
+    return `<article class="gelembung${kelasFast}">
       <div class="kepala">
         <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
         <span class="lencana no-urut">#${petaNomor[x.id]}</span>
@@ -2463,7 +2502,38 @@ function gambarAdmin(){
         <button class="btn-hapus" onclick="hapusAntrian('${x.id}')">Hapus</button>
       </div>
     </article>`;
-  }).join('');
+  }
+
+  /* ── Susun urutan ──
+     · Belum aktif dibaca (Belum/Sedang Dibaca): Fast Track SELALU naik paling atas,
+       sisanya urut waktu masuk seperti biasa.
+     · Sudah Dibaca: nggak ilang, cuma dipindah ke dropdown di paling bawah
+       (ketutup by default). Kalau statusnya dibalikin ke Belum/Sedang Dibaca,
+       otomatis naik lagi ke daftar utama karena render ini jalan ulang tiap
+       ubahStatusTarot() dipanggil. */
+  const aktif = data.filter(x => x.status !== 'Sudah Dibaca').sort((a, b) => {
+    const fa = a.tipe === 'Fast Track' ? 0 : 1;
+    const fb = b.tipe === 'Fast Track' ? 0 : 1;
+    if(fa !== fb) return fa - fb;
+    return a.ts - b.ts;
+  });
+  const sudah = data.filter(x => x.status === 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
+
+  const htmlAktif = aktif.map(kartuAdmin).join('');
+  const htmlSudah = sudah.length
+    ? `<details class="dropdown-sudah" ${sudahDibacaAdminTerbuka ? 'open' : ''} ontoggle="toggleSudahAdmin(this)">
+        <summary><span>✅ Sudah Dibaca</span><span class="dropdown-sudah-count">${sudah.length}</span></summary>
+        <div class="dropdown-sudah-isi">${sudah.map(kartuAdmin).join('')}</div>
+      </details>`
+    : '';
+
+  if(!aktif.length && !sudah.length){
+    el.innerHTML = `<div class="kosong"><div class="em">📋</div><div class="j">antrian lagi kosong</div><p style="font-size:13.5px;margin-top:6px">Mode: <b>${LABEL_SESI[sesiAktif]}</b> · semua data sebelumnya tetap aman di Laporan Pendapatan &amp; Arsip ya ♡</p></div>`;
+  } else if(!aktif.length){
+    el.innerHTML = `<div class="kosong" style="padding:20px 18px"><p style="font-size:13px">Semua yang lagi aktif udah beres ✓ — cek dropdown "Sudah Dibaca" di bawah kalau perlu.</p></div>` + htmlSudah;
+  } else {
+    el.innerHTML = htmlAktif + htmlSudah;
+  }
 }
 
 /* ══════ LAPORAN PENDAPATAN (2 MODE SESI) ══════
