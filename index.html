@@ -43,7 +43,8 @@ button{font-family:inherit}
 #gerbang.buka .tirai.kn{transform:translateX(92%)}
 .gerbang-teks{position:relative;z-index:2;text-align:center;transition:opacity .6s .2s,transform 1s}
 #gerbang.buka .gerbang-teks{opacity:0;transform:scale(1.14)}
-.gerbang-teks .nm{font-family:'Italianno',cursive;font-size:clamp(70px,17vw,140px);line-height:.9;
+.gerbang-teks .nm{font-family:'Italianno',cursive;font-size:clamp(70px,17vw,140px);line-height:1.15;
+  padding:.12em .16em .1em;margin:-.12em 0 -.1em;overflow:visible;
   background:linear-gradient(170deg,#fff 6%,#f7d3e4 40%,#e9a9c6 66%,#bcd4f5 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 6px 18px rgba(220,170,200,.55))}
@@ -964,10 +965,11 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
   var t;
   try { t = localStorage.getItem('tema_leony'); } catch(e){}
   if(t !== 'terang' && t !== 'gelap1' && t !== 'gelap2'){
-    // belum pernah milih -> langsung dikasih tema GELAP (Midnight).
+    // belum pernah milih -> langsung dikasih tema GELAP HITAM (Noir),
+    // bukan yang Midnight (masih kebiruan).
     // Kalau nanti mau balik ngikutin setelan HP, ganti baris di bawah jadi:
-    // t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'gelap1' : 'terang';
-    t = 'gelap1';
+    // t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'gelap2' : 'terang';
+    t = 'gelap2';
   }
   document.documentElement.setAttribute('data-tema', t);
 })();
@@ -1060,6 +1062,16 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
 
         <div class="cari"><span class="ikon-cari" aria-hidden="true">⌕</span><input type="text" id="cari-antrian" placeholder="Cari namamu di antrian…"></div>
         <div class="feed" id="feed-antrian"><div class="memuat">Memuat data antrian</div></div>
+
+        <!-- yang statusnya "Sudah Dibaca" diturunin ke sini, biar daftar utama nggak kepanjangan -->
+        <button type="button" class="buka-semua" id="antrian-toggle-selesai" style="display:none" aria-expanded="false">
+          <span class="teks">Tampilkan yang sudah dibaca</span>
+          <span class="jml" id="antrian-jml-selesai">0</span>
+          <span class="panah">▼</span>
+        </button>
+        <div class="wadah-lainnya" id="antrian-wadah-selesai">
+          <div class="isi-lainnya"><div class="feed" id="feed-antrian-selesai"></div></div>
+        </div>
       </div>
     </div>
 
@@ -2016,29 +2028,24 @@ function hitungNomorAntrian(){
   return peta;
 }
 
-/* ══════ SEMBUNYIIN ANTRIAN LAMA DI HALAMAN CUSTOMER ══════
-   Biar daftarnya nggak numpuk kepanjangan, tiap kelipatan 5 orang yang
-   statusnya "Sudah Dibaca" bakal disembunyiin dari TAMPILAN CUSTOMER.
-   Contoh: pas ada 5 yang udah dibaca (antrian #1-#5) -> 5 nama itu ilang.
-           pas ada 10 yang udah dibaca -> 10 nama itu ilang. Gitu seterusnya.
-   Catatan penting:
-     · Nomor antrian TETAP SAMA (nggak ikut geser), karena nomornya dihitung
-       dari semua data hari ini, bukan dari daftar yang lagi kelihatan.
-     · Di DASHBOARD ADMIN semua nama tetap kelihatan lengkap, nggak ada yang ilang.
-     · Datanya juga nggak kehapus, cuma disembunyiin dari tampilan customer.
-     · Customer masih bisa lihat semuanya dengan ketuk kartu "Sudah Dibaca". */
-const BATCH_SEMBUNYI = 5;    // ganti angka ini kalau mau tiap 10 / 20 / dst
+/* ══════ ANTRIAN "SUDAH DIBACA" DITURUNIN KE DROPDOWN DI HALAMAN CUSTOMER ══════
+   Biar daftarnya nggak numpuk kepanjangan: antrian yang statusnya "Belum
+   Dibaca" & "Sedang Dibaca" tetap tampil di daftar utama, sedangkan yang
+   udah "Sudah Dibaca" diturunin ke bawah dalam kotak dropdown terpisah
+   (bisa dibuka-tutup lewat tombol "Tampilkan yang sudah dibaca").
+   Nomor antrian TETAP SAMA persis kayak sebelumnya, karena nomornya dihitung
+   dari semua data hari ini (hitungNomorAntrian), bukan dari posisi tampilan. */
+let antrianSelesaiTerbuka = false;
 
-function idDisembunyiin(dataHariIni){
-  const sudah = dataHariIni
-    .filter(x => x.status === 'Sudah Dibaca')
-    .sort((a, b) => a.ts - b.ts);
-  const jumlahDilipat = Math.floor(sudah.length / BATCH_SEMBUNYI) * BATCH_SEMBUNYI;
-  return {
-    set: new Set(sudah.slice(0, jumlahDilipat).map(x => x.id)),
-    jumlah: jumlahDilipat
-  };
-}
+$('#antrian-toggle-selesai').addEventListener('click', () => {
+  antrianSelesaiTerbuka = !antrianSelesaiTerbuka;
+  const btn = $('#antrian-toggle-selesai');
+  const wadah = $('#antrian-wadah-selesai');
+  btn.querySelector('.teks').textContent = antrianSelesaiTerbuka ? 'Sembunyikan yang sudah dibaca' : 'Tampilkan yang sudah dibaca';
+  btn.classList.toggle('buka', antrianSelesaiTerbuka);
+  btn.setAttribute('aria-expanded', String(antrianSelesaiTerbuka));
+  wadah.classList.toggle('buka', antrianSelesaiTerbuka);
+});
 
 /* ══════ FILTER STATUS (KETUK KARTU STATISTIK) ══════
    Ketuk kartu "Belum Dibaca" -> daftar cuma nampilin yang belum dibaca.
@@ -2074,11 +2081,36 @@ const KELAS_FILTER = {
   });
 })();
 
+// Kartu satu baris antrian di halaman customer (dipakai buat daftar utama & dropdown "sudah dibaca")
+function htmlKartuAntrianCustomer(x, petaNomor){
+  let statusClass = 'lencana';
+  if(x.status === 'Sudah Dibaca') statusClass += ' baca';
+  else if(x.status === 'Sedang Dibaca') statusClass += ' proses';
+  else if(x.status === 'Belum Dibaca') statusClass += ' tunggu';
+
+  return `<article class="gelembung">
+      <div class="kepala">
+        <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
+        <span class="lencana no-urut">#${petaNomor[x.id]}</span>
+        <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
+        <span class="nama-p">${aman(x.detail)}</span>
+        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
+        ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡ Fast Track</span>' : ''}
+        <span class="${statusClass}">${aman(x.status)}</span>
+        <span class="waktu">${kapan(x.ts)}</span>
+      </div>
+    </article>`;
+}
+
 function gambarAntrian(){
   const el = $('#feed-antrian');
+  const btnSelesai = $('#antrian-toggle-selesai');
+  const wadahSelesai = $('#antrian-wadah-selesai');
+  const elSelesai = $('#feed-antrian-selesai');
+  const jmlSelesai = $('#antrian-jml-selesai');
   const semuaHariIni = antrianAktifSemua();
   let filtered = semuaHariIni;
-  
+
   if(tipeSubTabAktif === 'Fast Track'){
     filtered = filtered.filter(x => x.tipe === 'Fast Track');
   }
@@ -2092,13 +2124,6 @@ function gambarAntrian(){
   $('#st-belum').textContent = filtered.filter(x => x.status === 'Belum Dibaca').length;
   $('#st-sudah').textContent = filtered.filter(x => x.status === 'Sudah Dibaca').length;
 
-  // Sembunyiin yang udah dibaca per kelipatan 20 (lihat penjelasan di atas).
-  // Tapi kalau lagi nyaring "Sudah Dibaca", semuanya dibuka biar bisa dicek.
-  const lipat = idDisembunyiin(semuaHariIni);
-  if(filterStatus !== 'Sudah Dibaca'){
-    filtered = filtered.filter(x => !lipat.set.has(x.id));
-  }
-
   // Saring sesuai kartu statistik yang lagi kepilih
   if(filterStatus){
     filtered = filtered.filter(x => x.status === filterStatus);
@@ -2108,36 +2133,59 @@ function gambarAntrian(){
     filtered = filtered.filter(x => x.detail.toLowerCase().includes(cariAntrianTeks));
   }
 
+  const tutupDropdownSelesai = () => {
+    antrianSelesaiTerbuka = false;
+    if(btnSelesai){
+      btnSelesai.style.display = 'none';
+      btnSelesai.classList.remove('buka');
+      btnSelesai.setAttribute('aria-expanded', 'false');
+      btnSelesai.querySelector('.teks').textContent = 'Tampilkan yang sudah dibaca';
+    }
+    if(wadahSelesai) wadahSelesai.classList.remove('buka');
+    if(elSelesai) elSelesai.innerHTML = '';
+    if(jmlSelesai) jmlSelesai.textContent = '0';
+  };
+
   if(!filtered.length){
     const pesanKosong = filterStatus
       ? `Belum ada antrian yang statusnya "${filterStatus}" sekarang.`
       : 'Belum ada antrian untuk kategori ini.';
     el.innerHTML = `<div class="kosong"><div class="em">💌</div><div class="j">antrian kosong</div><p style="font-size:13px;margin-top:6px">${pesanKosong}</p></div>`;
+    tutupDropdownSelesai();
     return;
   }
 
   // Nomor antrian permanen (lihat hitungNomorAntrian di atas)
   const petaNomor = hitungNomorAntrian();
 
-  el.innerHTML = [...filtered].sort((a, b) => a.ts - b.ts).map((x) => {
-    let statusClass = 'lencana';
-    if(x.status === 'Sudah Dibaca') statusClass += ' baca';
-    else if(x.status === 'Sedang Dibaca') statusClass += ' proses';
-    else if(x.status === 'Belum Dibaca') statusClass += ' tunggu';
+  // Lagi nyaring lewat kartu statistik / pencarian -> tampilin apa adanya, satu daftar aja,
+  // nggak usah dipisah dropdown biar hasil saringannya kelihatan lengkap.
+  if(filterStatus || cariAntrianTeks){
+    el.innerHTML = [...filtered].sort((a, b) => a.ts - b.ts)
+      .map(x => htmlKartuAntrianCustomer(x, petaNomor)).join('');
+    tutupDropdownSelesai();
+    return;
+  }
 
-    return `<article class="gelembung">
-      <div class="kepala">
-        <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
-        <span class="lencana no-urut">#${petaNomor[x.id]}</span>
-        <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
-        <span class="nama-p">${aman(x.detail)}</span>
-        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
-        ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡ Fast Track</span>' : ''}
-        <span class="${statusClass}">${aman(x.status)}</span>
-        <span class="waktu">${kapan(x.ts)}</span>
-      </div>
-    </article>`;
-  }).join('');
+  // Nggak lagi nyaring apa-apa -> pisahin: yang masih jalan ("Belum Dibaca" /
+  // "Sedang Dibaca") di daftar utama, yang "Sudah Dibaca" diturunin ke dropdown.
+  const aktifList = filtered.filter(x => x.status !== 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
+  const selesaiList = filtered.filter(x => x.status === 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
+
+  el.innerHTML = aktifList.length
+    ? aktifList.map(x => htmlKartuAntrianCustomer(x, petaNomor)).join('')
+    : `<div class="kosong"><div class="em">💌</div><div class="j">nggak ada yang lagi antri</div><p style="font-size:13px;margin-top:6px">Semuanya udah dibaca, buka dropdown di bawah ya ♡</p></div>`;
+
+  if(elSelesai) elSelesai.innerHTML = selesaiList.map(x => htmlKartuAntrianCustomer(x, petaNomor)).join('');
+  if(jmlSelesai) jmlSelesai.textContent = String(selesaiList.length);
+
+  if(btnSelesai){
+    if(selesaiList.length){
+      btnSelesai.style.display = 'flex';
+    } else {
+      tutupDropdownSelesai();
+    }
+  }
 }
 
 /* ══════ LOGIN ADMIN (Supabase Auth) ══════ */
@@ -2635,6 +2683,7 @@ function gambarArsip(){
         <span class="lencana harga">${formatK(ambilHarga(x))}</span>
         ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡</span>' : ''}
         <span class="lencana ${x.status === 'Sudah Dibaca' ? 'baca' : x.status === 'Sedang Dibaca' ? 'proses' : 'tunggu'}">${aman(x.status || '-')}</span>
+        <button type="button" class="btn-hapus" style="padding:5px 10px;font-size:11px" onclick="hapusAntrian('${x.id}')" title="Hapus dari arsip">Hapus</button>
       </div>`).join('');
     return `<article class="grup-arsip">
       <div class="kepala-arsip">
