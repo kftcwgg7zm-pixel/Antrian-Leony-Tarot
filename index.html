@@ -2735,12 +2735,17 @@ function renderLaporanTgl(){
   // Urutkan tanggal terbaru dulu
   const tglUrut = Object.keys(rekap).sort((a, b) => b.localeCompare(a));
 
-  // Baris per-tanggal: RUMUS ASLI, persentase murni 20%/80%, nggak dipotong
-  // sama sekali -- sama kayak sebelum ada aturan pembatasan ini.
+  // Baris per-tanggal: potongan Yearly (20%) dibatasin MAKSIMAL Rp70.000
+  // PER HARI -- kalau 20% pendapatan hari itu lebih dari 70k, potongan hari
+  // itu dipotong jadi 70k aja (udah nggak bisa kebagi lagi lebih dari itu),
+  // sisanya otomatis masuk ke bagian Anisa hari itu.
+  let grandPotongan = 0;
+
   tbody.innerHTML = tglUrut.map(kunci => {
     const r = rekap[kunci];
-    const potongan = Math.round(r.pendapatan * 0.2);
+    const potongan = solo ? 0 : Math.min(Math.round(r.pendapatan * 0.2), BATAS_YEARLY);
     const sisa = r.pendapatan - potongan;
+    grandPotongan += potongan;
 
     return `<tr>
       <td><strong>${aman(r.label)}</strong></td>
@@ -2755,13 +2760,11 @@ function renderLaporanTgl(){
     </tr>`;
   }).join('');
 
-  // Ringkasan total keseluruhan (semua tanggal digabung) -- Total Pendapatan
-  // tetap total penuh yang sebenarnya. Yearly (20%) di kartu ringkasan ini
-  // di-FREEZE maksimal Rp70.000: begitu total Yearly-nya nyentuh 70k, dia
-  // berhenti nambah lagi buat seterusnya walaupun pendapatan terus masuk
-  // (sisanya otomatis masuk semua ke bagian Anisa). Ini sengaja nggak
-  // diinfoin di tampilan, cuma logika di belakang layar aja.
-  const grandPotongan = Math.min(Math.round(grandPendapatan * 0.2), BATAS_YEARLY);
+  // Ringkasan total keseluruhan (semua tanggal digabung) -- ini SELALU jumlah
+  // asli dari semua yang beneran didapet (Total Pendapatan penuh, Yearly &
+  // Anisa dijumlahin dari baris-baris tanggal di atas apa adanya). Ringkasan
+  // ini SENGAJA NGGAK dibatasi lagi -- pembatasan 70k cuma berlaku per hari
+  // di tabel, bukan di kartu ringkasan ini.
   const grandSisa = grandPendapatan - grandPotongan;
   $('#lap-total-pendapatan').textContent = formatRp(grandPendapatan);
   if(solo){
