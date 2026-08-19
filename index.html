@@ -1063,12 +1063,9 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
         <h2 class="sub">Daftar Antrian</h2>
         <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Lihat urutan antrian tarot kamu di bawah ini. Antrian tetap ada sampai sesinya diselesaikan admin ya ♡</p>
         
-        <!-- Papan Eksklusif: social proof singkat, beda bentuk sama papan statistik di bawahnya.
-             Kata "order" sengaja dipakai (bukan "antrian"/"pertanyaan") biar nggak disalahartikan
-             sebagai nomor urut antrian. -->
+        <!-- Papan Eksklusif: social proof singkat, beda bentuk sama papan statistik di bawahnya. -->
         <div class="papan-eksklusif" id="papan-eksklusif" style="display:none">
-          <span class="ek-ikon" aria-hidden="true">✨</span>
-          <span class="ek-teks"><b id="ek-angka">0</b> order sudah masuk di live ini ✨</span>
+          <span class="ek-teks">✨<b id="ek-angka">0</b> Pertanyaan sudah dijawab oleh leony✨</span>
         </div>
 
         <!-- Counter Statistik Antrian -->
@@ -2151,17 +2148,14 @@ function htmlKartuAntrianCustomer(x, petaNomor){
 }
 
 /* ══════ PAPAN EKSKLUSIF (SOCIAL PROOF) ══════
-   Ngitung TOTAL SEMUA order sepanjang masa (bukan dibatasi hari), gabungan
-   dari KEDUA mode sesi (Live Sendiri & Live + Moderator), apapun statusnya.
-   Angka ini sengaja disamain persis sama jumlah "antrian tersimpan" yang
-   ada di Arsip (panel Kelola Antrian) -- karena keduanya sumber datanya sama
-   (dAntrian), jadi nggak akan pernah beda/nggak sesuai lagi. Istilahnya
-   sengaja pakai "order" (bukan "antrian"/"pertanyaan") biar nggak
-   disalahartikan sebagai nomor urut antrian. */
+   Ngitung TOTAL pertanyaan yang statusnya udah "Sudah Dibaca" (beneran udah
+   dijawab), sepanjang masa (bukan dibatasi hari), gabungan dari KEDUA mode
+   sesi (Live Sendiri & Live + Moderator). Real-time & selalu sesuai data
+   aslinya karena diambil langsung dari dAntrian. */
 function gambarPapanEksklusif(){
   const box = $('#papan-eksklusif');
   if(!box) return;
-  const jumlah = dAntrian.length;
+  const jumlah = dAntrian.filter(x => x.status === 'Sudah Dibaca').length;
   const elAngka = $('#ek-angka');
   if(jumlah > 0){
     if(elAngka) elAngka.textContent = jumlah.toLocaleString('id-ID');
@@ -2741,20 +2735,12 @@ function renderLaporanTgl(){
   // Urutkan tanggal terbaru dulu
   const tglUrut = Object.keys(rekap).sort((a, b) => b.localeCompare(a));
 
-  // Potongan Yearly (20%) dibatasin maksimal Rp70.000 PER HARI -- kalau 20%
-  // pendapatan hari itu ngelewatin 70k, potongan hari itu dipotong jadi 70k
-  // aja, sisanya otomatis masuk ke bagian Anisa hari itu. Ini sengaja nggak
-  // diinfoin di tampilan, cuma logika di belakang layar aja. Ringkasan total
-  // di bawah nggak di-cap lagi -- itu murni jumlah dari semua yang beneran
-  // didapet tiap hari (termasuk yang udah kepotong 70k tadi), jadi selalu
-  // nunjukin total keseluruhan yang sebenarnya.
-  let grandPotongan = 0;
-
+  // Baris per-tanggal: RUMUS ASLI, persentase murni 20%/80%, nggak dipotong
+  // sama sekali -- sama kayak sebelum ada aturan pembatasan ini.
   tbody.innerHTML = tglUrut.map(kunci => {
     const r = rekap[kunci];
-    const potongan = solo ? 0 : Math.min(Math.round(r.pendapatan * 0.2), BATAS_YEARLY);
+    const potongan = Math.round(r.pendapatan * 0.2);
     const sisa = r.pendapatan - potongan;
-    grandPotongan += potongan;
 
     return `<tr>
       <td><strong>${aman(r.label)}</strong></td>
@@ -2770,9 +2756,12 @@ function renderLaporanTgl(){
   }).join('');
 
   // Ringkasan total keseluruhan (semua tanggal digabung) -- Total Pendapatan
-  // TETAP total penuh yang beneran didapet selama ini (nggak di-cap), Yearly
-  // di sini cuma hasil jumlah dari potongan tiap hari di atas (yang udah
-  // di-cap per hari), dan Anisa adalah sisanya.
+  // tetap total penuh yang sebenarnya. Yearly (20%) di kartu ringkasan ini
+  // di-FREEZE maksimal Rp70.000: begitu total Yearly-nya nyentuh 70k, dia
+  // berhenti nambah lagi buat seterusnya walaupun pendapatan terus masuk
+  // (sisanya otomatis masuk semua ke bagian Anisa). Ini sengaja nggak
+  // diinfoin di tampilan, cuma logika di belakang layar aja.
+  const grandPotongan = Math.min(Math.round(grandPendapatan * 0.2), BATAS_YEARLY);
   const grandSisa = grandPendapatan - grandPotongan;
   $('#lap-total-pendapatan').textContent = formatRp(grandPendapatan);
   if(solo){
