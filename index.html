@@ -143,17 +143,12 @@ p{margin:0 0 12px}
 @media (max-width:520px){.isi{padding:19px 15px}}
 
 /* ═════════ STATISTIK BOARD ═════════ */
-.papan-stat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
-.kartu-stat{background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(240,245,255,.7));border:1px solid rgba(255,255,255,.95);
-  border-radius:18px;padding:12px 10px;text-align:center;box-shadow:0 8px 20px -12px rgba(130,160,210,.4)}
-.kartu-stat .angka{font-size:22px;font-weight:700;color:#5d6c8d;line-height:1.2}
-.kartu-stat .lbl{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;margin-top:2px}
-
 /* ═════════ PAPAN EKSKLUSIF (SOCIAL PROOF · DI ATAS PAPAN STATISTIK) ═════════
    Sengaja dibuat BEDA bentuk sama .papan-stat di bawahnya: pita emas
-   memanjang satu baris, bukan grid 3 kotak. Efek kilau tipis lewat biar
-   kesannya eksklusif tapi tetap adem diliat, nggak norak. Angka & jumlah
-   hari-nya diisi lewat JS (gambarPapanEksklusif). */
+   memanjang satu baris, bukan grid 3 kotak. Efek kilau tipis biar kesannya
+   eksklusif tapi tetap adem diliat. Angka & jumlah hari-nya diisi lewat JS
+   (gambarPapanEksklusif). Kata "order" sengaja dipakai (bukan "antrian")
+   biar nggak disalahartikan sebagai nomor urut. */
 .papan-eksklusif{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
   gap:8px;margin:0 0 14px;padding:11px 20px;border-radius:999px;text-align:center;isolation:isolate;
   background:linear-gradient(100deg,#fff8ea 0%,#fdf1dc 28%,#fbe7c6 52%,#fdf1dc 76%,#fff8ea 100%);
@@ -169,6 +164,12 @@ p{margin:0 0 12px}
 @keyframes papanEkKilau{0%{transform:translateX(-140%)}42%,100%{transform:translateX(140%)}}
 @keyframes papanEkMasuk{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 @media (max-width:420px){.papan-eksklusif{padding:10px 12px;gap:6px}.papan-eksklusif .ek-teks{font-size:11.3px}}
+
+.papan-stat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.kartu-stat{background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(240,245,255,.7));border:1px solid rgba(255,255,255,.95);
+  border-radius:18px;padding:12px 10px;text-align:center;box-shadow:0 8px 20px -12px rgba(130,160,210,.4)}
+.kartu-stat .angka{font-size:22px;font-weight:700;color:#5d6c8d;line-height:1.2}
+.kartu-stat .lbl{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;margin-top:2px}
 
 /* TABEL LAPORAN HARIAN ADMIN */
 .tabel-laporan{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;text-align:left}
@@ -294,23 +295,6 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--blush);box-
 .lencana.proses{background:#fff6d6;color:#a67c00;border-color:#f0e2a0}
 .lencana.tunggu{background:#fde2e2;color:#c0392b;border-color:#f5c2c2}
 .lencana.kilat{background:#fde6f0;color:#b4708f;border-color:#f0b9d3}
-.lencana.privat{background:#eef0ff;color:#5a5fb0;border-color:#c9cdf7}
-
-/* ═════════ ZONA PRIVATE (BEDA DIKIT DARI YANG LAIN, TAPI TETEP 1 TEMA) ═════════
-   Dipakai buat bungkus form input Private & daftar kelola Private di
-   dashboard admin. Sengaja pakai border putus-putus emas + tint lembut
-   biar keliatan ini "zona" yang beda, tapi warnanya tetep narik dari
-   token tema yang sama (jadi otomatis ikutan gonta-ganti pas ganti mode
-   tampilan Terang/Midnight/Noir). */
-.blok-privat{position:relative;background:linear-gradient(165deg,rgba(201,168,106,.09),rgba(201,168,106,.02));
-  border:1.5px dashed var(--emas-tua);border-radius:18px;padding:16px 14px 14px}
-.pita-privat{display:inline-flex;align-items:center;gap:5px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  font-weight:800;color:#a5771f;background:#fdf1dc;border:1px solid var(--emas-tua);border-radius:999px;
-  padding:5px 12px;margin-bottom:10px}
-.gelembung.gelembung-privat{border-left:3px solid var(--emas-tua);background:linear-gradient(100deg,rgba(201,168,106,.06),transparent 40%),
-  linear-gradient(160deg,rgba(255,255,255,.9),rgba(240,245,255,.7))}
-.total-privat{font-size:12px;color:var(--tinta-muda);margin:2px 0 10px;padding-top:8px;border-top:1px dashed var(--garis)}
-.total-privat b{color:#a5771f}
 
 .kosong{text-align:center;padding:34px 18px;color:var(--tinta-muda)}
 .kosong .em{font-size:30px;margin-bottom:8px}
@@ -737,7 +721,10 @@ html[data-tema="gelap1"] .jendela{background:var(--panel);border:1px solid var(-
 html[data-tema="gelap1"] .kartu-stat{background:var(--panel-2);border:1px solid var(--tepi);
   box-shadow:0 10px 22px -16px rgba(0,0,0,.9)}html[data-tema="gelap1"] .kartu-stat .angka{color:var(--teks)}html[data-tema="gelap1"] .kartu-stat .lbl{color:var(--teks-lemah)}html[data-tema="gelap1"] .kartu-stat.bisa-pencet:hover{box-shadow:0 12px 26px -14px rgba(0,0,0,.95);border-color:var(--tepi-terang)}html[data-tema="gelap1"] .kartu-stat.pilih-belum{background:var(--merah-bg);border-color:var(--merah-tepi);
   box-shadow:0 10px 24px -12px var(--merah-glow)}html[data-tema="gelap1"] .kartu-stat.pilih-sudah{background:var(--hijau-bg);border-color:var(--hijau-tepi);
-  box-shadow:0 10px 24px -12px var(--hijau-glow)}html[data-tema="gelap1"] #st-belum{color:var(--merah)!important}html[data-tema="gelap1"] #st-sudah{color:var(--hijau)!important}html[data-tema="gelap1"] #st-hari-ini{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-total-pendapatan{color:var(--teks)!important}html[data-tema="gelap1"] #lap-potongan-mod{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-sisa-kamu{color:var(--hijau)!important}html[data-tema="gelap1"] #lap-privat-order{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-privat-pendapatan{color:var(--emas-w)!important}html[data-tema="gelap1"] .no-sedang{background:var(--emas-bg);border:1px solid var(--emas-tepi);color:var(--emas-w)}
+  box-shadow:0 10px 24px -12px var(--hijau-glow)}html[data-tema="gelap1"] #st-belum{color:var(--merah)!important}html[data-tema="gelap1"] #st-sudah{color:var(--hijau)!important}html[data-tema="gelap1"] #st-hari-ini{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-total-pendapatan{color:var(--teks)!important}html[data-tema="gelap1"] #lap-potongan-mod{color:var(--emas-w)!important}html[data-tema="gelap1"] #lap-sisa-kamu{color:var(--hijau)!important}html[data-tema="gelap1"] .no-sedang{background:var(--emas-bg);border:1px solid var(--emas-tepi);color:var(--emas-w)}
+html[data-tema="gelap1"] .papan-eksklusif{background:linear-gradient(100deg,var(--emas-bg) 0%,rgba(255,255,255,.03) 50%,var(--emas-bg) 100%);border-color:var(--emas-tepi);box-shadow:0 10px 24px -14px var(--emas-glow),inset 0 1px 0 rgba(255,255,255,.06)}
+html[data-tema="gelap1"] .papan-eksklusif::before{background:linear-gradient(100deg,transparent 22%,rgba(255,255,255,.16) 46%,transparent 64%)}
+html[data-tema="gelap1"] .papan-eksklusif .ek-teks{color:var(--teks-lemah)}html[data-tema="gelap1"] .papan-eksklusif .ek-teks b{color:var(--emas-w)}
 
 /* ── TABEL LAPORAN ── */
 html[data-tema="gelap1"] .tabel-laporan th{background:var(--panel-3);color:var(--teks-lemah);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .tabel-laporan td{color:var(--teks);border-bottom:1px solid var(--tepi)}html[data-tema="gelap1"] .tabel-laporan tr.baris-tgl:hover{background:var(--panel-2)}html[data-tema="gelap1"] .tabel-laporan td.td-hijau{color:var(--hijau);font-weight:700}html[data-tema="gelap1"] .tabel-laporan td.td-hijau.kuat{font-weight:800}html[data-tema="gelap1"] .tabel-laporan td.td-emas{color:var(--emas-w);font-weight:700}html[data-tema="gelap1"] .tabel-laporan td.td-kuat{color:var(--teks);font-weight:800}
@@ -766,16 +753,7 @@ html[data-tema="gelap1"] label{color:var(--teks-lemah)}html[data-tema="gelap1"] 
 /* ── KARTU ANTRIAN ── */
 html[data-tema="gelap1"] .gelembung{background:var(--panel-2);border:1px solid var(--tepi);
   box-shadow:0 10px 22px -18px rgba(0,0,0,.95)}html[data-tema="gelap1"] .gelembung:hover{border-color:var(--tepi-terang)}html[data-tema="gelap1"] .avatar{color:#150d18;background:linear-gradient(160deg,var(--biru),var(--rose));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}html[data-tema="gelap1"] .nama-p{color:var(--teks)}html[data-tema="gelap1"] .waktu{color:var(--teks-samar)}html[data-tema="gelap1"] .lencana{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap1"] .lencana.baca{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}html[data-tema="gelap1"] .lencana.proses{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}html[data-tema="gelap1"] .lencana.tunggu{background:var(--merah-bg);color:var(--merah);border-color:var(--merah-tepi)}html[data-tema="gelap1"] .lencana.kilat{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .lencana.no-urut{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);font-weight:800}html[data-tema="gelap1"] .lencana.harga{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi);font-weight:800}html[data-tema="gelap1"] .lencana.privat{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi)}
-html[data-tema="gelap1"] .blok-privat{background:linear-gradient(165deg,var(--emas-bg),rgba(255,255,255,.02));border-color:var(--emas-tepi)}
-html[data-tema="gelap1"] .pita-privat{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}
-html[data-tema="gelap1"] .gelembung.gelembung-privat{border-left-color:var(--emas-tepi);background:linear-gradient(100deg,var(--emas-bg),transparent 40%),var(--panel-2)}
-html[data-tema="gelap1"] .total-privat{color:var(--teks-lemah);border-top-color:var(--tepi)}
-html[data-tema="gelap1"] .total-privat b{color:var(--emas-w)}
-html[data-tema="gelap1"] .papan-eksklusif{background:linear-gradient(100deg,var(--emas-bg) 0%,rgba(255,255,255,.03) 50%,var(--emas-bg) 100%);border-color:var(--emas-tepi);box-shadow:0 10px 24px -14px var(--emas-glow),inset 0 1px 0 rgba(255,255,255,.06)}
-html[data-tema="gelap1"] .papan-eksklusif::before{background:linear-gradient(100deg,transparent 22%,rgba(255,255,255,.16) 46%,transparent 64%)}
-html[data-tema="gelap1"] .papan-eksklusif .ek-teks{color:var(--teks-lemah)}html[data-tema="gelap1"] .papan-eksklusif .ek-teks b{color:var(--emas-w)}
-html[data-tema="gelap1"] .sub-tabs-privat{border-bottom-color:var(--tepi)}html[data-tema="gelap1"] .kosong{color:var(--teks-lemah)}html[data-tema="gelap1"] .kosong .j{color:var(--teks-samar)}html[data-tema="gelap1"] .btn-hapus{background:var(--panel-3);border:1px solid var(--tepi);color:var(--merah)}html[data-tema="gelap1"] .btn-hapus:hover{background:var(--merah-bg);border-color:var(--merah-tepi)}html[data-tema="gelap1"] .btn-edit{background:var(--panel-3);border:1px solid var(--tepi);color:var(--biru)}html[data-tema="gelap1"] .btn-edit:hover{background:var(--biru-bg);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .mini{background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .mini:hover{color:var(--rose);border-color:var(--rose-tepi)}
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}html[data-tema="gelap1"] .nama-p{color:var(--teks)}html[data-tema="gelap1"] .waktu{color:var(--teks-samar)}html[data-tema="gelap1"] .lencana{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap1"] .lencana.baca{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}html[data-tema="gelap1"] .lencana.proses{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}html[data-tema="gelap1"] .lencana.tunggu{background:var(--merah-bg);color:var(--merah);border-color:var(--merah-tepi)}html[data-tema="gelap1"] .lencana.kilat{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap1"] .lencana.no-urut{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);font-weight:800}html[data-tema="gelap1"] .lencana.harga{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi);font-weight:800}html[data-tema="gelap1"] .kosong{color:var(--teks-lemah)}html[data-tema="gelap1"] .kosong .j{color:var(--teks-samar)}html[data-tema="gelap1"] .btn-hapus{background:var(--panel-3);border:1px solid var(--tepi);color:var(--merah)}html[data-tema="gelap1"] .btn-hapus:hover{background:var(--merah-bg);border-color:var(--merah-tepi)}html[data-tema="gelap1"] .btn-edit{background:var(--panel-3);border:1px solid var(--tepi);color:var(--biru)}html[data-tema="gelap1"] .btn-edit:hover{background:var(--biru-bg);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .mini{background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .mini:hover{color:var(--rose);border-color:var(--rose-tepi)}
 
 /* ── PRICELIST ── */
 html[data-tema="gelap1"] .daftar-harga li{color:var(--teks);border-bottom:1px dashed var(--tepi)}html[data-tema="gelap1"] .daftar-harga li b{color:var(--rose)}html[data-tema="gelap1"] .tag-fast{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi);
@@ -831,7 +809,10 @@ html[data-tema="gelap2"] .jendela{background:var(--panel);border:1px solid var(-
 html[data-tema="gelap2"] .kartu-stat{background:var(--panel-2);border:1px solid var(--tepi);
   box-shadow:0 10px 22px -16px rgba(0,0,0,.9)}html[data-tema="gelap2"] .kartu-stat .angka{color:var(--teks)}html[data-tema="gelap2"] .kartu-stat .lbl{color:var(--teks-lemah)}html[data-tema="gelap2"] .kartu-stat.bisa-pencet:hover{box-shadow:0 12px 26px -14px rgba(0,0,0,.95);border-color:var(--tepi-terang)}html[data-tema="gelap2"] .kartu-stat.pilih-belum{background:var(--merah-bg);border-color:var(--merah-tepi);
   box-shadow:0 10px 24px -12px var(--merah-glow)}html[data-tema="gelap2"] .kartu-stat.pilih-sudah{background:var(--hijau-bg);border-color:var(--hijau-tepi);
-  box-shadow:0 10px 24px -12px var(--hijau-glow)}html[data-tema="gelap2"] #st-belum{color:var(--merah)!important}html[data-tema="gelap2"] #st-sudah{color:var(--hijau)!important}html[data-tema="gelap2"] #st-hari-ini{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-total-pendapatan{color:var(--teks)!important}html[data-tema="gelap2"] #lap-potongan-mod{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-sisa-kamu{color:var(--hijau)!important}html[data-tema="gelap2"] #lap-privat-order{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-privat-pendapatan{color:var(--emas-w)!important}html[data-tema="gelap2"] .no-sedang{background:var(--emas-bg);border:1px solid var(--emas-tepi);color:var(--emas-w)}
+  box-shadow:0 10px 24px -12px var(--hijau-glow)}html[data-tema="gelap2"] #st-belum{color:var(--merah)!important}html[data-tema="gelap2"] #st-sudah{color:var(--hijau)!important}html[data-tema="gelap2"] #st-hari-ini{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-total-pendapatan{color:var(--teks)!important}html[data-tema="gelap2"] #lap-potongan-mod{color:var(--emas-w)!important}html[data-tema="gelap2"] #lap-sisa-kamu{color:var(--hijau)!important}html[data-tema="gelap2"] .no-sedang{background:var(--emas-bg);border:1px solid var(--emas-tepi);color:var(--emas-w)}
+html[data-tema="gelap2"] .papan-eksklusif{background:linear-gradient(100deg,var(--emas-bg) 0%,rgba(255,255,255,.03) 50%,var(--emas-bg) 100%);border-color:var(--emas-tepi);box-shadow:0 10px 24px -14px var(--emas-glow),inset 0 1px 0 rgba(255,255,255,.06)}
+html[data-tema="gelap2"] .papan-eksklusif::before{background:linear-gradient(100deg,transparent 22%,rgba(255,255,255,.16) 46%,transparent 64%)}
+html[data-tema="gelap2"] .papan-eksklusif .ek-teks{color:var(--teks-lemah)}html[data-tema="gelap2"] .papan-eksklusif .ek-teks b{color:var(--emas-w)}
 
 /* ── TABEL LAPORAN ── */
 html[data-tema="gelap2"] .tabel-laporan th{background:var(--panel-3);color:var(--teks-lemah);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .tabel-laporan td{color:var(--teks);border-bottom:1px solid var(--tepi)}html[data-tema="gelap2"] .tabel-laporan tr.baris-tgl:hover{background:var(--panel-2)}html[data-tema="gelap2"] .tabel-laporan td.td-hijau{color:var(--hijau);font-weight:700}html[data-tema="gelap2"] .tabel-laporan td.td-hijau.kuat{font-weight:800}html[data-tema="gelap2"] .tabel-laporan td.td-emas{color:var(--emas-w);font-weight:700}html[data-tema="gelap2"] .tabel-laporan td.td-kuat{color:var(--teks);font-weight:800}
@@ -860,16 +841,7 @@ html[data-tema="gelap2"] label{color:var(--teks-lemah)}html[data-tema="gelap2"] 
 /* ── KARTU ANTRIAN ── */
 html[data-tema="gelap2"] .gelembung{background:var(--panel-2);border:1px solid var(--tepi);
   box-shadow:0 10px 22px -18px rgba(0,0,0,.95)}html[data-tema="gelap2"] .gelembung:hover{border-color:var(--tepi-terang)}html[data-tema="gelap2"] .avatar{color:#150d18;background:linear-gradient(160deg,var(--biru),var(--rose));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}html[data-tema="gelap2"] .nama-p{color:var(--teks)}html[data-tema="gelap2"] .waktu{color:var(--teks-samar)}html[data-tema="gelap2"] .lencana{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap2"] .lencana.baca{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}html[data-tema="gelap2"] .lencana.proses{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}html[data-tema="gelap2"] .lencana.tunggu{background:var(--merah-bg);color:var(--merah);border-color:var(--merah-tepi)}html[data-tema="gelap2"] .lencana.kilat{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .lencana.no-urut{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);font-weight:800}html[data-tema="gelap2"] .lencana.harga{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi);font-weight:800}html[data-tema="gelap2"] .lencana.privat{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi)}
-html[data-tema="gelap2"] .blok-privat{background:linear-gradient(165deg,var(--emas-bg),rgba(255,255,255,.02));border-color:var(--emas-tepi)}
-html[data-tema="gelap2"] .pita-privat{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}
-html[data-tema="gelap2"] .gelembung.gelembung-privat{border-left-color:var(--emas-tepi);background:linear-gradient(100deg,var(--emas-bg),transparent 40%),var(--panel-2)}
-html[data-tema="gelap2"] .total-privat{color:var(--teks-lemah);border-top-color:var(--tepi)}
-html[data-tema="gelap2"] .total-privat b{color:var(--emas-w)}
-html[data-tema="gelap2"] .papan-eksklusif{background:linear-gradient(100deg,var(--emas-bg) 0%,rgba(255,255,255,.03) 50%,var(--emas-bg) 100%);border-color:var(--emas-tepi);box-shadow:0 10px 24px -14px var(--emas-glow),inset 0 1px 0 rgba(255,255,255,.06)}
-html[data-tema="gelap2"] .papan-eksklusif::before{background:linear-gradient(100deg,transparent 22%,rgba(255,255,255,.16) 46%,transparent 64%)}
-html[data-tema="gelap2"] .papan-eksklusif .ek-teks{color:var(--teks-lemah)}html[data-tema="gelap2"] .papan-eksklusif .ek-teks b{color:var(--emas-w)}
-html[data-tema="gelap2"] .sub-tabs-privat{border-bottom-color:var(--tepi)}html[data-tema="gelap2"] .kosong{color:var(--teks-lemah)}html[data-tema="gelap2"] .kosong .j{color:var(--teks-samar)}html[data-tema="gelap2"] .btn-hapus{background:var(--panel-3);border:1px solid var(--tepi);color:var(--merah)}html[data-tema="gelap2"] .btn-hapus:hover{background:var(--merah-bg);border-color:var(--merah-tepi)}html[data-tema="gelap2"] .btn-edit{background:var(--panel-3);border:1px solid var(--tepi);color:var(--biru)}html[data-tema="gelap2"] .btn-edit:hover{background:var(--biru-bg);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .mini{background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .mini:hover{color:var(--rose);border-color:var(--rose-tepi)}
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}html[data-tema="gelap2"] .nama-p{color:var(--teks)}html[data-tema="gelap2"] .waktu{color:var(--teks-samar)}html[data-tema="gelap2"] .lencana{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap2"] .lencana.baca{background:var(--hijau-bg);color:var(--hijau);border-color:var(--hijau-tepi)}html[data-tema="gelap2"] .lencana.proses{background:var(--emas-bg);color:var(--emas-w);border-color:var(--emas-tepi)}html[data-tema="gelap2"] .lencana.tunggu{background:var(--merah-bg);color:var(--merah);border-color:var(--merah-tepi)}html[data-tema="gelap2"] .lencana.kilat{background:var(--rose-bg);color:var(--rose);border-color:var(--rose-tepi)}html[data-tema="gelap2"] .lencana.no-urut{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi);font-weight:800}html[data-tema="gelap2"] .lencana.harga{background:var(--ungu-bg);color:var(--ungu);border-color:var(--ungu-tepi);font-weight:800}html[data-tema="gelap2"] .kosong{color:var(--teks-lemah)}html[data-tema="gelap2"] .kosong .j{color:var(--teks-samar)}html[data-tema="gelap2"] .btn-hapus{background:var(--panel-3);border:1px solid var(--tepi);color:var(--merah)}html[data-tema="gelap2"] .btn-hapus:hover{background:var(--merah-bg);border-color:var(--merah-tepi)}html[data-tema="gelap2"] .btn-edit{background:var(--panel-3);border:1px solid var(--tepi);color:var(--biru)}html[data-tema="gelap2"] .btn-edit:hover{background:var(--biru-bg);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .mini{background:var(--panel-3);border:1px solid var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .mini:hover{color:var(--rose);border-color:var(--rose-tepi)}
 
 /* ── PRICELIST ── */
 html[data-tema="gelap2"] .daftar-harga li{color:var(--teks);border-bottom:1px dashed var(--tepi)}html[data-tema="gelap2"] .daftar-harga li b{color:var(--rose)}html[data-tema="gelap2"] .tag-fast{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi);
@@ -1091,10 +1063,12 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
         <h2 class="sub">Daftar Antrian</h2>
         <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Lihat urutan antrian tarot kamu di bawah ini. Antrian tetap ada sampai sesinya diselesaikan admin ya ♡</p>
         
-        <!-- Papan Eksklusif: social proof singkat, beda bentuk sama papan statistik di bawahnya -->
+        <!-- Papan Eksklusif: social proof singkat, beda bentuk sama papan statistik di bawahnya.
+             Kata "order" sengaja dipakai (bukan "antrian"/"pertanyaan") biar nggak disalahartikan
+             sebagai nomor urut antrian. -->
         <div class="papan-eksklusif" id="papan-eksklusif" style="display:none">
           <span class="ek-ikon" aria-hidden="true">✨</span>
-          <span class="ek-teks"><b id="ek-angka">0</b> pertanyaan sudah masuk di live ini dalam kurun waktu <b id="ek-hari">3 hari</b></span>
+          <span class="ek-teks"><b id="ek-angka">0</b> order sudah masuk di live ini dalam kurun waktu <b id="ek-hari">3 hari</b></span>
         </div>
 
         <!-- Counter Statistik Antrian -->
@@ -1220,14 +1194,7 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
           <h2 class="sub" style="margin-bottom:6px">Input Antrian Baru</h2>
           <div style="margin-bottom:10px"><span class="pita-mode" id="pita-input">🌷 Live Sendiri</span></div>
           <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama customer &amp; pilih harga order-nya. Kamu bisa input lebih dari 1 orang sekaligus sebelum dikirim!</p>
-
-          <!-- Sub-tab Antrian / Private -- Private CUMA muncul pas mode "Live Sendiri" -->
-          <div class="sub-tabs sub-tabs-privat" id="tabs-input-privat">
-            <button type="button" class="sub-tab aktif" id="tab-input-live">🌸 Antrian</button>
-            <button type="button" class="sub-tab" id="tab-input-privat">🔒 Private</button>
-          </div>
-
-          <div id="wrap-input-live">
+          
           <form class="form" id="form-input">
             <!-- Container untuk menampung baris input dinamis -->
             <div id="daftar-input-container" style="display: grid; gap: 12px;">
@@ -1269,52 +1236,6 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
             <div class="pesan-status" id="i-status"></div>
             <button type="submit" class="kirim" id="btn-input">Kirim Semua ke Antrian ♡</button>
           </form>
-          </div>
-
-          <!-- ═══ FORM INPUT PRIVATE: lebih ringkas -- cuma Nama + Harga per Order +
-               Jumlah Order. Data yang kekirim ditandain privat:true, jadi cuma nongol
-               di dashboard admin Live Sendiri kamu sendiri & nggak pernah masuk ke
-               halaman antrian customer maupun ke nomor urut antrian. Sengaja dibuat
-               beda dikit tampilannya (kotak putus-putus emas) biar keliatan ini
-               "zona" yang beda, tapi tetep pakai token warna tema yang sama. ═══ -->
-          <div id="wrap-input-privat" class="blok-privat" style="display:none">
-            <div class="pita-privat">🔒 Zona Private</div>
-            <p style="font-size:12.5px;color:var(--tinta-muda);margin:0 0 14px">Nama-nama di sini cuma buat catatan pribadi kamu — nggak bakal muncul di halaman antrian.</p>
-            <form class="form" id="form-input-privat">
-              <div id="daftar-input-privat-container" style="display: grid; gap: 12px;">
-                <div class="baris-input-privat-item" style="display:grid;gap:12px">
-                  <div>
-                    <label>Nama</label>
-                    <input type="text" class="ip-detail" placeholder="Contoh: Sari" required>
-                  </div>
-                  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-                    <div style="flex:1;min-width:140px">
-                      <label>Harga per Order</label>
-                      <div class="pills-harga-input">
-                        <button type="button" class="pill-harga-opt aktif" data-harga="5000">5K</button>
-                        <button type="button" class="pill-harga-opt" data-harga="10000">10K</button>
-                        <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
-                        <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
-                      </div>
-                      <input type="hidden" class="ip-harga-val" value="5000">
-                    </div>
-                    <div style="width:96px">
-                      <label>Jumlah Order</label>
-                      <input type="number" class="ip-jumlah" min="1" step="1" value="1" style="width:100%;border:1px solid var(--garis);border-radius:12px;padding:0 8px;height:47px;text-align:center;font-weight:700;font-size:14px;color:var(--tinta);background:rgba(255,255,255,.7);font-family:inherit">
-                    </div>
-                    <button type="button" class="mini btn-hapus-baris-privat" style="display:none; height: 40px; color:#a9526f;">✕</button>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <button type="button" class="mini" id="btn-tambah-baris-privat" style="border-color: var(--blush); color: #b4708f; width: 100%; padding: 10px;">+ Tambah Nama Lain (Multi-Input)</button>
-              </div>
-
-              <div class="pesan-status" id="ip-status"></div>
-              <button type="submit" class="kirim" id="btn-input-privat">Simpan ke Private ♡</button>
-            </form>
-          </div>
         </div>
       </div>
 
@@ -1370,55 +1291,8 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
           </div>
           <div class="info-hari">📅 <b id="teks-tgl-hari-ini">hari ini</b></div>
 
-          <!-- Sub-tab Antrian / Private -- Private CUMA muncul pas mode "Live Sendiri" -->
-          <div class="sub-tabs sub-tabs-privat" id="tabs-kelola-privat">
-            <button type="button" class="sub-tab aktif" id="tab-kelola-live">🌸 Antrian</button>
-            <button type="button" class="sub-tab" id="tab-kelola-privat">🔒 Private</button>
-          </div>
-
-          <div id="wrap-kelola-live">
-            <div class="cari"><span class="ikon-cari" aria-hidden="true">⌕</span><input type="text" id="cari-admin" placeholder="Cari nama pelanggan…"></div>
-            <div class="feed" id="feed-admin"><div class="memuat">Memuat data admin</div></div>
-
-            <!-- yang statusnya "Sudah Dibaca" diturunin ke sini, sama kayak di halaman antrian customer -->
-            <button type="button" class="buka-semua" id="admin-toggle-selesai" style="display:none" aria-expanded="false">
-              <span class="teks">Tampilkan yang sudah dibaca</span>
-              <span class="jml" id="admin-jml-selesai">0</span>
-              <span class="panah">▼</span>
-            </button>
-            <div class="wadah-lainnya" id="admin-wadah-selesai">
-              <div class="isi-lainnya"><div class="feed" id="feed-admin-selesai"></div></div>
-            </div>
-          </div>
-
-          <!-- ═══ PRIVATE: cuma keliatan di dashboard admin sendiri, nggak pernah nongol di halaman antrian ═══ -->
-          <div id="wrap-kelola-privat" class="blok-privat" style="display:none">
-            <div class="pita-privat">🔒 Zona Private</div>
-            <p style="font-size:12.5px;color:var(--tinta-muda);margin:0 0 12px">Daftar ini cuma buat kamu — nggak bakal nongol di halaman antrian customer sama sekali.</p>
-
-            <!-- Laporan pendapatan khusus Private (kepisah dari Laporan Pendapatan utama) -->
-            <div class="papan-stat" id="papan-lap-privat" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px">
-              <div class="kartu-stat">
-                <div class="angka" id="lap-privat-order" style="color:#a5771f;font-size:18px">0</div>
-                <div class="lbl">Total Order Private</div>
-              </div>
-              <div class="kartu-stat">
-                <div class="angka" id="lap-privat-pendapatan" style="color:#a5771f;font-size:16px">Rp0</div>
-                <div class="lbl">Total Pendapatan Private</div>
-              </div>
-            </div>
-
-            <div class="feed" id="feed-admin-privat"><div class="memuat">Memuat data private</div></div>
-
-            <button type="button" class="buka-semua" id="privat-toggle-selesai" style="display:none" aria-expanded="false">
-              <span class="teks">Tampilkan yang sudah dibaca</span>
-              <span class="jml" id="privat-jml-selesai">0</span>
-              <span class="panah">▼</span>
-            </button>
-            <div class="wadah-lainnya" id="privat-wadah-selesai">
-              <div class="isi-lainnya"><div class="feed" id="feed-admin-privat-selesai"></div></div>
-            </div>
-          </div>
+          <div class="cari"><span class="ikon-cari" aria-hidden="true">⌕</span><input type="text" id="cari-admin" placeholder="Cari nama pelanggan…"></div>
+          <div class="feed" id="feed-admin"><div class="memuat">Memuat data admin</div></div>
 
           <!-- Antrian di atas nggak ilang sendiri walaupun ganti hari.
                Baru dikosongin kalau tombol ini ditekan. -->
@@ -1934,23 +1808,6 @@ async function tambahAntrianKeSupabase(items){
     const tanpaSesi = items.map(({ sesi, ...sisa }) => sisa);
     ({ error } = await supabaseClient.from(TABEL_ANTRIAN).insert(tanpaSesi));
   }
-  // Sama kayak di atas, tapi buat kolom 'privat' (dipakai fitur Private di
-  // Live Sendiri). Kalau kolomnya belum ada di Supabase, diulang tanpa itu --
-  // efeknya cuma nggak kesimpen status privat-nya di server (tetap aman
-  // tampil privat di layar sendiri lewat data lokal).
-  if(error && /privat/i.test(error.message || '')){
-    console.warn('Kolom "privat" belum ada di Supabase, insert diulang tanpa privat.');
-    const tanpaPrivat = items.map(({ privat, ...sisa }) => sisa);
-    ({ error } = await supabaseClient.from(TABEL_ANTRIAN).insert(tanpaPrivat));
-  }
-  // Sama lagi buat kolom 'jumlah' (jumlah order per nama, dipakai fitur
-  // Private). Kalau belum ada, diulang tanpa itu -- jumlah order-nya
-  // otomatis dianggap 1 (lihat ambilJumlah).
-  if(error && /jumlah/i.test(error.message || '')){
-    console.warn('Kolom "jumlah" belum ada di Supabase, insert diulang tanpa jumlah.');
-    const tanpaJumlah = items.map(({ jumlah, ...sisa }) => sisa);
-    ({ error } = await supabaseClient.from(TABEL_ANTRIAN).insert(tanpaJumlah));
-  }
   if(error) console.error('Gagal insert ke Supabase:', error);
   return error;
 }
@@ -1968,14 +1825,7 @@ async function hapusAntrianDiSupabase(id){
 }
 
 async function editAntrianKeSupabase(id, data){
-  let { error } = await supabaseClient.from(TABEL_ANTRIAN).update(data).eq('id', id);
-  // Sama kayak insert: kalau kolom 'jumlah' belum ada di Supabase, diulang
-  // tanpa field itu (perubahan lain -- nama/harga -- tetap kesimpen).
-  if(error && /jumlah/i.test(error.message || '') && 'jumlah' in data){
-    console.warn('Kolom "jumlah" belum ada di Supabase, update diulang tanpa jumlah.');
-    const { jumlah, ...tanpaJumlah } = data;
-    ({ error } = await supabaseClient.from(TABEL_ANTRIAN).update(tanpaJumlah).eq('id', id));
-  }
+  const { error } = await supabaseClient.from(TABEL_ANTRIAN).update(data).eq('id', id);
   if(error) console.error('Gagal edit di Supabase:', error);
   return error;
 }
@@ -2018,13 +1868,6 @@ function ambilHarga(x){
   if(x.harga != null && !isNaN(x.harga)) return Number(x.harga);
   const cocok = /(\d+)\s*k\b/i.exec(x.detail || '');
   return cocok ? parseInt(cocok[1], 10) * 1000 : 0;
-}
-function ambilJumlah(x){
-  const n = parseInt(x.jumlah, 10);
-  return (n && n > 0) ? n : 1;
-}
-function hitungTotalPrivat(x){
-  return ambilHarga(x) * ambilJumlah(x);
 }
 function formatRp(n){
   return 'Rp' + Number(n || 0).toLocaleString('id-ID');
@@ -2126,27 +1969,12 @@ function pasangRealtimeBatas(){
 function masihBerjalan(x){
   return Number(x.ts) > (batasSesi[ambilSesi(x)] || 0);
 }
-// Semua antrian berjalan dari dua mode -> dipakai di halaman customer.
-// Antrian yang ditandain privat (x.privat) SENGAJA nggak pernah ikut di sini,
-// jadi nggak bakal nongol di halaman customer & nggak makan nomor urut antrian.
-function antrianAktifSemua(){ return dAntrian.filter(x => !x.privat && masihBerjalan(x)); }
+// Semua antrian berjalan dari dua mode -> dipakai di halaman customer
+function antrianAktifSemua(){ return dAntrian.filter(masihBerjalan); }
 // Antrian berjalan di mode yang lagi kepilih -> dipakai di dashboard admin
-function antrianAktif(){ return dataSesi().filter(x => !x.privat && masihBerjalan(x)); }
+function antrianAktif(){ return dataSesi().filter(masihBerjalan); }
 // Antrian yang udah diarsipkan (mode yang lagi kepilih)
-function antrianArsip(){ return dataSesi().filter(x => !x.privat && !masihBerjalan(x)); }
-
-/* ══════ DATA PRIVATE (CUMA ADA DI MODE "LIVE SENDIRI") ══════
-   Kepisah total dari antrian biasa: nggak numpang nomor urut, nggak
-   nongol di halaman customer, dan nggak ikut ke Laporan Pendapatan /
-   Arsip -- murni catatan pribadi admin doang. */
-function dataPrivatSemua(){ return dAntrian.filter(x => x.privat && ambilSesi(x) === 'solo'); }
-function antrianPrivatAktif(){ return dataPrivatSemua().filter(masihBerjalan); }
-function hitungNomorAntrianPrivat(){
-  const urutan = antrianPrivatAktif().sort((a, b) => a.ts - b.ts);
-  const peta = {};
-  urutan.forEach((x, i) => { peta[x.id] = i + 1; });
-  return peta;
-}
+function antrianArsip(){ return dataSesi().filter(x => !masihBerjalan(x)); }
 
 function tglKunci(ts){
   const d = new Date(ts);
@@ -2255,41 +2083,6 @@ $('#antrian-toggle-selesai').addEventListener('click', () => {
   wadah.classList.toggle('buka', antrianSelesaiTerbuka);
 });
 
-/* ══════ VERSI SAMA PERSIS BUAT DASHBOARD ADMIN (KELOLA ANTRIAN & PRIVATE) ══════
-   Dipakai di 2 tempat: feed-admin (antrian biasa) & feed-admin-privat (private).
-   Walaupun udah masuk dropdown, tombol status (Belum/Sedang/Sudah) di tiap
-   kartunya tetap aktif -- jadi admin masih bisa balikin status kapan aja,
-   nanti otomatis naik lagi ke daftar utama begitu di-render ulang. */
-function buatToggleDropdownAdmin(btnId, wadahId){
-  let terbuka = false;
-  const btn = $('#' + btnId);
-  const wadah = $('#' + wadahId);
-  if(btn){
-    btn.addEventListener('click', () => {
-      terbuka = !terbuka;
-      btn.querySelector('.teks').textContent = terbuka ? 'Sembunyikan yang sudah dibaca' : 'Tampilkan yang sudah dibaca';
-      btn.classList.toggle('buka', terbuka);
-      btn.setAttribute('aria-expanded', String(terbuka));
-      if(wadah) wadah.classList.toggle('buka', terbuka);
-    });
-  }
-  return {
-    get terbuka(){ return terbuka; },
-    tutup(){
-      terbuka = false;
-      if(btn){
-        btn.style.display = 'none';
-        btn.classList.remove('buka');
-        btn.setAttribute('aria-expanded', 'false');
-        btn.querySelector('.teks').textContent = 'Tampilkan yang sudah dibaca';
-      }
-      if(wadah) wadah.classList.remove('buka');
-    }
-  };
-}
-const toggleAdminSelesai = buatToggleDropdownAdmin('admin-toggle-selesai', 'admin-wadah-selesai');
-const togglePrivatSelesai = buatToggleDropdownAdmin('privat-toggle-selesai', 'privat-wadah-selesai');
-
 /* ══════ FILTER STATUS (KETUK KARTU STATISTIK) ══════
    Ketuk kartu "Belum Dibaca" -> daftar cuma nampilin yang belum dibaca.
    Ketuk kartu "Sudah Dibaca" -> daftar cuma nampilin yang udah dibaca
@@ -2346,21 +2139,19 @@ function htmlKartuAntrianCustomer(x, petaNomor){
 }
 
 /* ══════ PAPAN EKSKLUSIF (SOCIAL PROOF) ══════
-   Ngitung TOTAL pertanyaan/order yang MASUK dalam kurun waktu N hari
-   terakhir (rolling window dari sekarang) -- apapun statusnya (Belum/
-   Sedang/Sudah Dibaca), digabung dari KEDUA mode sesi (Live Sendiri &
-   Live + Moderator). Sengaja disamain sama definisi "Total Masuk" yang
-   dipakai di tabel Laporan Pendapatan, biar angkanya selalu konsisten
-   & real-time sama data aslinya -- bukan angka yang keitung beda sendiri.
-   Antrian yang ditandain privat (x.privat) sengaja tetap nggak ikut
-   dihitung/ditampilin di sini karena privat emang nggak boleh nongol di
-   halaman customer sama sekali. */
+   Ngitung TOTAL order yang masuk dalam kurun waktu N hari terakhir (rolling
+   window dari sekarang) -- apapun statusnya (Belum/Sedang/Sudah Dibaca),
+   digabung dari KEDUA mode sesi (Live Sendiri & Live + Moderator). Sengaja
+   disamain sama definisi "Total Masuk" yang dipakai di tabel Laporan
+   Pendapatan, biar angkanya selalu konsisten & real-time sama data aslinya.
+   Istilahnya sengaja pakai "order" (bukan "antrian"/"pertanyaan") biar nggak
+   disalahartikan sebagai nomor urut antrian. */
 const PAPAN_EK_HARI = 3;
 function gambarPapanEksklusif(){
   const box = $('#papan-eksklusif');
   if(!box) return;
   const batas = Date.now() - PAPAN_EK_HARI * 24 * 60 * 60 * 1000;
-  const jumlah = dAntrian.filter(x => !x.privat && Number(x.ts) >= batas).length;
+  const jumlah = dAntrian.filter(x => Number(x.ts) >= batas).length;
   const elAngka = $('#ek-angka');
   const elHari = $('#ek-hari');
   if(jumlah > 0){
@@ -2689,170 +2480,6 @@ $('#form-input').addEventListener('submit', async e => {
   }
 });
 
-/* ══════ FORM INPUT PRIVATE (CUMA ADA DI MODE LIVE SENDIRI) ══════
-   Alurnya disederhanain dari form input antrian biasa: cuma nama + harga
-   (nggak ada pilihan Fast Track karena nggak relevan buat catatan privat).
-   Data yang kekirim ditandain privat:true & sesi:'solo' terus, apapun mode
-   yang lagi aktif pas tombolnya ditekan (tombolnya emang cuma keliatan pas
-   mode solo). */
-function bindPillHargaPrivat(scopeEl){
-  const btnHargaList = scopeEl.querySelectorAll('.pill-harga-opt');
-  const inputHarga = scopeEl.querySelector('.ip-harga-val');
-  btnHargaList.forEach(btn => {
-    btn.addEventListener('click', () => {
-      inputHarga.value = btn.dataset.harga;
-      btnHargaList.forEach(b => b.classList.remove('aktif'));
-      btn.classList.add('aktif');
-    });
-  });
-}
-bindPillHargaPrivat($('#daftar-input-privat-container .baris-input-privat-item'));
-
-const HTML_BARIS_PRIVAT = (namaContoh) => `
-    <div>
-      <label>Nama</label>
-      <input type="text" class="ip-detail" placeholder="Contoh: ${namaContoh}" required>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-      <div style="flex:1;min-width:140px">
-        <label>Harga per Order</label>
-        <div class="pills-harga-input">
-          <button type="button" class="pill-harga-opt aktif" data-harga="5000">5K</button>
-          <button type="button" class="pill-harga-opt" data-harga="10000">10K</button>
-          <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
-          <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
-        </div>
-        <input type="hidden" class="ip-harga-val" value="5000">
-      </div>
-      <div style="width:96px">
-        <label>Jumlah Order</label>
-        <input type="number" class="ip-jumlah" min="1" step="1" value="1" style="width:100%;border:1px solid var(--garis);border-radius:12px;padding:0 8px;height:47px;text-align:center;font-weight:700;font-size:14px;color:var(--tinta);background:rgba(255,255,255,.7);font-family:inherit">
-      </div>
-      <button type="button" class="mini btn-hapus-baris-privat" style="height: 40px; color:#a9526f;" title="Hapus baris">✕</button>
-    </div>
-  `;
-
-$('#btn-tambah-baris-privat').addEventListener('click', () => {
-  const container = $('#daftar-input-privat-container');
-  const divBaru = document.createElement('div');
-  divBaru.className = 'baris-input-privat-item';
-  divBaru.style.cssText = 'display:grid;gap:12px;animation: masuk .3s ease both;';
-  divBaru.innerHTML = HTML_BARIS_PRIVAT('Rani');
-
-  bindPillHargaPrivat(divBaru);
-  divBaru.querySelector('.btn-hapus-baris-privat').addEventListener('click', () => divBaru.remove());
-  container.appendChild(divBaru);
-});
-
-$('#form-input-privat').addEventListener('submit', async e => {
-  e.preventDefault();
-  const st = $('#ip-status');
-  const btn = $('#btn-input-privat');
-
-  const barisItems = document.querySelectorAll('.baris-input-privat-item');
-  if(!barisItems.length) return status(st, 'Minimal isi 1 nama.', 'err');
-
-  btn.disabled = true;
-  btn.textContent = 'Menyimpan...';
-
-  let itemBaruList = [];
-  let timestampBase = Date.now();
-
-  barisItems.forEach((el, index) => {
-    const detail = el.querySelector('.ip-detail').value.trim();
-    const harga = parseInt(el.querySelector('.ip-harga-val').value, 10) || 0;
-    const jumlahEl = el.querySelector('.ip-jumlah');
-    const jumlah = Math.max(1, parseInt(jumlahEl ? jumlahEl.value : 1, 10) || 1);
-
-    if(detail){
-      itemBaruList.push({
-        id: 'q_' + (timestampBase + index),
-        detail: detail,
-        tipe: 'Reguler',
-        harga: harga,
-        jumlah: jumlah,
-        sesi: 'solo',
-        privat: true,
-        status: 'Belum Dibaca',
-        ts: timestampBase + index
-      });
-    }
-  });
-
-  if(!itemBaruList.length){
-    btn.disabled = false;
-    btn.textContent = 'Simpan ke Private ♡';
-    return status(st, 'Semua field nama masih kosong!', 'err');
-  }
-
-  dAntrian = [...itemBaruList.reverse(), ...dAntrian];
-  simpanAntrianLocal(dAntrian);
-
-  const errInsert = await tambahAntrianKeSupabase(itemBaruList);
-  if(errInsert){
-    status(st, ditolakIzin(errInsert)
-      ? 'Gagal simpan — kamu belum login sebagai admin atau sesi login udah habis. Coba keluar terus masuk lagi ya ♡'
-      : 'Tersimpan di layar, tapi gagal sync ke server: ' + errInsert.message, 'err');
-  }
-
-  $('#daftar-input-privat-container').innerHTML = `<div class="baris-input-privat-item" style="display:grid;gap:12px">${HTML_BARIS_PRIVAT('Sari')}</div>`;
-  $('#daftar-input-privat-container .btn-hapus-baris-privat').style.display = 'none';
-  bindPillHargaPrivat($('#daftar-input-privat-container .baris-input-privat-item'));
-
-  btn.disabled = false;
-  btn.textContent = 'Simpan ke Private ♡';
-  if(!errInsert){
-    status(st, `Berhasil menambahkan ${itemBaruList.length} nama ke Private! ♡`, 'ok');
-  }
-});
-
-/* ══════ SUB-TAB INPUT: ANTRIAN / PRIVATE ══════ */
-$('#tab-input-live').addEventListener('click', () => {
-  $('#tab-input-live').classList.add('aktif');
-  $('#tab-input-privat').classList.remove('aktif', 'biru');
-  $('#wrap-input-live').style.display = 'block';
-  $('#wrap-input-privat').style.display = 'none';
-});
-$('#tab-input-privat').addEventListener('click', () => {
-  $('#tab-input-privat').classList.add('aktif', 'biru');
-  $('#tab-input-live').classList.remove('aktif');
-  $('#wrap-input-privat').style.display = 'block';
-  $('#wrap-input-live').style.display = 'none';
-});
-
-/* ══════ SUB-TAB KELOLA: ANTRIAN / PRIVATE ══════ */
-$('#tab-kelola-live').addEventListener('click', () => {
-  $('#tab-kelola-live').classList.add('aktif');
-  $('#tab-kelola-privat').classList.remove('aktif', 'biru');
-  $('#wrap-kelola-live').style.display = 'block';
-  $('#wrap-kelola-privat').style.display = 'none';
-});
-$('#tab-kelola-privat').addEventListener('click', () => {
-  $('#tab-kelola-privat').classList.add('aktif', 'biru');
-  $('#tab-kelola-live').classList.remove('aktif');
-  $('#wrap-kelola-privat').style.display = 'block';
-  $('#wrap-kelola-live').style.display = 'none';
-});
-
-// Balikin ke sub-tab "Antrian"/"Live" (bukan Private) -- dipanggil pas
-// pindah ke mode "Live + Moderator" karena Private cuma ada di mode Sendiri.
-function resetKeSubTabLive(){
-  const tInputLive = $('#tab-input-live'), tInputPrivat = $('#tab-input-privat');
-  if(tInputLive && tInputPrivat && tInputPrivat.classList.contains('aktif')){
-    tInputLive.classList.add('aktif');
-    tInputPrivat.classList.remove('aktif', 'biru');
-    $('#wrap-input-live').style.display = 'block';
-    $('#wrap-input-privat').style.display = 'none';
-  }
-  const tKelolaLive = $('#tab-kelola-live'), tKelolaPrivat = $('#tab-kelola-privat');
-  if(tKelolaLive && tKelolaPrivat && tKelolaPrivat.classList.contains('aktif')){
-    tKelolaLive.classList.add('aktif');
-    tKelolaPrivat.classList.remove('aktif', 'biru');
-    $('#wrap-kelola-live').style.display = 'block';
-    $('#wrap-kelola-privat').style.display = 'none';
-  }
-}
-
 /* ══════ RENDER KELOLA ANTRIAN & LAPORAN HARIAN (ADMIN) ══════ */
 let cariAdminTeks = '';
 let editingId = null;
@@ -2860,98 +2487,6 @@ $('#cari-admin').addEventListener('input', e => {
   cariAdminTeks = e.target.value.trim().toLowerCase();
   gambarAdmin();
 });
-
-const OPSI_HARGA_ADMIN = [5000, 10000, 15000, 25000];
-
-// Kartu satu baris antrian di dashboard admin (dipakai buat feed-admin biasa
-// & feed-admin-privat, termasuk versi yang diturunin ke dropdown "sudah dibaca").
-// opts.privat -> true kalau ini kartu dari daftar Private (badge beda, nggak ada Fast Track).
-function htmlKartuAdmin(x, petaNomor, opts){
-  opts = opts || {};
-  const isBelum = x.status === 'Belum Dibaca' ? 'sel-belum' : '';
-  const isSudah = x.status === 'Sudah Dibaca' ? 'sel-sudah' : '';
-  const isSedang = x.status === 'Sedang Dibaca' ? 'sel-sedang' : '';
-
-  // ── MODE EDIT: tampilkan form ganti nama/harga/tipe/jumlah ──
-  if(editingId === x.id){
-    const hargaSekarang = ambilHarga(x);
-    const jumlahSekarang = ambilJumlah(x);
-    return `<article class="gelembung${opts.privat ? ' gelembung-privat' : ''}">
-      <div class="kepala" style="align-items:flex-start;flex-wrap:wrap;gap:10px">
-        <input type="text" id="edit-detail-${x.id}" value="${aman(x.detail)}" style="flex:1;min-width:140px;border:1px solid var(--garis);border-radius:12px;padding:9px 12px;font-family:inherit;font-size:14px;color:var(--tinta)">
-      </div>
-      <div class="alat" style="flex-direction:column;align-items:stretch;gap:10px">
-        <div>
-          <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">${opts.privat ? 'Harga per Order' : 'Harga Order'}</label>
-          <div class="pills-harga-input" id="edit-harga-${x.id}" data-value="${hargaSekarang}">
-            ${OPSI_HARGA_ADMIN.map(h => `<button type="button" class="pill-harga-opt ${h === hargaSekarang ? 'aktif' : ''}" onclick="pilihPillEdit(this, ${h})">${formatK(h)}</button>`).join('')}
-          </div>
-        </div>
-        ${opts.privat ? `<div>
-          <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Jumlah Order</label>
-          <input type="number" id="edit-jumlah-${x.id}" min="1" step="1" value="${jumlahSekarang}" style="width:100px;border:1px solid var(--garis);border-radius:12px;padding:0 10px;height:42px;text-align:center;font-weight:700;font-size:14px;color:var(--tinta);background:transparent;font-family:inherit">
-        </div>` : `<div>
-          <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Status Tipe Antrian</label>
-          <div class="pills-tipe-input" id="edit-tipe-${x.id}" data-value="${aman(x.tipe)}">
-            <button type="button" class="pill-tipe-opt ${x.tipe === 'Reguler' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Reguler')">Reguler</button>
-            <button type="button" class="pill-tipe-opt ${x.tipe === 'Fast Track' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Fast Track')">⚡ Fast Track</button>
-          </div>
-        </div>`}
-        <div style="display:flex;gap:8px">
-          <button class="kirim" style="flex:1;padding:10px" onclick="simpanEditAntrian('${x.id}')">Simpan ♡</button>
-          <button class="mini" onclick="batalEditAntrian()">Batal</button>
-        </div>
-      </div>
-    </article>`;
-  }
-
-  // ── MODE NORMAL ──
-  if(opts.privat){
-    const jml = ambilJumlah(x);
-    const total = hitungTotalPrivat(x);
-    return `<article class="gelembung gelembung-privat">
-      <div class="kepala">
-        <span class="lencana no-urut">#${petaNomor[x.id]}</span>
-        <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
-        <span class="nama-p">${aman(x.detail)}</span>
-        <span class="lencana harga">${formatK(ambilHarga(x))}${jml > 1 ? ` ×${jml}` : ''}</span>
-        <span class="lencana privat">🔒 Private</span>
-        <span class="waktu">${kapan(x.ts)}</span>
-      </div>
-      <div class="total-privat">Total: <b>${formatRp(total)}</b></div>
-      <div class="alat">
-        <div class="pills-status">
-          <button class="pill-opt ${isBelum}" onclick="ubahStatusTarot('${x.id}', 'Belum Dibaca')">Belum</button>
-          <button class="pill-opt ${isSedang}" onclick="ubahStatusTarot('${x.id}', 'Sedang Dibaca')">Sedang Dibaca</button>
-          <button class="pill-opt ${isSudah}" onclick="ubahStatusTarot('${x.id}', 'Sudah Dibaca')">Sudah</button>
-        </div>
-        <button class="btn-edit" onclick="mulaiEditAntrian('${x.id}')">✏️ Edit</button>
-        <button class="btn-hapus" onclick="hapusAntrian('${x.id}')">Hapus</button>
-      </div>
-    </article>`;
-  }
-
-  return `<article class="gelembung">
-    <div class="kepala">
-      <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
-      <span class="lencana no-urut">#${petaNomor[x.id]}</span>
-      <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
-      <span class="nama-p">${aman(x.detail)}</span>
-      <span class="lencana harga">${formatK(ambilHarga(x))}</span>
-      <span class="lencana kilat">${aman(x.tipe)}</span>
-      <span class="waktu">${kapan(x.ts)}</span>
-    </div>
-    <div class="alat">
-      <div class="pills-status">
-        <button class="pill-opt ${isBelum}" onclick="ubahStatusTarot('${x.id}', 'Belum Dibaca')">Belum</button>
-        <button class="pill-opt ${isSedang}" onclick="ubahStatusTarot('${x.id}', 'Sedang Dibaca')">Sedang Dibaca</button>
-        <button class="pill-opt ${isSudah}" onclick="ubahStatusTarot('${x.id}', 'Sudah Dibaca')">Sudah</button>
-      </div>
-      <button class="btn-edit" onclick="mulaiEditAntrian('${x.id}')">✏️ Edit</button>
-      <button class="btn-hapus" onclick="hapusAntrian('${x.id}')">Hapus</button>
-    </div>
-  </article>`;
-}
 
 function gambarAdmin(){
   if(!isLoggedAdmin) return;
@@ -2966,9 +2501,6 @@ function gambarAdmin(){
   if(btnBalik) btnBalik.style.display = batasSebelumnya[sesiAktif] !== batasSesi[sesiAktif] ? 'block' : 'none';
 
   const el = $('#feed-admin');
-  const elSelesai = $('#feed-admin-selesai');
-  const jmlSelesai = $('#admin-jml-selesai');
-  const btnSelesai = $('#admin-toggle-selesai');
   let data = antrianAktif();
 
   if(cariAdminTeks){
@@ -2977,110 +2509,71 @@ function gambarAdmin(){
 
   if(!data.length){
     el.innerHTML = `<div class="kosong"><div class="em">📋</div><div class="j">antrian lagi kosong</div><p style="font-size:13.5px;margin-top:6px">Mode: <b>${LABEL_SESI[sesiAktif]}</b> · semua data sebelumnya tetap aman di Laporan Pendapatan &amp; Arsip ya ♡</p></div>`;
-    if(elSelesai) elSelesai.innerHTML = '';
-    if(jmlSelesai) jmlSelesai.textContent = '0';
-    toggleAdminSelesai.tutup();
     gambarArsip();
-    gambarAdminPrivat();
     return;
   }
 
   gambarArsip();
 
   const petaNomor = hitungNomorAntrian();
+  const opsiHarga = [5000, 10000, 15000, 25000];
 
-  // Lagi nyaring lewat pencarian -> tampilin satu daftar aja apa adanya,
-  // biar hasil carinya kelihatan lengkap (nggak usah dipisah dropdown).
-  if(cariAdminTeks){
-    el.innerHTML = [...data].sort((a, b) => a.ts - b.ts).map(x => htmlKartuAdmin(x, petaNomor)).join('');
-    if(elSelesai) elSelesai.innerHTML = '';
-    if(jmlSelesai) jmlSelesai.textContent = '0';
-    toggleAdminSelesai.tutup();
-    gambarAdminPrivat();
-    return;
-  }
+  el.innerHTML = [...data].sort((a, b) => a.ts - b.ts).map(x => {
+    const isBelum = x.status === 'Belum Dibaca' ? 'sel-belum' : '';
+    const isSudah = x.status === 'Sudah Dibaca' ? 'sel-sudah' : '';
+    const isSedang = x.status === 'Sedang Dibaca' ? 'sel-sedang' : '';
 
-  // Nggak lagi nyaring apa-apa -> pisahin: yang masih jalan ("Belum Dibaca" /
-  // "Sedang Dibaca") di daftar utama, yang "Sudah Dibaca" diturunin ke dropdown --
-  // sama persis kayak pola di halaman antrian customer. Status masih bisa
-  // diubah dari dalam dropdown, jadi begitu diubah balik ke Belum/Sedang,
-  // otomatis naik lagi ke daftar utama pas di-render ulang.
-  const aktifList = data.filter(x => x.status !== 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
-  const selesaiList = data.filter(x => x.status === 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
-
-  el.innerHTML = aktifList.length
-    ? aktifList.map(x => htmlKartuAdmin(x, petaNomor)).join('')
-    : `<div class="kosong"><div class="em">📋</div><div class="j">nggak ada yang lagi antri</div><p style="font-size:13px;margin-top:6px">Semuanya udah dibaca, buka dropdown di bawah ya ♡</p></div>`;
-
-  if(elSelesai) elSelesai.innerHTML = selesaiList.map(x => htmlKartuAdmin(x, petaNomor)).join('');
-  if(jmlSelesai) jmlSelesai.textContent = String(selesaiList.length);
-
-  if(btnSelesai){
-    if(selesaiList.length){
-      btnSelesai.style.display = 'flex';
-    } else {
-      toggleAdminSelesai.tutup();
+    // ── MODE EDIT: tampilkan form ganti nama/harga/tipe ──
+    if(editingId === x.id){
+      const hargaSekarang = ambilHarga(x);
+      return `<article class="gelembung">
+        <div class="kepala" style="align-items:flex-start;flex-wrap:wrap;gap:10px">
+          <input type="text" id="edit-detail-${x.id}" value="${aman(x.detail)}" style="flex:1;min-width:140px;border:1px solid var(--garis);border-radius:12px;padding:9px 12px;font-family:inherit;font-size:14px;color:var(--tinta)">
+        </div>
+        <div class="alat" style="flex-direction:column;align-items:stretch;gap:10px">
+          <div>
+            <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Harga Order</label>
+            <div class="pills-harga-input" id="edit-harga-${x.id}" data-value="${hargaSekarang}">
+              ${opsiHarga.map(h => `<button type="button" class="pill-harga-opt ${h === hargaSekarang ? 'aktif' : ''}" onclick="pilihPillEdit(this, ${h})">${formatK(h)}</button>`).join('')}
+            </div>
+          </div>
+          <div>
+            <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Status Tipe Antrian</label>
+            <div class="pills-tipe-input" id="edit-tipe-${x.id}" data-value="${aman(x.tipe)}">
+              <button type="button" class="pill-tipe-opt ${x.tipe === 'Reguler' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Reguler')">Reguler</button>
+              <button type="button" class="pill-tipe-opt ${x.tipe === 'Fast Track' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Fast Track')">⚡ Fast Track</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="kirim" style="flex:1;padding:10px" onclick="simpanEditAntrian('${x.id}')">Simpan ♡</button>
+            <button class="mini" onclick="batalEditAntrian()">Batal</button>
+          </div>
+        </div>
+      </article>`;
     }
-  }
 
-  gambarAdminPrivat();
-}
-
-/* ══════ RENDER DAFTAR PRIVATE (KHUSUS MODE LIVE SENDIRI) ══════
-   Alurnya sama persis kayak feed-admin biasa (termasuk dropdown "sudah
-   dibaca"), cuma sumber datanya dari antrianPrivatAktif() & petaNomor-nya
-   sendiri terpisah dari nomor antrian utama. */
-/* Laporan pendapatan khusus Private -- kepisah total dari Laporan Pendapatan
-   utama (yang cuma ngitung antrian biasa). Ngitung dari SEMUA data private
-   sepanjang waktu (dataPrivatSemua, bukan cuma yang lagi aktif), soalnya
-   ini laporan akumulatif kayak Laporan Pendapatan utama. */
-function renderLaporanPrivat(){
-  const elOrder = $('#lap-privat-order');
-  const elPendapatan = $('#lap-privat-pendapatan');
-  if(!elOrder && !elPendapatan) return;
-  const data = dataPrivatSemua();
-  const totalOrder = data.reduce((s, x) => s + ambilJumlah(x), 0);
-  const totalPendapatan = data.reduce((s, x) => s + hitungTotalPrivat(x), 0);
-  if(elOrder) elOrder.textContent = totalOrder.toLocaleString('id-ID');
-  if(elPendapatan) elPendapatan.textContent = formatRp(totalPendapatan);
-}
-
-function gambarAdminPrivat(){
-  const el = $('#feed-admin-privat');
-  if(!el) return;
-  renderLaporanPrivat();
-  const elSelesai = $('#feed-admin-privat-selesai');
-  const jmlSelesai = $('#privat-jml-selesai');
-  const btnSelesai = $('#privat-toggle-selesai');
-
-  const data = antrianPrivatAktif();
-
-  if(!data.length){
-    el.innerHTML = `<div class="kosong"><div class="em">🔒</div><div class="j">belum ada nama private</div><p style="font-size:13.5px;margin-top:6px">Input lewat form di panel "Input Antrian Baru" tab Private ya ♡</p></div>`;
-    if(elSelesai) elSelesai.innerHTML = '';
-    if(jmlSelesai) jmlSelesai.textContent = '0';
-    togglePrivatSelesai.tutup();
-    return;
-  }
-
-  const petaNomor = hitungNomorAntrianPrivat();
-  const aktifList = data.filter(x => x.status !== 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
-  const selesaiList = data.filter(x => x.status === 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
-
-  el.innerHTML = aktifList.length
-    ? aktifList.map(x => htmlKartuAdmin(x, petaNomor, { privat: true })).join('')
-    : `<div class="kosong"><div class="em">🔒</div><div class="j">nggak ada yang lagi antri</div><p style="font-size:13px;margin-top:6px">Semuanya udah dibaca, buka dropdown di bawah ya ♡</p></div>`;
-
-  if(elSelesai) elSelesai.innerHTML = selesaiList.map(x => htmlKartuAdmin(x, petaNomor, { privat: true })).join('');
-  if(jmlSelesai) jmlSelesai.textContent = String(selesaiList.length);
-
-  if(btnSelesai){
-    if(selesaiList.length){
-      btnSelesai.style.display = 'flex';
-    } else {
-      togglePrivatSelesai.tutup();
-    }
-  }
+    // ── MODE NORMAL ──
+    return `<article class="gelembung">
+      <div class="kepala">
+        <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
+        <span class="lencana no-urut">#${petaNomor[x.id]}</span>
+        <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
+        <span class="nama-p">${aman(x.detail)}</span>
+        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
+        <span class="lencana kilat">${aman(x.tipe)}</span>
+        <span class="waktu">${kapan(x.ts)}</span>
+      </div>
+      <div class="alat">
+        <div class="pills-status">
+          <button class="pill-opt ${isBelum}" onclick="ubahStatusTarot('${x.id}', 'Belum Dibaca')">Belum</button>
+          <button class="pill-opt ${isSedang}" onclick="ubahStatusTarot('${x.id}', 'Sedang Dibaca')">Sedang Dibaca</button>
+          <button class="pill-opt ${isSudah}" onclick="ubahStatusTarot('${x.id}', 'Sudah Dibaca')">Sudah</button>
+        </div>
+        <button class="btn-edit" onclick="mulaiEditAntrian('${x.id}')">✏️ Edit</button>
+        <button class="btn-hapus" onclick="hapusAntrian('${x.id}')">Hapus</button>
+      </div>
+    </article>`;
+  }).join('');
 }
 
 /* ══════ LAPORAN PENDAPATAN (2 MODE SESI) ══════
@@ -3090,6 +2583,10 @@ function gambarAdminPrivat(){
    Laporan ini nampilin SEMUA tanggal (data lama nggak ikut kehapus walaupun
    antrian hariannya udah ganti), dan tiap baris tanggal bisa diketuk buat
    lihat detail siapa aja yang order di tanggal itu. */
+// Batas maksimal potongan Yearly (20%) secara total -- lihat penjelasan
+// lengkap di renderLaporanTgl().
+const BATAS_YEARLY = 70000;
+
 function pasangTabSesi(){
   const tSolo = $('#tab-sesi-solo'), tMod = $('#tab-sesi-mod');
   if(!tSolo || !tMod) return;
@@ -3105,16 +2602,6 @@ function pasangTabSesi(){
       const el = $(sel);
       if(el){ el.textContent = LABEL_SESI[mode]; el.classList.toggle('mod', mode === 'mod'); }
     });
-    // Tab "Private" cuma ada di mode Live Sendiri. Pas pindah ke mode
-    // Live + Moderator, sub-tabnya disembunyiin & dipaksa balik ke tab
-    // "Antrian"/"Live" biar nggak nyangkut nampilin form/list private
-    // yang lagi disembunyiin.
-    const tampilPrivat = mode === 'solo';
-    const tabsInputPrivat = $('#tabs-input-privat');
-    const tabsKelolaPrivat = $('#tabs-kelola-privat');
-    if(tabsInputPrivat) tabsInputPrivat.style.display = tampilPrivat ? 'flex' : 'none';
-    if(tabsKelolaPrivat) tabsKelolaPrivat.style.display = tampilPrivat ? 'flex' : 'none';
-    if(!tampilPrivat && typeof resetKeSubTabLive === 'function') resetKeSubTabLive();
     gambarAdmin();
   };
   tSolo.addEventListener('click', () => pilih('solo'));
@@ -3150,10 +2637,7 @@ function renderLaporanTgl(){
     papan.style.gridTemplateColumns = 'repeat(3,1fr)';
   }
 
-  // Data private (tab "Private" di Live Sendiri) SENGAJA nggak ikut kehitung
-  // di laporan pendapatan -- itu murni catatan pribadi admin, bukan order
-  // resmi yang direkap.
-  const dataLap = dataSesi().filter(x => !x.privat);
+  const dataLap = dataSesi();
   if(!dataLap.length){
     tbody.innerHTML = `<tr><td colspan="${kolom}" style="text-align:center;color:var(--tinta-muda)">Belum ada data untuk ${LABEL_SESI[sesiAktif]}</td></tr>`;
     $('#lap-total-pendapatan').textContent = 'Rp0';
@@ -3203,8 +2687,12 @@ function renderLaporanTgl(){
     </tr>`;
   }).join('');
 
-  // Ringkasan total keseluruhan (semua tanggal digabung)
-  const grandPotongan = Math.round(grandPendapatan * 0.2);
+  // Ringkasan total keseluruhan (semua tanggal digabung).
+  // Potongan Yearly (20%) dibatasin maksimal Rp70.000 total -- kalau udah
+  // ngelewatin itu, potongannya nggak nambah lagi walau pendapatan terus
+  // bertambah (sisanya otomatis masuk semua ke bagian Anisa). Ini sengaja
+  // nggak diinfoin di tampilan, cuma logika di belakang layar aja.
+  const grandPotongan = Math.min(Math.round(grandPendapatan * 0.2), BATAS_YEARLY);
   const grandSisa = grandPendapatan - grandPotongan;
   $('#lap-total-pendapatan').textContent = formatRp(grandPendapatan);
   if(solo){
@@ -3383,32 +2871,19 @@ window.simpanEditAntrian = async function(id){
 
   const detailBaru = $('#edit-detail-' + id).value.trim();
   const hargaBaru = parseInt($('#edit-harga-' + id).dataset.value, 10) || 0;
+  const tipeBaru = $('#edit-tipe-' + id).dataset.value;
+
   if(!detailBaru) return alert('Nama gak boleh kosong ya!');
 
   dAntrian[idx].detail = detailBaru;
   dAntrian[idx].harga = hargaBaru;
-
-  // Kartu private punya field "Jumlah Order" (bukan Tipe/Fast Track).
-  const elJumlah = $('#edit-jumlah-' + id);
-  const elTipe = $('#edit-tipe-' + id);
-  const dataUpdate = { detail: detailBaru, harga: hargaBaru };
-
-  if(elJumlah){
-    const jumlahBaru = Math.max(1, parseInt(elJumlah.value, 10) || 1);
-    dAntrian[idx].jumlah = jumlahBaru;
-    dataUpdate.jumlah = jumlahBaru;
-  } else if(elTipe){
-    const tipeBaru = elTipe.dataset.value;
-    dAntrian[idx].tipe = tipeBaru;
-    dataUpdate.tipe = tipeBaru;
-  }
-
+  dAntrian[idx].tipe = tipeBaru;
   simpanAntrianLocal(dAntrian);
 
   editingId = null;
   gambarAdmin();
 
-  const errEdit = await editAntrianKeSupabase(id, dataUpdate);
+  const errEdit = await editAntrianKeSupabase(id, { detail: detailBaru, harga: hargaBaru, tipe: tipeBaru });
   if(laporGagal(errEdit, 'menyimpan perubahan')) muatAntrianLocal();
 };
 
