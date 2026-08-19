@@ -1068,7 +1068,7 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
              sebagai nomor urut antrian. -->
         <div class="papan-eksklusif" id="papan-eksklusif" style="display:none">
           <span class="ek-ikon" aria-hidden="true">✨</span>
-          <span class="ek-teks"><b id="ek-angka">0</b> order sudah masuk di live ini dalam kurun waktu <b id="ek-hari">3 hari</b></span>
+          <span class="ek-teks"><b id="ek-angka">0</b> order sudah masuk di live ini ✨</span>
         </div>
 
         <!-- Counter Statistik Antrian -->
@@ -1293,6 +1293,18 @@ html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .
 
           <div class="cari"><span class="ikon-cari" aria-hidden="true">⌕</span><input type="text" id="cari-admin" placeholder="Cari nama pelanggan…"></div>
           <div class="feed" id="feed-admin"><div class="memuat">Memuat data admin</div></div>
+
+          <!-- yang statusnya "Sudah Dibaca" diturunin ke sini, sama kayak di halaman antrian
+               customer. Status masih bisa diubah lewat pill di dalam kartu ini juga -- kalau
+               diubah balik ke Belum/Sedang Dibaca, otomatis naik lagi ke daftar utama. -->
+          <button type="button" class="buka-semua" id="admin-toggle-selesai" style="display:none" aria-expanded="false">
+            <span class="teks">Tampilkan yang sudah dibaca</span>
+            <span class="jml" id="admin-jml-selesai">0</span>
+            <span class="panah">▼</span>
+          </button>
+          <div class="wadah-lainnya" id="admin-wadah-selesai">
+            <div class="isi-lainnya"><div class="feed" id="feed-admin-selesai"></div></div>
+          </div>
 
           <!-- Antrian di atas nggak ilang sendiri walaupun ganti hari.
                Baru dikosongin kalau tombol ini ditekan. -->
@@ -2139,24 +2151,20 @@ function htmlKartuAntrianCustomer(x, petaNomor){
 }
 
 /* ══════ PAPAN EKSKLUSIF (SOCIAL PROOF) ══════
-   Ngitung TOTAL order yang masuk dalam kurun waktu N hari terakhir (rolling
-   window dari sekarang) -- apapun statusnya (Belum/Sedang/Sudah Dibaca),
-   digabung dari KEDUA mode sesi (Live Sendiri & Live + Moderator). Sengaja
-   disamain sama definisi "Total Masuk" yang dipakai di tabel Laporan
-   Pendapatan, biar angkanya selalu konsisten & real-time sama data aslinya.
-   Istilahnya sengaja pakai "order" (bukan "antrian"/"pertanyaan") biar nggak
+   Ngitung TOTAL SEMUA order sepanjang masa (bukan dibatasi hari), gabungan
+   dari KEDUA mode sesi (Live Sendiri & Live + Moderator), apapun statusnya.
+   Angka ini sengaja disamain persis sama jumlah "antrian tersimpan" yang
+   ada di Arsip (panel Kelola Antrian) -- karena keduanya sumber datanya sama
+   (dAntrian), jadi nggak akan pernah beda/nggak sesuai lagi. Istilahnya
+   sengaja pakai "order" (bukan "antrian"/"pertanyaan") biar nggak
    disalahartikan sebagai nomor urut antrian. */
-const PAPAN_EK_HARI = 3;
 function gambarPapanEksklusif(){
   const box = $('#papan-eksklusif');
   if(!box) return;
-  const batas = Date.now() - PAPAN_EK_HARI * 24 * 60 * 60 * 1000;
-  const jumlah = dAntrian.filter(x => Number(x.ts) >= batas).length;
+  const jumlah = dAntrian.length;
   const elAngka = $('#ek-angka');
-  const elHari = $('#ek-hari');
   if(jumlah > 0){
     if(elAngka) elAngka.textContent = jumlah.toLocaleString('id-ID');
-    if(elHari) elHari.textContent = PAPAN_EK_HARI + ' hari';
     box.style.display = 'flex';
   } else {
     box.style.display = 'none';
@@ -2488,6 +2496,78 @@ $('#cari-admin').addEventListener('input', e => {
   gambarAdmin();
 });
 
+let adminSelesaiTerbuka = false;
+
+$('#admin-toggle-selesai').addEventListener('click', () => {
+  adminSelesaiTerbuka = !adminSelesaiTerbuka;
+  const btn = $('#admin-toggle-selesai');
+  const wadah = $('#admin-wadah-selesai');
+  btn.querySelector('.teks').textContent = adminSelesaiTerbuka ? 'Sembunyikan yang sudah dibaca' : 'Tampilkan yang sudah dibaca';
+  btn.classList.toggle('buka', adminSelesaiTerbuka);
+  btn.setAttribute('aria-expanded', String(adminSelesaiTerbuka));
+  wadah.classList.toggle('buka', adminSelesaiTerbuka);
+});
+
+// Kartu satu baris antrian di dashboard admin -- dipakai buat daftar utama & dropdown "sudah dibaca".
+// Nomor antrian (petaNomor) selalu dihitung dari SEMUA data hari ini (bukan dari posisi tampilan),
+// jadi nggak kegeser walaupun kartunya pindah-pindah antara daftar utama <-> dropdown.
+function htmlKartuAdmin(x, petaNomor, opsiHarga){
+  const isBelum = x.status === 'Belum Dibaca' ? 'sel-belum' : '';
+  const isSudah = x.status === 'Sudah Dibaca' ? 'sel-sudah' : '';
+  const isSedang = x.status === 'Sedang Dibaca' ? 'sel-sedang' : '';
+
+  // ── MODE EDIT: tampilkan form ganti nama/harga/tipe ──
+  if(editingId === x.id){
+    const hargaSekarang = ambilHarga(x);
+    return `<article class="gelembung">
+      <div class="kepala" style="align-items:flex-start;flex-wrap:wrap;gap:10px">
+        <input type="text" id="edit-detail-${x.id}" value="${aman(x.detail)}" style="flex:1;min-width:140px;border:1px solid var(--garis);border-radius:12px;padding:9px 12px;font-family:inherit;font-size:14px;color:var(--tinta)">
+      </div>
+      <div class="alat" style="flex-direction:column;align-items:stretch;gap:10px">
+        <div>
+          <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Harga Order</label>
+          <div class="pills-harga-input" id="edit-harga-${x.id}" data-value="${hargaSekarang}">
+            ${opsiHarga.map(h => `<button type="button" class="pill-harga-opt ${h === hargaSekarang ? 'aktif' : ''}" onclick="pilihPillEdit(this, ${h})">${formatK(h)}</button>`).join('')}
+          </div>
+        </div>
+        <div>
+          <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Status Tipe Antrian</label>
+          <div class="pills-tipe-input" id="edit-tipe-${x.id}" data-value="${aman(x.tipe)}">
+            <button type="button" class="pill-tipe-opt ${x.tipe === 'Reguler' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Reguler')">Reguler</button>
+            <button type="button" class="pill-tipe-opt ${x.tipe === 'Fast Track' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Fast Track')">⚡ Fast Track</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="kirim" style="flex:1;padding:10px" onclick="simpanEditAntrian('${x.id}')">Simpan ♡</button>
+          <button class="mini" onclick="batalEditAntrian()">Batal</button>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  // ── MODE NORMAL ──
+  return `<article class="gelembung">
+    <div class="kepala">
+      <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
+      <span class="lencana no-urut">#${petaNomor[x.id]}</span>
+      <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
+      <span class="nama-p">${aman(x.detail)}</span>
+      <span class="lencana harga">${formatK(ambilHarga(x))}</span>
+      <span class="lencana kilat">${aman(x.tipe)}</span>
+      <span class="waktu">${kapan(x.ts)}</span>
+    </div>
+    <div class="alat">
+      <div class="pills-status">
+        <button class="pill-opt ${isBelum}" onclick="ubahStatusTarot('${x.id}', 'Belum Dibaca')">Belum</button>
+        <button class="pill-opt ${isSedang}" onclick="ubahStatusTarot('${x.id}', 'Sedang Dibaca')">Sedang Dibaca</button>
+        <button class="pill-opt ${isSudah}" onclick="ubahStatusTarot('${x.id}', 'Sudah Dibaca')">Sudah</button>
+      </div>
+      <button class="btn-edit" onclick="mulaiEditAntrian('${x.id}')">✏️ Edit</button>
+      <button class="btn-hapus" onclick="hapusAntrian('${x.id}')">Hapus</button>
+    </div>
+  </article>`;
+}
+
 function gambarAdmin(){
   if(!isLoggedAdmin) return;
   
@@ -2501,14 +2581,32 @@ function gambarAdmin(){
   if(btnBalik) btnBalik.style.display = batasSebelumnya[sesiAktif] !== batasSesi[sesiAktif] ? 'block' : 'none';
 
   const el = $('#feed-admin');
+  const elSelesai = $('#feed-admin-selesai');
+  const btnSelesaiToggle = $('#admin-toggle-selesai');
+  const wadahSelesai = $('#admin-wadah-selesai');
+  const jmlSelesai = $('#admin-jml-selesai');
   let data = antrianAktif();
 
   if(cariAdminTeks){
     data = data.filter(x => x.detail.toLowerCase().includes(cariAdminTeks));
   }
 
+  const tutupDropdownSelesai = () => {
+    adminSelesaiTerbuka = false;
+    if(btnSelesaiToggle){
+      btnSelesaiToggle.style.display = 'none';
+      btnSelesaiToggle.classList.remove('buka');
+      btnSelesaiToggle.setAttribute('aria-expanded', 'false');
+      btnSelesaiToggle.querySelector('.teks').textContent = 'Tampilkan yang sudah dibaca';
+    }
+    if(wadahSelesai) wadahSelesai.classList.remove('buka');
+    if(elSelesai) elSelesai.innerHTML = '';
+    if(jmlSelesai) jmlSelesai.textContent = '0';
+  };
+
   if(!data.length){
     el.innerHTML = `<div class="kosong"><div class="em">📋</div><div class="j">antrian lagi kosong</div><p style="font-size:13.5px;margin-top:6px">Mode: <b>${LABEL_SESI[sesiAktif]}</b> · semua data sebelumnya tetap aman di Laporan Pendapatan &amp; Arsip ya ♡</p></div>`;
+    tutupDropdownSelesai();
     gambarArsip();
     return;
   }
@@ -2518,62 +2616,36 @@ function gambarAdmin(){
   const petaNomor = hitungNomorAntrian();
   const opsiHarga = [5000, 10000, 15000, 25000];
 
-  el.innerHTML = [...data].sort((a, b) => a.ts - b.ts).map(x => {
-    const isBelum = x.status === 'Belum Dibaca' ? 'sel-belum' : '';
-    const isSudah = x.status === 'Sudah Dibaca' ? 'sel-sudah' : '';
-    const isSedang = x.status === 'Sedang Dibaca' ? 'sel-sedang' : '';
+  // Lagi nyaring lewat pencarian -> tampilin satu daftar aja apa adanya,
+  // biar hasil carinya kelihatan lengkap (nggak usah dipisah dropdown).
+  if(cariAdminTeks){
+    el.innerHTML = [...data].sort((a, b) => a.ts - b.ts).map(x => htmlKartuAdmin(x, petaNomor, opsiHarga)).join('');
+    tutupDropdownSelesai();
+    return;
+  }
 
-    // ── MODE EDIT: tampilkan form ganti nama/harga/tipe ──
-    if(editingId === x.id){
-      const hargaSekarang = ambilHarga(x);
-      return `<article class="gelembung">
-        <div class="kepala" style="align-items:flex-start;flex-wrap:wrap;gap:10px">
-          <input type="text" id="edit-detail-${x.id}" value="${aman(x.detail)}" style="flex:1;min-width:140px;border:1px solid var(--garis);border-radius:12px;padding:9px 12px;font-family:inherit;font-size:14px;color:var(--tinta)">
-        </div>
-        <div class="alat" style="flex-direction:column;align-items:stretch;gap:10px">
-          <div>
-            <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Harga Order</label>
-            <div class="pills-harga-input" id="edit-harga-${x.id}" data-value="${hargaSekarang}">
-              ${opsiHarga.map(h => `<button type="button" class="pill-harga-opt ${h === hargaSekarang ? 'aktif' : ''}" onclick="pilihPillEdit(this, ${h})">${formatK(h)}</button>`).join('')}
-            </div>
-          </div>
-          <div>
-            <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Status Tipe Antrian</label>
-            <div class="pills-tipe-input" id="edit-tipe-${x.id}" data-value="${aman(x.tipe)}">
-              <button type="button" class="pill-tipe-opt ${x.tipe === 'Reguler' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Reguler')">Reguler</button>
-              <button type="button" class="pill-tipe-opt ${x.tipe === 'Fast Track' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Fast Track')">⚡ Fast Track</button>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button class="kirim" style="flex:1;padding:10px" onclick="simpanEditAntrian('${x.id}')">Simpan ♡</button>
-            <button class="mini" onclick="batalEditAntrian()">Batal</button>
-          </div>
-        </div>
-      </article>`;
+  // Nggak lagi nyaring apa-apa -> pisahin: yang masih jalan ("Belum Dibaca" /
+  // "Sedang Dibaca") di daftar utama, yang "Sudah Dibaca" diturunin ke dropdown --
+  // sama persis kayak pola di halaman antrian customer. Kalau admin nggak sengaja
+  // nekan "Sudah" padahal maksudnya belum, tinggal buka dropdown-nya terus pencet
+  // pill "Belum"/"Sedang Dibaca" di kartunya -- otomatis naik lagi ke daftar utama.
+  const aktifList = data.filter(x => x.status !== 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
+  const selesaiList = data.filter(x => x.status === 'Sudah Dibaca').sort((a, b) => a.ts - b.ts);
+
+  el.innerHTML = aktifList.length
+    ? aktifList.map(x => htmlKartuAdmin(x, petaNomor, opsiHarga)).join('')
+    : `<div class="kosong"><div class="em">📋</div><div class="j">nggak ada yang lagi antri</div><p style="font-size:13px;margin-top:6px">Semuanya udah dibaca, buka dropdown di bawah ya ♡</p></div>`;
+
+  if(elSelesai) elSelesai.innerHTML = selesaiList.map(x => htmlKartuAdmin(x, petaNomor, opsiHarga)).join('');
+  if(jmlSelesai) jmlSelesai.textContent = String(selesaiList.length);
+
+  if(btnSelesaiToggle){
+    if(selesaiList.length){
+      btnSelesaiToggle.style.display = 'flex';
+    } else {
+      tutupDropdownSelesai();
     }
-
-    // ── MODE NORMAL ──
-    return `<article class="gelembung">
-      <div class="kepala">
-        <!-- Badge Nomor Urut Antrian Otomatis (permanen, berdasarkan ts) -->
-        <span class="lencana no-urut">#${petaNomor[x.id]}</span>
-        <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
-        <span class="nama-p">${aman(x.detail)}</span>
-        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
-        <span class="lencana kilat">${aman(x.tipe)}</span>
-        <span class="waktu">${kapan(x.ts)}</span>
-      </div>
-      <div class="alat">
-        <div class="pills-status">
-          <button class="pill-opt ${isBelum}" onclick="ubahStatusTarot('${x.id}', 'Belum Dibaca')">Belum</button>
-          <button class="pill-opt ${isSedang}" onclick="ubahStatusTarot('${x.id}', 'Sedang Dibaca')">Sedang Dibaca</button>
-          <button class="pill-opt ${isSudah}" onclick="ubahStatusTarot('${x.id}', 'Sudah Dibaca')">Sudah</button>
-        </div>
-        <button class="btn-edit" onclick="mulaiEditAntrian('${x.id}')">✏️ Edit</button>
-        <button class="btn-hapus" onclick="hapusAntrian('${x.id}')">Hapus</button>
-      </div>
-    </article>`;
-  }).join('');
+  }
 }
 
 /* ══════ LAPORAN PENDAPATAN (2 MODE SESI) ══════
@@ -2669,10 +2741,20 @@ function renderLaporanTgl(){
   // Urutkan tanggal terbaru dulu
   const tglUrut = Object.keys(rekap).sort((a, b) => b.localeCompare(a));
 
+  // Potongan Yearly (20%) dibatasin maksimal Rp70.000 PER HARI -- kalau 20%
+  // pendapatan hari itu ngelewatin 70k, potongan hari itu dipotong jadi 70k
+  // aja, sisanya otomatis masuk ke bagian Anisa hari itu. Ini sengaja nggak
+  // diinfoin di tampilan, cuma logika di belakang layar aja. Ringkasan total
+  // di bawah nggak di-cap lagi -- itu murni jumlah dari semua yang beneran
+  // didapet tiap hari (termasuk yang udah kepotong 70k tadi), jadi selalu
+  // nunjukin total keseluruhan yang sebenarnya.
+  let grandPotongan = 0;
+
   tbody.innerHTML = tglUrut.map(kunci => {
     const r = rekap[kunci];
-    const potongan = Math.round(r.pendapatan * 0.2);
+    const potongan = solo ? 0 : Math.min(Math.round(r.pendapatan * 0.2), BATAS_YEARLY);
     const sisa = r.pendapatan - potongan;
+    grandPotongan += potongan;
 
     return `<tr>
       <td><strong>${aman(r.label)}</strong></td>
@@ -2687,12 +2769,10 @@ function renderLaporanTgl(){
     </tr>`;
   }).join('');
 
-  // Ringkasan total keseluruhan (semua tanggal digabung).
-  // Potongan Yearly (20%) dibatasin maksimal Rp70.000 total -- kalau udah
-  // ngelewatin itu, potongannya nggak nambah lagi walau pendapatan terus
-  // bertambah (sisanya otomatis masuk semua ke bagian Anisa). Ini sengaja
-  // nggak diinfoin di tampilan, cuma logika di belakang layar aja.
-  const grandPotongan = Math.min(Math.round(grandPendapatan * 0.2), BATAS_YEARLY);
+  // Ringkasan total keseluruhan (semua tanggal digabung) -- Total Pendapatan
+  // TETAP total penuh yang beneran didapet selama ini (nggak di-cap), Yearly
+  // di sini cuma hasil jumlah dari potongan tiap hari di atas (yang udah
+  // di-cap per hari), dan Anisa adalah sisanya.
   const grandSisa = grandPendapatan - grandPotongan;
   $('#lap-total-pendapatan').textContent = formatRp(grandPendapatan);
   if(solo){
