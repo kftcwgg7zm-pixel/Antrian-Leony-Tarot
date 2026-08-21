@@ -1000,6 +1000,7 @@ textarea.ada-tombol-suara{padding-right:42px !important}
 .tombol-suara.dengar{background:linear-gradient(160deg,#ef9cbf,#8fb3ee);color:#fff;
   animation:suaraDenyut 1.1s ease-in-out infinite}
 .tombol-suara:disabled{opacity:.35;cursor:not-allowed}
+.tombol-suara.sembunyi{display:none}
 @keyframes suaraDenyut{0%,100%{box-shadow:0 0 0 0 rgba(239,156,191,.55)}50%{box-shadow:0 0 0 9px rgba(239,156,191,0)}}
 </style>
 <script>
@@ -3351,23 +3352,33 @@ function gambarTesti(){
 muatAntrianLocal();
 </script>
 
-<!-- ═════════ INPUT SUARA (VOICE COMMAND + AUTO-KIRIM) — KHUSUS DASHBOARD ADMIN ═════════
-     Tombol mic 🎙 di kolom "Nama Customer" (form "Input Antrian Baru",
-     baris pertama maupun baris tambahan). Tinggal tap, lalu ngomong
-     satu kalimat berisi NAMA + HARGA + TIPE sekaligus, misalnya:
-       "input Abelle 15k reguler"
-       "Kirana 25 ribu fast track"
-       "Dinda 5k"                → tipe default Reguler
-     Otomatis: nama masuk ke kolom, pill harga & tipe yang cocok
-     ke-klik sendiri, form langsung KE-KIRIM sendiri (nggak usah pencet
-     "Kirim Semua ke Antrian" lagi), lalu begitu berhasil sistem
-     "ngomong balik" konfirmasinya lewat text-to-speech, misal:
-       "Abelle 15k reguler berhasil masuk antrian"
-     Kalau gagal (mis. sesi admin habis / koneksi putus), sistem
-     ngomong pesan errornya juga biar ketauan tanpa perlu liat layar.
+<!-- ═════════ INPUT SUARA (VOICE COMMAND + AUTO-KIRIM) — KHUSUS MODE "LIVE SENDIRI" ═════════
+     Tombol mic 🎙 di kolom "Nama Customer" (form "Input Antrian Baru"),
+     TAPI cuma muncul pas tab sesi lagi di "🌷 Live Sendiri". Pas pindah
+     ke "👥 Live + Moderator", tombolnya otomatis ilang lagi.
+
+     Di mode Live Sendiri, field "Harga Order" (pill 5K/10K/15K/25K)
+     ikut disembunyiin dari form — asumsinya tiap orderan di mode ini
+     dianggap harga standar 5K (nilai default yang emang udah kepilih),
+     jadi nggak perlu disebut/dipilih lagi. Kalau ternyata harganya mau
+     beda-beda, kasih tau ya, field-nya gampang dimunculin lagi.
+
+     Sekarang cukup ngomong NAMA + TIPE aja (tipe boleh nggak disebut,
+     defaultnya Reguler), misalnya:
+       "input Abelle reguler"
+       "Kirana fast track"
+       "Dinda"                  → tipe otomatis Reguler
+     Lebih sedikit yang perlu didengerin = lebih jarang salah tangkep.
+
+     Begitu ngomong: nama & tipe langsung keisi, form langsung KE-KIRIM
+     sendiri, terus sistem "ngomong balik" konfirmasinya, misal:
+       "Abelle reguler berhasil masuk antrian"
+     Kalau gagal (mis. sesi admin habis / koneksi putus), sistem ngomong
+     pesan errornya juga.
+
      Pakai Web Speech API bawaan browser — paling stabil di Chrome/Edge
      Android & desktop. Kalau browsernya nggak dukung (mis. Firefox),
-     tombol nggak dipasang sama sekali, jadi nggak ganggu apa-apa. -->
+     tombol nggak dipasang sama sekali. -->
 <script>
 (function(){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -3375,7 +3386,12 @@ muatAntrianLocal();
 
   const WADAH_TARGET = '#daftar-input-container';
   const SELEKTOR_TARGET = '.i-detail';
-  const OPSI_HARGA = [5000, 10000, 15000, 25000];
+  const HARGA_DEFAULT_SOLO = 5000; // harga standar dipakai diam-diam di mode Live Sendiri
+
+  function modeSoloAktif(){
+    // "sesiAktif" didefinisikan di script utama halaman ini ('solo' / 'mod')
+    return typeof sesiAktif !== 'undefined' && sesiAktif === 'solo';
+  }
 
   /* ── ngomong balik lewat text-to-speech bawaan browser ── */
   function ucapkan(teks){
@@ -3389,33 +3405,17 @@ muatAntrianLocal();
     } catch(err){ console.error(err); }
   }
 
-  /* ── uraikan kalimat suara jadi {nama, harga, tipe} ── */
+  /* ── uraikan kalimat suara jadi {nama, tipe} — udah nggak perlu urus harga ── */
   function uraiPerintah(mentah){
     let t = ' ' + mentah.toLowerCase().trim() + ' ';
 
-    // tipe antrian
     let tipe = null;
-    if(/fast\s*track|\bft\b|express/.test(t)){
+    if(/fast\s*track|\bft\b|express|fas\s*trek/.test(t)){
       tipe = 'Fast Track';
-      t = t.replace(/fast\s*track|\bft\b|express/g, ' ');
-    } else if(/\breguler\b|\bregular\b|\breg\b/.test(t)){
+      t = t.replace(/fast\s*track|\bft\b|express|fas\s*trek/g, ' ');
+    } else if(/\bregul[ae]r\b|\bregular\b|\breg\b|\bregulir\b/.test(t)){
       tipe = 'Reguler';
-      t = t.replace(/\breguler\b|\bregular\b|\breg\b/g, ' ');
-    }
-
-    // harga: "15k" / "15 k" / "15rb" / "15 ribu" / angka polos 5000-25000
-    let harga = null;
-    const mK = t.match(/(\d+)\s*(rb|ribu|k)\b/);
-    if(mK){
-      harga = parseInt(mK[1], 10) * 1000;
-      t = t.replace(mK[0], ' ');
-    } else {
-      const mPolos = t.match(/\b(5000|10000|15000|25000)\b/);
-      if(mPolos){ harga = parseInt(mPolos[1], 10); t = t.replace(mPolos[0], ' '); }
-    }
-    if(harga !== null && !OPSI_HARGA.includes(harga)){
-      // bulatin ke opsi pill terdekat kalau kesebutnya nggak pas persis
-      harga = OPSI_HARGA.reduce((a, b) => Math.abs(b - harga) < Math.abs(a - harga) ? b : a);
+      t = t.replace(/\bregul[ae]r\b|\bregular\b|\breg\b|\bregulir\b/g, ' ');
     }
 
     // buang kata-kata pemicu/pengisi umum, sisanya = nama
@@ -3423,7 +3423,24 @@ muatAntrianLocal();
     t = t.replace(/\s+/g, ' ').trim();
     const nama = t.replace(/\b\w/g, c => c.toUpperCase());
 
-    return { nama, harga, tipe };
+    return { nama, tipe };
+  }
+
+  /* ── dari beberapa alternatif hasil dengaran, pilih yang paling "masuk akal"
+        (ada kata tipe yang kekenal & sisa namanya nggak kosong) ── */
+  function pilihAlternatifTerbaik(hasil){
+    let terbaik = null;
+    for(let i = 0; i < hasil.length; i++){
+      const teks = hasil[i].transcript;
+      const u = uraiPerintah(teks);
+      if(!u.nama) continue;
+      const skor = (u.tipe ? 1 : 0);
+      if(!terbaik || skor > terbaik.skor) terbaik = { ...u, skor, mentah: teks };
+      if(skor > 0) break; // udah dapet yang jelas tipenya, cukup
+    }
+    if(terbaik) return terbaik;
+    // semua alternatif namanya kosong (cuma nyebut tipe doang / kedengeran kosong)
+    return uraiPerintah(hasil[0] ? hasil[0].transcript : '');
   }
 
   /* ── pantau pesan status form, biar bisa "ngomong balik" pas beneran kesimpan ── */
@@ -3464,7 +3481,7 @@ muatAntrianLocal();
     btn.type = 'button';
     btn.className = 'tombol-suara';
     btn.setAttribute('aria-label', 'Ngomong buat langsung input & kirim ke antrian');
-    btn.title = 'Ngomong: "nama, harga, tipe" — misal "Abelle 15k reguler" — langsung kekirim otomatis';
+    btn.title = 'Ngomong: "nama, tipe" — misal "Abelle reguler" — langsung kekirim otomatis';
     btn.textContent = '🎙';
     wadah.appendChild(btn);
 
@@ -3479,7 +3496,7 @@ muatAntrianLocal();
       rec = new SR();
       rec.lang = 'id-ID';
       rec.interimResults = false;
-      rec.maxAlternatives = 1;
+      rec.maxAlternatives = 3; // ambil beberapa kemungkinan, pilih yang paling masuk akal
 
       rec.onstart = function(){ dengar = true; btn.classList.add('dengar'); btn.textContent = '●'; };
       rec.onend   = function(){ dengar = false; btn.classList.remove('dengar'); btn.textContent = '🎙'; };
@@ -3490,10 +3507,8 @@ muatAntrianLocal();
         }
       };
       rec.onresult = function(ev){
-        const mentah = ev.results[0][0].transcript;
-        if(!mentah) return;
-
-        const { nama, harga, tipe } = uraiPerintah(mentah);
+        if(!ev.results || !ev.results[0] || !ev.results[0].length) return;
+        const { nama, tipe } = pilihAlternatifTerbaik(ev.results[0]);
         const baris = elInput.closest('.baris-input-item') || elInput.closest('.jendela') || document;
 
         if(!nama){
@@ -3504,10 +3519,6 @@ muatAntrianLocal();
         elInput.value = nama;
         elInput.dispatchEvent(new Event('input', {bubbles:true}));
 
-        if(harga !== null){
-          const pilHarga = baris.querySelector(`.pill-harga-opt[data-harga="${harga}"]`);
-          if(pilHarga) pilHarga.click();
-        }
         if(tipe === 'Fast Track'){
           const pilFt = baris.querySelector('.btn-ft');
           if(pilFt) pilFt.click();
@@ -3516,11 +3527,12 @@ muatAntrianLocal();
           if(pilReg) pilReg.click();
         }
 
-        // siapin kalimat konfirmasi SEBELUM form di-reset (biar datanya masih ada)
-        const hargaAkhir = parseInt((baris.querySelector('.i-harga-val') || {}).value, 10) || 5000;
+        // harga nggak ditanya lagi di mode ini — dipastiin tetep di nilai standar
+        const inputHarga = baris.querySelector('.i-harga-val');
+        if(inputHarga) inputHarga.value = String(HARGA_DEFAULT_SOLO);
+
         const tipeAkhir = (baris.querySelector('.i-tipe-val') || {}).value || 'Reguler';
-        const labelHarga = Math.round(hargaAkhir / 1000) + 'k';
-        ucapanSuksesTertunda = `${nama} ${labelHarga} ${tipeAkhir.toLowerCase()} berhasil masuk antrian`;
+        ucapanSuksesTertunda = `${nama} ${tipeAkhir.toLowerCase()} berhasil masuk antrian`;
 
         // langsung kirim form-nya, nggak usah pencet tombol manual lagi
         const form = document.querySelector('#form-input');
@@ -3538,7 +3550,25 @@ muatAntrianLocal();
     (root || document).querySelectorAll(SELEKTOR_TARGET).forEach(pasangTombol);
   }
 
+  /* ── tampilin/sembunyiin mic & field harga sesuai mode sesi yang aktif ── */
+  function terapkanModeSesi(){
+    const solo = modeSoloAktif();
+    document.querySelectorAll(WADAH_TARGET + ' .tombol-suara').forEach(btn => {
+      btn.classList.toggle('sembunyi', !solo);
+    });
+    document.querySelectorAll(WADAH_TARGET + ' .pills-harga-input').forEach(pills => {
+      const wrap = pills.parentElement; // div pembungkus label + pills + input tersembunyi
+      if(wrap) wrap.style.display = solo ? 'none' : '';
+      if(solo){
+        const inputHarga = wrap ? wrap.querySelector('.i-harga-val') : null;
+        if(inputHarga) inputHarga.value = String(HARGA_DEFAULT_SOLO);
+      }
+    });
+  }
+
   pasangSemua();
+  terapkanModeSesi();
+
   new MutationObserver(function(mutasi){
     mutasi.forEach(function(m){
       m.addedNodes.forEach(function(node){
@@ -3547,7 +3577,14 @@ muatAntrianLocal();
         if(node.querySelectorAll) pasangSemua(node);
       });
     });
+    terapkanModeSesi(); // baris baru ikut nurut mode yang lagi aktif
   }).observe(document.querySelector(WADAH_TARGET) || document.body, {childList:true, subtree:true});
+
+  // pita label mode (#pita-input) ganti class 'mod' pas admin pindah tab sesi
+  const elPita = document.querySelector('#pita-input');
+  if(elPita){
+    new MutationObserver(terapkanModeSesi).observe(elPita, {attributes:true, attributeFilter:['class']});
+  }
 })();
 </script>
 </body>
