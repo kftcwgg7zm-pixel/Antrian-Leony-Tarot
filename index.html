@@ -985,6 +985,22 @@ html[data-tema="gelap1"] .buka-semua:hover,html[data-tema="gelap2"] .buka-semua:
   background:var(--rose-bg);border-color:var(--rose-tepi)}
 html[data-tema="gelap1"] .buka-semua .jml,html[data-tema="gelap2"] .buka-semua .jml{
   background:var(--rose-bg);border-color:var(--rose-tepi);color:var(--rose)}
+/* ═════════ INPUT SUARA (VOICE-TO-TEXT) ═════════ */
+.wadah-suara{position:relative;display:block}
+input.ada-tombol-suara{padding-right:42px !important}
+textarea.ada-tombol-suara{padding-right:42px !important}
+.tombol-suara{position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  width:29px;height:29px;border-radius:50%;border:none;cursor:pointer;padding:0;
+  background:linear-gradient(160deg,#fbd9e6,#cfe1fa);color:#7a5a78;
+  display:grid;place-items:center;font-size:14px;line-height:1;
+  box-shadow:0 4px 10px -4px rgba(120,140,190,.6);transition:transform .15s,background .2s}
+.tombol-suara.atas{top:12px;transform:none}
+.tombol-suara:hover{transform:translateY(-50%) scale(1.08)}
+.tombol-suara.atas:hover{transform:scale(1.08)}
+.tombol-suara.dengar{background:linear-gradient(160deg,#ef9cbf,#8fb3ee);color:#fff;
+  animation:suaraDenyut 1.1s ease-in-out infinite}
+.tombol-suara:disabled{opacity:.35;cursor:not-allowed}
+@keyframes suaraDenyut{0%,100%{box-shadow:0 0 0 0 rgba(239,156,191,.55)}50%{box-shadow:0 0 0 9px rgba(239,156,191,0)}}
 </style>
 <script>
 /* Dijalanin paling awal biar temanya udah nempel sebelum halaman digambar —
@@ -3333,6 +3349,206 @@ function gambarTesti(){
 })();
 
 muatAntrianLocal();
+</script>
+
+<!-- ═════════ INPUT SUARA (VOICE COMMAND + AUTO-KIRIM) — KHUSUS DASHBOARD ADMIN ═════════
+     Tombol mic 🎙 di kolom "Nama Customer" (form "Input Antrian Baru",
+     baris pertama maupun baris tambahan). Tinggal tap, lalu ngomong
+     satu kalimat berisi NAMA + HARGA + TIPE sekaligus, misalnya:
+       "input Abelle 15k reguler"
+       "Kirana 25 ribu fast track"
+       "Dinda 5k"                → tipe default Reguler
+     Otomatis: nama masuk ke kolom, pill harga & tipe yang cocok
+     ke-klik sendiri, form langsung KE-KIRIM sendiri (nggak usah pencet
+     "Kirim Semua ke Antrian" lagi), lalu begitu berhasil sistem
+     "ngomong balik" konfirmasinya lewat text-to-speech, misal:
+       "Abelle 15k reguler berhasil masuk antrian"
+     Kalau gagal (mis. sesi admin habis / koneksi putus), sistem
+     ngomong pesan errornya juga biar ketauan tanpa perlu liat layar.
+     Pakai Web Speech API bawaan browser — paling stabil di Chrome/Edge
+     Android & desktop. Kalau browsernya nggak dukung (mis. Firefox),
+     tombol nggak dipasang sama sekali, jadi nggak ganggu apa-apa. -->
+<script>
+(function(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return; // browser tak dukung pengenalan suara
+
+  const WADAH_TARGET = '#daftar-input-container';
+  const SELEKTOR_TARGET = '.i-detail';
+  const OPSI_HARGA = [5000, 10000, 15000, 25000];
+
+  /* ── ngomong balik lewat text-to-speech bawaan browser ── */
+  function ucapkan(teks){
+    try{
+      if(!('speechSynthesis' in window) || !teks) return;
+      window.speechSynthesis.cancel(); // potong ucapan sebelumnya kalau numpuk
+      const u = new SpeechSynthesisUtterance(teks);
+      u.lang = 'id-ID';
+      u.rate = 1;
+      window.speechSynthesis.speak(u);
+    } catch(err){ console.error(err); }
+  }
+
+  /* ── uraikan kalimat suara jadi {nama, harga, tipe} ── */
+  function uraiPerintah(mentah){
+    let t = ' ' + mentah.toLowerCase().trim() + ' ';
+
+    // tipe antrian
+    let tipe = null;
+    if(/fast\s*track|\bft\b|express/.test(t)){
+      tipe = 'Fast Track';
+      t = t.replace(/fast\s*track|\bft\b|express/g, ' ');
+    } else if(/\breguler\b|\bregular\b|\breg\b/.test(t)){
+      tipe = 'Reguler';
+      t = t.replace(/\breguler\b|\bregular\b|\breg\b/g, ' ');
+    }
+
+    // harga: "15k" / "15 k" / "15rb" / "15 ribu" / angka polos 5000-25000
+    let harga = null;
+    const mK = t.match(/(\d+)\s*(rb|ribu|k)\b/);
+    if(mK){
+      harga = parseInt(mK[1], 10) * 1000;
+      t = t.replace(mK[0], ' ');
+    } else {
+      const mPolos = t.match(/\b(5000|10000|15000|25000)\b/);
+      if(mPolos){ harga = parseInt(mPolos[1], 10); t = t.replace(mPolos[0], ' '); }
+    }
+    if(harga !== null && !OPSI_HARGA.includes(harga)){
+      // bulatin ke opsi pill terdekat kalau kesebutnya nggak pas persis
+      harga = OPSI_HARGA.reduce((a, b) => Math.abs(b - harga) < Math.abs(a - harga) ? b : a);
+    }
+
+    // buang kata-kata pemicu/pengisi umum, sisanya = nama
+    t = t.replace(/\b(input|tambah|masukin|masukkan|catat|catet|order|antrian|antri|untuk|atas nama|nama|customer|pelanggan|orderan)\b/g, ' ');
+    t = t.replace(/\s+/g, ' ').trim();
+    const nama = t.replace(/\b\w/g, c => c.toUpperCase());
+
+    return { nama, harga, tipe };
+  }
+
+  /* ── pantau pesan status form, biar bisa "ngomong balik" pas beneran kesimpan ── */
+  let ucapanSuksesTertunda = '';
+  const elStatus = document.querySelector('#i-status');
+  if(elStatus){
+    new MutationObserver(function(){
+      if(elStatus.classList.contains('ok')){
+        ucapkan(ucapanSuksesTertunda || elStatus.textContent);
+        ucapanSuksesTertunda = '';
+      } else if(elStatus.classList.contains('err')){
+        ucapkan(elStatus.textContent);
+        ucapanSuksesTertunda = '';
+      }
+    }).observe(elStatus, {attributes:true, attributeFilter:['class']});
+  }
+
+  function layak(el){
+    if(el.dataset.suaraTerpasang) return false;
+    if(el.disabled || el.readOnly) return false;
+    if(!el.matches(SELEKTOR_TARGET)) return false;
+    if(!el.closest(WADAH_TARGET)) return false;
+    if(el.tagName === 'INPUT' && el.type !== 'text') return false;
+    return true;
+  }
+
+  function pasangTombol(elInput){
+    if(!layak(elInput)) return;
+    elInput.dataset.suaraTerpasang = '1';
+
+    const wadah = document.createElement('span');
+    wadah.className = 'wadah-suara';
+    elInput.parentNode.insertBefore(wadah, elInput);
+    wadah.appendChild(elInput);
+    elInput.classList.add('ada-tombol-suara');
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'tombol-suara';
+    btn.setAttribute('aria-label', 'Ngomong buat langsung input & kirim ke antrian');
+    btn.title = 'Ngomong: "nama, harga, tipe" — misal "Abelle 15k reguler" — langsung kekirim otomatis';
+    btn.textContent = '🎙';
+    wadah.appendChild(btn);
+
+    let rec = null, dengar = false;
+
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+
+      if(dengar){ rec && rec.stop(); return; }
+
+      rec = new SR();
+      rec.lang = 'id-ID';
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+
+      rec.onstart = function(){ dengar = true; btn.classList.add('dengar'); btn.textContent = '●'; };
+      rec.onend   = function(){ dengar = false; btn.classList.remove('dengar'); btn.textContent = '🎙'; };
+      rec.onerror = function(ev){
+        dengar = false; btn.classList.remove('dengar'); btn.textContent = '🎙';
+        if(ev.error === 'not-allowed' || ev.error === 'service-not-allowed'){
+          alert('Akses mic-nya diblokir. Izinin dulu ya lewat pengaturan browser ♡');
+        }
+      };
+      rec.onresult = function(ev){
+        const mentah = ev.results[0][0].transcript;
+        if(!mentah) return;
+
+        const { nama, harga, tipe } = uraiPerintah(mentah);
+        const baris = elInput.closest('.baris-input-item') || elInput.closest('.jendela') || document;
+
+        if(!nama){
+          ucapkan('Nama pelanggannya nggak kedengeran, coba ulang lagi ya');
+          return;
+        }
+
+        elInput.value = nama;
+        elInput.dispatchEvent(new Event('input', {bubbles:true}));
+
+        if(harga !== null){
+          const pilHarga = baris.querySelector(`.pill-harga-opt[data-harga="${harga}"]`);
+          if(pilHarga) pilHarga.click();
+        }
+        if(tipe === 'Fast Track'){
+          const pilFt = baris.querySelector('.btn-ft');
+          if(pilFt) pilFt.click();
+        } else if(tipe === 'Reguler'){
+          const pilReg = baris.querySelector('.btn-reg');
+          if(pilReg) pilReg.click();
+        }
+
+        // siapin kalimat konfirmasi SEBELUM form di-reset (biar datanya masih ada)
+        const hargaAkhir = parseInt((baris.querySelector('.i-harga-val') || {}).value, 10) || 5000;
+        const tipeAkhir = (baris.querySelector('.i-tipe-val') || {}).value || 'Reguler';
+        const labelHarga = Math.round(hargaAkhir / 1000) + 'k';
+        ucapanSuksesTertunda = `${nama} ${labelHarga} ${tipeAkhir.toLowerCase()} berhasil masuk antrian`;
+
+        // langsung kirim form-nya, nggak usah pencet tombol manual lagi
+        const form = document.querySelector('#form-input');
+        if(form){
+          if(form.requestSubmit) form.requestSubmit();
+          else form.dispatchEvent(new Event('submit', {cancelable:true, bubbles:true}));
+        }
+      };
+
+      try{ rec.start(); } catch(err){ console.error(err); }
+    });
+  }
+
+  function pasangSemua(root){
+    (root || document).querySelectorAll(SELEKTOR_TARGET).forEach(pasangTombol);
+  }
+
+  pasangSemua();
+  new MutationObserver(function(mutasi){
+    mutasi.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if(node.nodeType !== 1) return;
+        if(node.matches && node.matches(SELEKTOR_TARGET)) pasangTombol(node);
+        if(node.querySelectorAll) pasangSemua(node);
+      });
+    });
+  }).observe(document.querySelector(WADAH_TARGET) || document.body, {childList:true, subtree:true});
+})();
 </script>
 </body>
 </html>
