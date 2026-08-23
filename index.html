@@ -226,6 +226,26 @@ p{margin:0 0 12px}
 .kotak-qris{text-align:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--garis)}
 .kotak-qris img{width:100%;max-width:230px;border-radius:18px;border:1px solid var(--garis);box-shadow:var(--bayang-lembut)}
 .kotak-qris .ket{font-size:11.5px;color:var(--tinta-muda);margin-top:9px;letter-spacing:.03em}
+/* KATEGORI PRICELIST (General / Asmara Only) */
+.tag-kategori{display:inline-block;margin:18px 0 2px;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+  padding:7px 14px;border-radius:999px;background:linear-gradient(160deg,#fdf0f6,#f7dcea);
+  color:#b4708f;border:1px solid #f0b9d3;box-shadow:var(--bayang-lembut);font-weight:700}
+.daftar-harga li span{display:flex;flex-direction:column;gap:2px}
+.ket-kartu{font-style:normal;font-size:11px;color:var(--tinta-muda);letter-spacing:.02em}
+
+/* BLOK PERATURAN */
+.blok-peraturan{margin-top:26px;padding-top:18px;border-top:1px solid var(--garis)}
+.tag-peraturan{display:inline-block;margin-bottom:12px;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+  padding:7px 14px;border-radius:999px;background:linear-gradient(160deg,#fff3e2,#ffe3c9);
+  color:#a97a4a;border:1px solid #f3cfa5;box-shadow:var(--bayang-lembut);font-weight:700}
+.daftar-peraturan{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.daftar-peraturan li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.5}
+.daftar-peraturan li b{display:block;color:var(--tinta);font-weight:700}
+.daftar-peraturan li i{font-style:normal;font-size:12px;color:var(--tinta-muda)}
+.ikon-larang{flex:0 0 auto;font-size:14px;line-height:1.4}
+.catatan-peraturan{margin-top:14px;font-size:12px;color:var(--tinta-muda);text-align:center;
+  padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.55);border:1px dashed var(--garis)}
+
 .privasi-aman{margin-top:14px;text-align:center;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
   font-weight:700;color:#5c8a68;background:#eef8f0;border:1px solid #d3ecd9;border-radius:14px;padding:10px}
 .jam-jawab{margin-top:10px;text-align:center;font-size:12.5px;color:var(--tinta-muda)}
@@ -531,7 +551,11 @@ label{font-size:12px;letter-spacing:.12em;font-weight:700}
 .avatar{width:34px;height:34px;font-size:15px;font-weight:700}
 .daftar-harga li{font-size:16px;font-weight:500;padding:14px 2px}
 .daftar-harga li b{font-size:17px;font-weight:800}
-.tag-fast,.tag-privat{font-size:11.5px;letter-spacing:.1em}
+.tag-fast,.tag-privat,.tag-kategori,.tag-peraturan{font-size:11.5px;letter-spacing:.1em}
+  .ket-kartu{font-size:12.5px}
+  .daftar-peraturan li{font-size:14.5px}
+  .daftar-peraturan li i{font-size:13px}
+  .catatan-peraturan{font-size:13px}
 .langkah-order .baris-langkah{font-size:15px;line-height:1.55}
 .langkah-order .no{width:25px;height:25px;font-size:13px;font-weight:800}
 .kartu-info-biru{font-size:14.5px;line-height:1.6}
@@ -757,7 +781,7 @@ html[data-tema="gelap1"] .gelembung{background:var(--panel-2);border:1px solid v
 
 /* ── PRICELIST ── */
 html[data-tema="gelap1"] .daftar-harga li{color:var(--teks);border-bottom:1px dashed var(--tepi)}html[data-tema="gelap1"] .daftar-harga li b{color:var(--rose)}html[data-tema="gelap1"] .tag-fast{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi);
-  box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap1"] .langkah-order .baris-langkah{color:var(--teks)}html[data-tema="gelap1"] .langkah-order .no{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi)}html[data-tema="gelap1"] .blok-biru .daftar-harga li{border-bottom-color:var(--tepi)}html[data-tema="gelap1"] .blok-biru .daftar-harga li b{color:var(--biru)}html[data-tema="gelap1"] .blok-biru .langkah-order .no{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .blok-biru .sub{background:var(--grad-sub-biru);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap1"] .tag-privat{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap1"] .kartu-info-biru{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks)}html[data-tema="gelap1"] .kartu-info-biru b{color:var(--biru)}html[data-tema="gelap1"] .akun-tuju{background:var(--panel-3);border:1px dashed var(--biru-tepi);color:var(--biru)}html[data-tema="gelap1"] .jam-jawab{color:var(--teks-lemah)}html[data-tema="gelap1"] .privasi-aman{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap1"] .kotak-qris{border-top:1px solid var(--tepi)}
+  box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap1"] .langkah-order .baris-langkah{color:var(--teks)}html[data-tema="gelap1"] .langkah-order .no{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi)}html[data-tema="gelap1"] .blok-biru .daftar-harga li{border-bottom-color:var(--tepi)}html[data-tema="gelap1"] .blok-biru .daftar-harga li b{color:var(--biru)}html[data-tema="gelap1"] .blok-biru .langkah-order .no{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap1"] .blok-biru .sub{background:var(--grad-sub-biru);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap1"] .tag-privat{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap1"] .kartu-info-biru{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks)}html[data-tema="gelap1"] .kartu-info-biru b{color:var(--biru)}html[data-tema="gelap1"] .akun-tuju{background:var(--panel-3);border:1px dashed var(--biru-tepi);color:var(--biru)}html[data-tema="gelap1"] .jam-jawab{color:var(--teks-lemah)}html[data-tema="gelap1"] .privasi-aman{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap1"] .tag-kategori{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi);box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap1"] .ket-kartu{color:var(--teks-lemah)}html[data-tema="gelap1"] .blok-peraturan{border-top:1px solid var(--tepi)}html[data-tema="gelap1"] .tag-peraturan{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap1"] .daftar-peraturan li{color:var(--teks)}html[data-tema="gelap1"] .daftar-peraturan li b{color:var(--teks)}html[data-tema="gelap1"] .daftar-peraturan li i{color:var(--teks-lemah)}html[data-tema="gelap1"] .catatan-peraturan{background:var(--panel-2);border:1px dashed var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap1"] .kotak-qris{border-top:1px solid var(--tepi)}
 /* QR dikasih bantalan putih biar tetap kebaca kamera di layar gelap */
 html[data-tema="gelap1"] .kotak-qris img{background:#fff;padding:12px;border:1px solid var(--tepi-terang);
   box-shadow:0 14px 32px -16px rgba(0,0,0,.9)}html[data-tema="gelap1"] .kotak-qris .ket{color:var(--teks-lemah)}
@@ -845,7 +869,7 @@ html[data-tema="gelap2"] .gelembung{background:var(--panel-2);border:1px solid v
 
 /* ── PRICELIST ── */
 html[data-tema="gelap2"] .daftar-harga li{color:var(--teks);border-bottom:1px dashed var(--tepi)}html[data-tema="gelap2"] .daftar-harga li b{color:var(--rose)}html[data-tema="gelap2"] .tag-fast{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi);
-  box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap2"] .langkah-order .baris-langkah{color:var(--teks)}html[data-tema="gelap2"] .langkah-order .no{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi)}html[data-tema="gelap2"] .blok-biru .daftar-harga li{border-bottom-color:var(--tepi)}html[data-tema="gelap2"] .blok-biru .daftar-harga li b{color:var(--biru)}html[data-tema="gelap2"] .blok-biru .langkah-order .no{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .blok-biru .sub{background:var(--grad-sub-biru);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap2"] .tag-privat{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap2"] .kartu-info-biru{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks)}html[data-tema="gelap2"] .kartu-info-biru b{color:var(--biru)}html[data-tema="gelap2"] .akun-tuju{background:var(--panel-3);border:1px dashed var(--biru-tepi);color:var(--biru)}html[data-tema="gelap2"] .jam-jawab{color:var(--teks-lemah)}html[data-tema="gelap2"] .privasi-aman{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap2"] .kotak-qris{border-top:1px solid var(--tepi)}
+  box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap2"] .langkah-order .baris-langkah{color:var(--teks)}html[data-tema="gelap2"] .langkah-order .no{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi)}html[data-tema="gelap2"] .blok-biru .daftar-harga li{border-bottom-color:var(--tepi)}html[data-tema="gelap2"] .blok-biru .daftar-harga li b{color:var(--biru)}html[data-tema="gelap2"] .blok-biru .langkah-order .no{background:var(--biru-bg);color:var(--biru);border-color:var(--biru-tepi)}html[data-tema="gelap2"] .blok-biru .sub{background:var(--grad-sub-biru);-webkit-background-clip:text;background-clip:text}html[data-tema="gelap2"] .tag-privat{background:var(--biru-bg);color:var(--biru);border:1px solid var(--biru-tepi)}html[data-tema="gelap2"] .kartu-info-biru{background:var(--biru-bg);border:1px solid var(--biru-tepi);color:var(--teks)}html[data-tema="gelap2"] .kartu-info-biru b{color:var(--biru)}html[data-tema="gelap2"] .akun-tuju{background:var(--panel-3);border:1px dashed var(--biru-tepi);color:var(--biru)}html[data-tema="gelap2"] .jam-jawab{color:var(--teks-lemah)}html[data-tema="gelap2"] .privasi-aman{background:var(--hijau-bg);color:var(--hijau);border:1px solid var(--hijau-tepi)}html[data-tema="gelap2"] .tag-kategori{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-tepi);box-shadow:0 8px 18px -12px var(--rose-glow)}html[data-tema="gelap2"] .ket-kartu{color:var(--teks-lemah)}html[data-tema="gelap2"] .blok-peraturan{border-top:1px solid var(--tepi)}html[data-tema="gelap2"] .tag-peraturan{background:var(--emas-bg);color:var(--emas-w);border:1px solid var(--emas-tepi)}html[data-tema="gelap2"] .daftar-peraturan li{color:var(--teks)}html[data-tema="gelap2"] .daftar-peraturan li b{color:var(--teks)}html[data-tema="gelap2"] .daftar-peraturan li i{color:var(--teks-lemah)}html[data-tema="gelap2"] .catatan-peraturan{background:var(--panel-2);border:1px dashed var(--tepi);color:var(--teks-lemah)}html[data-tema="gelap2"] .kotak-qris{border-top:1px solid var(--tepi)}
 /* QR dikasih bantalan putih biar tetap kebaca kamera di layar gelap */
 html[data-tema="gelap2"] .kotak-qris img{background:#fff;padding:12px;border:1px solid var(--tepi-terang);
   box-shadow:0 14px 32px -16px rgba(0,0,0,.9)}html[data-tema="gelap2"] .kotak-qris .ket{color:var(--teks-lemah)}
@@ -1222,12 +1246,14 @@ textarea.ada-tombol-suara{padding-right:42px !important}
                   <div style="flex:1;min-width:160px">
                     <label>Harga Order</label>
                     <div class="pills-harga-input">
-                      <button type="button" class="pill-harga-opt aktif" data-harga="5000">5K</button>
-                      <button type="button" class="pill-harga-opt" data-harga="10000">10K</button>
+                      <button type="button" class="pill-harga-opt aktif" data-harga="7000">7K</button>
+                      <button type="button" class="pill-harga-opt" data-harga="8000">8K</button>
                       <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
+                      <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
                       <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
+                      <button type="button" class="pill-harga-opt" data-harga="35000">35K</button>
                     </div>
-                    <input type="hidden" class="i-harga-val" value="5000">
+                    <input type="hidden" class="i-harga-val" value="7000">
                   </div>
                   <div style="flex:1;min-width:160px">
                     <label>Status Tipe Antrian</label>
@@ -1250,45 +1276,6 @@ textarea.ada-tombol-suara{padding-right:42px !important}
             <div class="pesan-status" id="i-status"></div>
             <button type="submit" class="kirim" id="btn-input">Kirim Semua ke Antrian ♡</button>
           </form>
-        </div>
-      </div>
-
-      <!-- LAPORAN PERTANYAAN PER TANGGAL -->
-      <div class="jendela">
-        <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">laporan_harian</span></div>
-        <div class="isi">
-          <h2 class="sub" style="margin-bottom:6px">Laporan Pendapatan</h2>
-          <div style="margin-bottom:10px"><span class="pita-mode" id="pita-laporan">🌷 Live Sendiri</span></div>
-          <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Rekap semua orang yang order per tanggal. Semua data lama tetap kesimpan di sini selamanya, walaupun antrian berjalannya udah dikosongin ♡</p>
-
-          <!-- Ringkasan Total Keseluruhan -->
-          <div class="papan-stat" id="papan-lap" style="grid-template-columns:repeat(3,1fr)">
-            <div class="kartu-stat">
-              <div class="angka" id="lap-total-pendapatan" style="color:#5d6c8d;font-size:16px">Rp0</div>
-              <div class="lbl">Total Pendapatan</div>
-            </div>
-            <div class="kartu-stat" id="kartu-yearly">
-              <div class="angka" id="lap-potongan-mod" style="color:#a67c00;font-size:16px">Rp0</div>
-              <div class="lbl" id="lbl-yearly">Yearly (20%)</div>
-            </div>
-            <div class="kartu-stat" id="kartu-anisa">
-              <div class="angka" id="lap-sisa-kamu" style="color:#5c8a68;font-size:16px">Rp0</div>
-              <div class="lbl" id="lbl-anisa">Anisa (80%)</div>
-            </div>
-          </div>
-
-          <p style="font-size:12.5px;color:var(--tinta-muda);margin:0 0 10px">Buat lihat siapa aja yang order, buka <b>Arsip</b> di panel Antrian Berjalan di bawah ♡</p>
-
-          <div style="overflow-x:auto;">
-            <table class="tabel-laporan">
-              <thead id="tabel-laporan-head">
-                <!-- Header dibuat lewat JS (nyesuain mode sesi) -->
-              </thead>
-              <tbody id="tabel-laporan-body">
-                <!-- Data Laporan dimasukkan lewat JS -->
-              </tbody>
-            </table>
-          </div>
         </div>
       </div>
 
@@ -1336,6 +1323,45 @@ textarea.ada-tombol-suara{padding-right:42px !important}
         </div>
       </div>
 
+      <!-- LAPORAN PERTANYAAN PER TANGGAL -->
+      <div class="jendela">
+        <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">laporan_harian</span></div>
+        <div class="isi">
+          <h2 class="sub" style="margin-bottom:6px">Laporan Pendapatan</h2>
+          <div style="margin-bottom:10px"><span class="pita-mode" id="pita-laporan">🌷 Live Sendiri</span></div>
+          <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Rekap semua orang yang order per tanggal. Semua data lama tetap kesimpan di sini selamanya, walaupun antrian berjalannya udah dikosongin ♡</p>
+
+          <!-- Ringkasan Total Keseluruhan -->
+          <div class="papan-stat" id="papan-lap" style="grid-template-columns:repeat(3,1fr)">
+            <div class="kartu-stat">
+              <div class="angka" id="lap-total-pendapatan" style="color:#5d6c8d;font-size:16px">Rp0</div>
+              <div class="lbl">Total Pendapatan</div>
+            </div>
+            <div class="kartu-stat" id="kartu-yearly">
+              <div class="angka" id="lap-potongan-mod" style="color:#a67c00;font-size:16px">Rp0</div>
+              <div class="lbl" id="lbl-yearly">Yearly (20%)</div>
+            </div>
+            <div class="kartu-stat" id="kartu-anisa">
+              <div class="angka" id="lap-sisa-kamu" style="color:#5c8a68;font-size:16px">Rp0</div>
+              <div class="lbl" id="lbl-anisa">Anisa (80%)</div>
+            </div>
+          </div>
+
+          <p style="font-size:12.5px;color:var(--tinta-muda);margin:0 0 10px">Buat lihat siapa aja yang order, buka <b>Arsip</b> di panel Antrian Berjalan di bawah ♡</p>
+
+          <div style="overflow-x:auto;">
+            <table class="tabel-laporan">
+              <thead id="tabel-laporan-head">
+                <!-- Header dibuat lewat JS (nyesuain mode sesi) -->
+              </thead>
+              <tbody id="tabel-laporan-body">
+                <!-- Data Laporan dimasukkan lewat JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- CATATAN BEBAS (ADMIN) -->
       <div class="jendela">
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">catatan</span></div>
@@ -1369,11 +1395,18 @@ textarea.ada-tombol-suara{padding-right:42px !important}
 
         <!-- ═══ ISI: PRICELIST LIVE ═══ -->
         <div id="isi-harga-live">
+          <span class="tag-kategori">🔮 Tarot General · Love, Career, dll</span>
           <ul class="daftar-harga">
-            <li><span>1 Pertanyaan (3 Kartu)</span><b>5K</b></li>
-            <li><span>2 Pertanyaan (12 Kartu)</span><b>10K</b></li>
-            <li><span>3 Pertanyaan (18 Kartu)</span><b>15K</b></li>
+            <li><span>1 Pertanyaan (3 Kartu)</span><b>7K</b></li>
+            <li><span>2 Pertanyaan (12 Kartu)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>15K</b></li>
           </ul>
+
+          <span class="tag-kategori">🫶 Tarot + Oracle · Asmara Only</span>
+          <ul class="daftar-harga">
+            <li><span>1 Pertanyaan (3 Tarot + 1 Oracle)</span><b>8K</b></li>
+            <li><span>2 Pertanyaan (12 Tarot + 2 Oracle)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>16K</b></li>
+          </ul>
+
           <span class="tag-fast">⚡ Fast Track (Bisa Skip Antrian)</span>
           <ul class="daftar-harga">
             <li><span>2 Pertanyaan (12 Kartu)</span><b>25K</b></li>
@@ -1389,16 +1422,16 @@ textarea.ada-tombol-suara{padding-right:42px !important}
         <div id="isi-harga-private" class="blok-biru" style="display:none">
           <span class="tag-privat">✉️ Private Reading · Jawaban via DM</span>
           <ul class="daftar-harga">
-            <li><span>2 Pertanyaan (6 Kartu)</span><b>20K</b></li>
-            <li><span>3 Pertanyaan (18 Kartu)</span><b>25K</b></li>
-            <li><span>4 Pertanyaan (24 Kartu)</span><b>30K</b></li>
+            <li><span>2 Pertanyaan (12 Kartu)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>25K</b></li>
+            <li><span>3 Pertanyaan (18 Kartu)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>35K</b></li>
           </ul>
 
           <h2 class="sub" style="font-size:clamp(30px,6vw,42px);margin-top:22px">How To Order!</h2>
           <div class="langkah-order">
-            <div class="baris-langkah"><span class="no">1</span><span>Transfer &amp; kirim bukti payment ke <span class="akun-tuju">@leony</span></span></div>
-            <div class="baris-langkah"><span class="no">2</span><span>Kirim sedikit cerita kamu + pertanyaan + nama kamu + nama orang yang ditanyain (kalau ada) ke <span class="akun-tuju">@leony</span></span></div>
+            <div class="baris-langkah"><span class="no">1</span><span>Transfer &amp; kirim bukti payment ke <span class="akun-tuju">@leony</span> atau <span class="akun-tuju">@leony2nnd</span></span></div>
+            <div class="baris-langkah"><span class="no">2</span><span>Kirim sedikit cerita kamu + pertanyaan + nama kamu + nama orang yang ditanyain (kalau ada fotonya bisa dikirim) ke <span class="akun-tuju">@leony</span></span></div>
             <div class="baris-langkah"><span class="no">3</span><span>Tunggu jawaban dikirim lewat DM 💌</span></div>
+            <div class="baris-langkah"><span class="no">4</span><span>Jawaban dikirim pakai salah satu dari ini: <b>teks</b>, <b>video</b>, atau <b>voice note</b></span></div>
           </div>
 
           <div class="kartu-info-biru">
@@ -1413,6 +1446,18 @@ textarea.ada-tombol-suara{padding-right:42px !important}
           </div>
 
           <div class="privasi-aman">🔒 Privasi Aman · 100% Rahasia</div>
+        </div>
+
+        <!-- ═══ PERATURAN (berlaku untuk Live & Private) ═══ -->
+        <div class="blok-peraturan">
+          <span class="tag-peraturan">⚠️ Peraturan</span>
+          <ul class="daftar-peraturan">
+            <li><span class="ikon-larang">🚫</span><span><b>Dilarang minta bacaan dimana konteksnya kalian jadi selingkuhan.</b></span></li>
+            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan orientasi seksual seseorang.</b><i>Baik diri sendiri maupun orang lain, ya ♡</i></span></li>
+            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan jodoh.</b><i>Siapa, kapan ketemu, di mana ketemunya, dll.</i></span></li>
+            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan waktu &amp; tempat.</b><i>Kapan nikah, kapan dia balik, kapan sukses, di mana, dll.</i></span></li>
+          </ul>
+          <div class="catatan-peraturan">Kalau pertanyaannya masuk kategori di atas, aku bakal minta kamu ganti pertanyaannya dulu ya ♡</div>
         </div>
       </div>
     </div>
@@ -2385,12 +2430,14 @@ $('#btn-tambah-baris').addEventListener('click', () => {
       <div style="flex:1;min-width:160px">
         <label>Harga Order</label>
         <div class="pills-harga-input">
-          <button type="button" class="pill-harga-opt aktif" data-harga="5000">5K</button>
-          <button type="button" class="pill-harga-opt" data-harga="10000">10K</button>
+          <button type="button" class="pill-harga-opt aktif" data-harga="7000">7K</button>
+          <button type="button" class="pill-harga-opt" data-harga="8000">8K</button>
           <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
+          <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
           <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
+          <button type="button" class="pill-harga-opt" data-harga="35000">35K</button>
         </div>
-        <input type="hidden" class="i-harga-val" value="5000">
+        <input type="hidden" class="i-harga-val" value="7000">
       </div>
       <div style="flex:1;min-width:160px">
         <label>Status Tipe Antrian</label>
@@ -2471,12 +2518,14 @@ $('#form-input').addEventListener('submit', async e => {
         <div style="flex:1;min-width:160px">
           <label>Harga Order</label>
           <div class="pills-harga-input">
-            <button type="button" class="pill-harga-opt aktif" data-harga="5000">5K</button>
-            <button type="button" class="pill-harga-opt" data-harga="10000">10K</button>
+            <button type="button" class="pill-harga-opt aktif" data-harga="7000">7K</button>
+            <button type="button" class="pill-harga-opt" data-harga="8000">8K</button>
             <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
+            <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
             <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
+            <button type="button" class="pill-harga-opt" data-harga="35000">35K</button>
           </div>
-          <input type="hidden" class="i-harga-val" value="5000">
+          <input type="hidden" class="i-harga-val" value="7000">
         </div>
         <div style="flex:1;min-width:160px">
           <label>Status Tipe Antrian</label>
