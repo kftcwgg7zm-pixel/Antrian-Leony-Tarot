@@ -1251,7 +1251,6 @@ textarea.ada-tombol-suara{padding-right:42px !important}
                       <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
                       <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
                       <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
-                      <button type="button" class="pill-harga-opt" data-harga="35000">35K</button>
                     </div>
                     <input type="hidden" class="i-harga-val" value="7000">
                   </div>
@@ -2402,7 +2401,7 @@ function bindPillsTipe(scopeEl){
     btnReg.classList.remove('aktif');
   });
 
-  // Pill Harga Order (5K / 10K / 15K / 25K)
+  // Pill Harga Order (7K / 8K / 15K / 16K / 25K)
   const btnHargaList = scopeEl.querySelectorAll('.pill-harga-opt');
   const inputHarga = scopeEl.querySelector('.i-harga-val');
   btnHargaList.forEach(btn => {
@@ -2435,7 +2434,6 @@ $('#btn-tambah-baris').addEventListener('click', () => {
           <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
           <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
           <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
-          <button type="button" class="pill-harga-opt" data-harga="35000">35K</button>
         </div>
         <input type="hidden" class="i-harga-val" value="7000">
       </div>
@@ -2523,7 +2521,6 @@ $('#form-input').addEventListener('submit', async e => {
             <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
             <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
             <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
-            <button type="button" class="pill-harga-opt" data-harga="35000">35K</button>
           </div>
           <input type="hidden" class="i-harga-val" value="7000">
         </div>
@@ -2674,7 +2671,7 @@ function gambarAdmin(){
   gambarArsip();
 
   const petaNomor = hitungNomorAntrian();
-  const opsiHarga = [5000, 10000, 15000, 25000];
+  const opsiHarga = [7000, 8000, 15000, 16000, 25000];
 
   // Lagi nyaring lewat pencarian -> tampilin satu daftar aja apa adanya,
   // biar hasil carinya kelihatan lengkap (nggak usah dipisah dropdown).
