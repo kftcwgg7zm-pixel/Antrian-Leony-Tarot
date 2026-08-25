@@ -389,6 +389,18 @@ footer .kecil{font-size:11.5px;color:var(--tinta-muda);letter-spacing:.1em}
   padding:4px 11px;border-radius:20px;background:#e8f1ff;color:#4a6f9e;border:1px solid #bcd6f4;vertical-align:middle}
 .pita-mode.mod{background:#fde6f0;color:#b4708f;border-color:#f0b9d3}
 
+/* ═════════ TOMBOL NYALA/MATIIN SUARA "ADA ANTRIAN BARU" (PER PERANGKAT) ═════════ */
+.toggle-suara{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+  padding:7px 14px 7px 7px;border-radius:999px;border:1px solid var(--garis);
+  background:var(--awan);cursor:pointer;user-select:none;transition:.2s;color:var(--tinta-muda)}
+.toggle-suara:hover{border-color:var(--emas)}
+.toggle-suara .bulatan{width:30px;height:17px;border-radius:20px;background:#dfe4ee;position:relative;flex:none;transition:background .2s}
+.toggle-suara .bulatan::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.toggle-suara.nyala{color:#3f8f5f;border-color:#bfe3cc}
+.toggle-suara.nyala .bulatan{background:#59c281}
+.toggle-suara.nyala .bulatan::after{transform:translateX(13px)}
+
 /* ═════════ RIWAYAT PER TANGGAL ═════════ */
 .tabel-laporan tr.baris-tgl{cursor:pointer;transition:.2s}
 .tabel-laporan tr.baris-tgl:hover{background:rgba(232,241,255,.55)}
@@ -1231,7 +1243,15 @@ textarea.ada-tombol-suara{padding-right:42px !important}
         <div class="isi">
           <h2 class="sub" style="margin-bottom:6px">Input Antrian Baru</h2>
           <div style="margin-bottom:10px"><span class="pita-mode" id="pita-input">🌷 Live Sendiri</span></div>
-          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:18px">Masukkan nama customer &amp; pilih harga order-nya. Kamu bisa input lebih dari 1 orang sekaligus sebelum dikirim!</p>
+          <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:14px">Masukkan nama customer &amp; pilih harga order-nya. Kamu bisa input lebih dari 1 orang sekaligus sebelum dikirim!</p>
+
+          <!-- Nyala/matiin suara "ada antrian baru masuk" — pilihannya kesimpen di
+               perangkat ini aja (localStorage), jadi tiap admin (kamu / temen admin
+               yang lain) bisa milih sendiri-sendiri mau denger apa nggak. -->
+          <button type="button" id="btn-toggle-suara-antrian" class="toggle-suara" style="margin-bottom:16px">
+            <span class="bulatan"></span>
+            <span class="teks-toggle">🔊 Suara antrian baru: Nyala</span>
+          </button>
           
           <form class="form" id="form-input">
             <!-- Container untuk menampung baris input dinamis -->
@@ -1850,11 +1870,41 @@ async function muatAntrianLocal(){
    dari server (realtime INSERT), jadi tetap kedengeran walaupun yang masukin
    antrian itu ORANG LAIN (misal temen admin) dari perangkat lain, atau diketik
    manual tanpa mic sekalipun. Sengaja cuma nyala pas lagi login sebagai admin,
-   biar pengunjung biasa yang cuma buka halaman antrian nggak ikut2an denger. */
+   biar pengunjung biasa yang cuma buka halaman antrian nggak ikut2an denger.
+
+   BISA DINYALAIN/DIMATIIN sendiri-sendiri per admin: ada tombol saklar di
+   card "Input Antrian Baru" (#btn-toggle-suara-antrian). Pilihannya kesimpen
+   di localStorage PERANGKAT ITU AJA — jadi misal kamu matiin di HP kamu,
+   temen admin yang lain tetep bisa nyalain punya dia sendiri, nggak saling
+   ganggu. Default-nya NYALA. */
+const KUNCI_SUARA_ANTRIAN = 'suara_antrian_leony_tarot';
+function suaraAntrianNyala(){
+  try { return localStorage.getItem(KUNCI_SUARA_ANTRIAN) !== '0'; } catch(e){ return true; }
+}
+function gambarToggleSuaraAntrian(){
+  const btn = $('#btn-toggle-suara-antrian');
+  if(!btn) return;
+  const nyala = suaraAntrianNyala();
+  btn.classList.toggle('nyala', nyala);
+  btn.setAttribute('aria-pressed', String(nyala));
+  const teks = btn.querySelector('.teks-toggle');
+  if(teks) teks.textContent = nyala ? '🔊 Suara antrian baru: Nyala' : '🔇 Suara antrian baru: Mati';
+}
+function setSuaraAntrian(nyala){
+  try { localStorage.setItem(KUNCI_SUARA_ANTRIAN, nyala ? '1' : '0'); } catch(e){}
+  gambarToggleSuaraAntrian();
+}
+(function pasangToggleSuaraAntrian(){
+  const btn = $('#btn-toggle-suara-antrian');
+  if(!btn) return;
+  btn.addEventListener('click', () => setSuaraAntrian(!suaraAntrianNyala()));
+  gambarToggleSuaraAntrian();
+})();
+
 const idSudahDiumumkan = new Set();
 function umumkanAntrianBaru(item){
   try{
-    if(!item || !isLoggedAdmin) return;
+    if(!item || !isLoggedAdmin || !suaraAntrianNyala()) return;
     if(idSudahDiumumkan.has(item.id)) return;
     idSudahDiumumkan.add(item.id);
     if(!('speechSynthesis' in window)) return;
