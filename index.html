@@ -1844,6 +1844,36 @@ async function muatAntrianLocal(){
   pasangRealtimeBatas();
 }
 
+/* ══════ UMUMKAN LEWAT SUARA TIAP ADA ANTRIAN BARU (SIAPAPUN YANG INPUT) ══════
+   Beda sama suara punya fitur "input suara" (yang cuma ngomong pas KITA sendiri
+   yang ngomong lewat mic, di perangkat kita sendiri): yang ini dengerin langsung
+   dari server (realtime INSERT), jadi tetap kedengeran walaupun yang masukin
+   antrian itu ORANG LAIN (misal temen admin) dari perangkat lain, atau diketik
+   manual tanpa mic sekalipun. Sengaja cuma nyala pas lagi login sebagai admin,
+   biar pengunjung biasa yang cuma buka halaman antrian nggak ikut2an denger. */
+const idSudahDiumumkan = new Set();
+function umumkanAntrianBaru(item){
+  try{
+    if(!item || !isLoggedAdmin) return;
+    if(idSudahDiumumkan.has(item.id)) return;
+    idSudahDiumumkan.add(item.id);
+    if(!('speechSynthesis' in window)) return;
+
+    const nama = (item.detail || 'Pelanggan baru').trim();
+    const tipe = item.tipe === 'Fast Track' ? 'fast track' : 'reguler';
+    const nomor = hitungNomorAntrian()[item.id];
+    const teks = nomor
+      ? `${nama}, ${tipe}, antrian nomor ${nomor}`
+      : `${nama}, ${tipe}, masuk antrian`;
+
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(teks);
+    u.lang = 'id-ID';
+    u.rate = 1;
+    window.speechSynthesis.speak(u);
+  } catch(err){ console.error(err); }
+}
+
 function pasangRealtimeAntrian(){
   supabaseClient
     .channel('realtime-antrian')
@@ -1853,6 +1883,7 @@ function pasangRealtimeAntrian(){
         gambarAntrian();
         gambarAdmin();
       }
+      umumkanAntrianBaru(payload.new);
     })
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: TABEL_ANTRIAN }, payload => {
       const idx = dAntrian.findIndex(x => x.id === payload.new.id);
@@ -3489,17 +3520,18 @@ muatAntrianLocal();
     return uraiPerintah(hasil[0] ? hasil[0].transcript : '');
   }
 
-  /* ── pantau pesan status form, biar bisa "ngomong balik" pas beneran kesimpan ── */
-  let ucapanSuksesTertunda = '';
+  /* ── pantau pesan status form, buat "ngomong balik" pas GAGAL kesimpan ──
+     Ucapan pas BERHASIL sekarang udah nggak dari sini lagi, tapi dari
+     "umumkanAntrianBaru" (global, jalan lewat data real-time server) —
+     soalnya itu jalan buat SIAPAPUN yang input (bukan cuma yg pake mic),
+     dan udah otomatis nyebutin nomor antriannya juga. Di sini cukup
+     ngomong pas GAGAL aja, karena kegagalan nggak kekirim ke server jadi
+     nggak bakal kedengeran lewat jalur realtime itu. */
   const elStatus = document.querySelector('#i-status');
   if(elStatus){
     new MutationObserver(function(){
-      if(elStatus.classList.contains('ok')){
-        ucapkan(ucapanSuksesTertunda || elStatus.textContent);
-        ucapanSuksesTertunda = '';
-      } else if(elStatus.classList.contains('err')){
+      if(elStatus.classList.contains('err')){
         ucapkan(elStatus.textContent);
-        ucapanSuksesTertunda = '';
       }
     }).observe(elStatus, {attributes:true, attributeFilter:['class']});
   }
@@ -3576,9 +3608,6 @@ muatAntrianLocal();
         // harga nggak ditanya lagi di mode ini — dipastiin tetep di nilai standar
         const inputHarga = baris.querySelector('.i-harga-val');
         if(inputHarga) inputHarga.value = String(HARGA_DEFAULT_SOLO);
-
-        const tipeAkhir = (baris.querySelector('.i-tipe-val') || {}).value || 'Reguler';
-        ucapanSuksesTertunda = `${nama} ${tipeAkhir.toLowerCase()} berhasil masuk antrian`;
 
         // langsung kirim form-nya, nggak usah pencet tombol manual lagi
         const form = document.querySelector('#form-input');
