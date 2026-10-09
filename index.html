@@ -1239,23 +1239,12 @@ textarea.ada-tombol-suara{padding-right:42px !important}
     <!-- TAMPILAN DASHBOARD (JIKA SUDAH LOGIN) -->
     <div id="panel-admin" style="display:none">
 
-      <!-- ═══ PILIH MODE SESI: LIVE SENDIRI / LIVE + MODERATOR ═══
-           Semua isi dashboard di bawah (input antrian, laporan, kelola antrian)
-           ngikutin mode yang lagi kepilih. Datanya kepisah total. -->
-      <div class="kotak-mode">
-        <div class="jdl-mode">Kamu lagi live yang mana?</div>
-        <div class="tabs-sesi">
-          <button class="tab-sesi aktif solo" id="tab-sesi-solo">🌷 Live Sendiri<small>Sendiri</small></button>
-          <button class="tab-sesi" id="tab-sesi-mod">👥 Live + Moderator<small>Berdua</small></button>
-        </div>
-      </div>
-
       <!-- FORM INPUT ORDER/ANTRIAN (MULTI-INPUT) -->
       <div class="jendela">
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">input_antrian_baru</span></div>
         <div class="isi">
           <h2 class="sub" style="margin-bottom:6px">Input Antrian Baru</h2>
-          <div style="margin-bottom:10px"><span class="pita-mode" id="pita-input">🌷 Live Sendiri</span></div>
+          <div style="margin-bottom:10px"><span class="pita-mode mod" id="pita-input">👥 Live + Moderator</span></div>
           <p style="font-size:14px;color:var(--tinta-muda);margin-bottom:14px">Masukkan nama customer &amp; pilih harga order-nya. Kamu bisa input lebih dari 1 orang sekaligus sebelum dikirim!</p>
 
           <!-- Nyala/matiin suara "ada antrian baru masuk" — pilihannya kesimpen di
@@ -1276,17 +1265,6 @@ textarea.ada-tombol-suara{padding-right:42px !important}
                   <input type="text" class="i-detail" placeholder="Contoh: Anisa" required>
                 </div>
                 <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-                  <div style="flex:1;min-width:160px">
-                    <label>Harga Order</label>
-                    <div class="pills-harga-input">
-                      <button type="button" class="pill-harga-opt aktif" data-harga="7000">7K</button>
-                      <button type="button" class="pill-harga-opt" data-harga="8000">8K</button>
-                      <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
-                      <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
-                      <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
-                    </div>
-                    <input type="hidden" class="i-harga-val" value="7000">
-                  </div>
                   <div style="flex:1;min-width:160px">
                     <label>Status Tipe Antrian</label>
                     <div class="pills-tipe-input">
@@ -1318,7 +1296,7 @@ textarea.ada-tombol-suara{padding-right:42px !important}
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
             <div>
               <h2 class="sub" style="margin:0 0 4px">Antrian Berjalan</h2>
-              <span class="pita-mode" id="pita-kelola">🌷 Live Sendiri</span>
+              <span class="pita-mode mod" id="pita-kelola">👥 Live + Moderator</span>
             </div>
             <button class="mini" id="btn-logout" style="border-color:#f0b9d3;color:#b4708f">Keluar Admin</button>
           </div>
@@ -1413,7 +1391,7 @@ textarea.ada-tombol-suara{padding-right:42px !important}
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">laporan_harian</span></div>
         <div class="isi">
           <h2 class="sub" style="margin-bottom:6px">Laporan Pendapatan</h2>
-          <div style="margin-bottom:10px"><span class="pita-mode" id="pita-laporan">🌷 Live Sendiri</span></div>
+          <div style="margin-bottom:10px"><span class="pita-mode mod" id="pita-laporan">👥 Live + Moderator</span></div>
           <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Rekap semua orang yang order per tanggal. Semua data lama tetap kesimpan di sini selamanya, walaupun antrian berjalannya udah dikosongin ♡</p>
 
           <!-- Ringkasan Total Keseluruhan -->
@@ -2210,7 +2188,7 @@ function labelTgl(ts){
      'mod'  -> Live + Moderator  (pendapatan dibagi Yearly 20% & Anisa 80%)
    Tiap antrian nyimpen field 'sesi'. Data lama yang belum punya field ini
    otomatis dianggap punya sesi 'mod' (karena dulu emang selalu ada bagi 20%). */
-let sesiAktif = 'solo';
+let sesiAktif = 'mod';
 const LABEL_SESI = { solo: '🌷 Live Sendiri', mod: '👥 Live + Moderator' };
 
 function ambilSesi(x){
@@ -2347,7 +2325,7 @@ function htmlKartuAntrianCustomer(x, petaNomor){
         <span class="lencana no-urut">#${petaNomor[x.id]}</span>
         <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
         <span class="nama-p">${aman(x.detail)}</span>
-        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
+        ${ambilHarga(x) ? `<span class="lencana harga">${formatK(ambilHarga(x))}</span>` : ''}
         ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡ Fast Track</span>' : ''}
         <span class="${statusClass}">${aman(x.status)}</span>
         <span class="waktu">${kapan(x.ts)}</span>
@@ -2574,17 +2552,6 @@ $('#btn-tambah-baris').addEventListener('click', () => {
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
       <div style="flex:1;min-width:160px">
-        <label>Harga Order</label>
-        <div class="pills-harga-input">
-          <button type="button" class="pill-harga-opt aktif" data-harga="7000">7K</button>
-          <button type="button" class="pill-harga-opt" data-harga="8000">8K</button>
-          <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
-          <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
-          <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
-        </div>
-        <input type="hidden" class="i-harga-val" value="7000">
-      </div>
-      <div style="flex:1;min-width:160px">
         <label>Status Tipe Antrian</label>
         <div class="pills-tipe-input">
           <button type="button" class="pill-tipe-opt aktif btn-reg">Reguler</button>
@@ -2622,7 +2589,7 @@ $('#form-input').addEventListener('submit', async e => {
   barisItems.forEach((el, index) => {
     const detail = el.querySelector('.i-detail').value.trim();
     const tipe = el.querySelector('.i-tipe-val').value;
-    const harga = parseInt(el.querySelector('.i-harga-val').value, 10) || 0;
+    const harga = 0;
 
     if(detail){
       itemBaruList.push({
@@ -2660,17 +2627,6 @@ $('#form-input').addEventListener('submit', async e => {
         <input type="text" class="i-detail" placeholder="Contoh: Anisa" required>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-        <div style="flex:1;min-width:160px">
-          <label>Harga Order</label>
-          <div class="pills-harga-input">
-            <button type="button" class="pill-harga-opt aktif" data-harga="7000">7K</button>
-            <button type="button" class="pill-harga-opt" data-harga="8000">8K</button>
-            <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
-            <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
-            <button type="button" class="pill-harga-opt" data-harga="25000">25K</button>
-          </div>
-          <input type="hidden" class="i-harga-val" value="7000">
-        </div>
         <div style="flex:1;min-width:160px">
           <label>Status Tipe Antrian</label>
           <div class="pills-tipe-input">
@@ -2728,13 +2684,7 @@ function htmlKartuAdmin(x, petaNomor, opsiHarga){
         <input type="text" id="edit-detail-${x.id}" value="${aman(x.detail)}" style="flex:1;min-width:140px;border:1px solid var(--garis);border-radius:12px;padding:9px 12px;font-family:inherit;font-size:14px;color:var(--tinta)">
       </div>
       <div class="alat" style="flex-direction:column;align-items:stretch;gap:10px">
-        <div>
-          <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Harga Order</label>
-          <div class="pills-harga-input" id="edit-harga-${x.id}" data-value="${hargaSekarang}">
-            ${opsiHarga.map(h => `<button type="button" class="pill-harga-opt ${h === hargaSekarang ? 'aktif' : ''}" onclick="pilihPillEdit(this, ${h})">${formatK(h)}</button>`).join('')}
-          </div>
-        </div>
-        <div>
+<div>
           <label style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-muda);font-weight:600;display:block;margin-bottom:6px">Status Tipe Antrian</label>
           <div class="pills-tipe-input" id="edit-tipe-${x.id}" data-value="${aman(x.tipe)}">
             <button type="button" class="pill-tipe-opt ${x.tipe === 'Reguler' ? 'aktif' : ''}" onclick="pilihPillEdit(this, 'Reguler')">Reguler</button>
@@ -2756,7 +2706,7 @@ function htmlKartuAdmin(x, petaNomor, opsiHarga){
       <span class="lencana no-urut">#${petaNomor[x.id]}</span>
       <div class="avatar">${aman((x.detail || '?').trim().charAt(0).toUpperCase())}</div>
       <span class="nama-p">${aman(x.detail)}</span>
-      <span class="lencana harga">${formatK(ambilHarga(x))}</span>
+      ${ambilHarga(x) ? `<span class="lencana harga">${formatK(ambilHarga(x))}</span>` : ''}
       <span class="lencana kilat">${aman(x.tipe)}</span>
       <span class="waktu">${kapan(x.ts)}</span>
     </div>
@@ -3014,7 +2964,7 @@ function gambarArsip(){
     const baris = isi.map((x, i) => `<div class="baris-arsip-item">
         <span class="lencana no-urut">#${i + 1}</span>
         <span class="nama-arsip">${aman(x.detail)}</span>
-        <span class="lencana harga">${formatK(ambilHarga(x))}</span>
+        ${ambilHarga(x) ? `<span class="lencana harga">${formatK(ambilHarga(x))}</span>` : ''}
         ${x.tipe === 'Fast Track' ? '<span class="lencana kilat">⚡</span>' : ''}
         <span class="lencana ${x.status === 'Sudah Dibaca' ? 'baca' : x.status === 'Sedang Dibaca' ? 'proses' : 'tunggu'}">${aman(x.status || '-')}</span>
         <button type="button" class="btn-hapus" style="padding:5px 10px;font-size:11px" onclick="hapusAntrian('${x.id}')" title="Hapus dari arsip">Hapus</button>
@@ -3134,7 +3084,7 @@ window.simpanEditAntrian = async function(id){
   if(idx === -1) return;
 
   const detailBaru = $('#edit-detail-' + id).value.trim();
-  const hargaBaru = parseInt($('#edit-harga-' + id).dataset.value, 10) || 0;
+  const hargaBaru = ambilHarga(dAntrian[idx]);
   const tipeBaru = $('#edit-tipe-' + id).dataset.value;
 
   if(!detailBaru) return alert('Nama gak boleh kosong ya!');
@@ -3830,233 +3780,5 @@ function gambarPrivatUtama(){
 muatPrivat();
 </script>
 
-<!-- ═════════ INPUT SUARA (VOICE COMMAND + AUTO-KIRIM) — KHUSUS MODE "LIVE SENDIRI" ═════════
-     Tombol mic 🎙 di kolom "Nama Customer" (form "Input Antrian Baru"),
-     TAPI cuma muncul pas tab sesi lagi di "🌷 Live Sendiri". Pas pindah
-     ke "👥 Live + Moderator", tombolnya otomatis ilang lagi.
-
-     Di mode Live Sendiri, field "Harga Order" (pill 5K/10K/15K/25K)
-     ikut disembunyiin dari form — asumsinya tiap orderan di mode ini
-     dianggap harga standar 5K (nilai default yang emang udah kepilih),
-     jadi nggak perlu disebut/dipilih lagi. Kalau ternyata harganya mau
-     beda-beda, kasih tau ya, field-nya gampang dimunculin lagi.
-
-     Sekarang cukup ngomong NAMA + TIPE aja (tipe boleh nggak disebut,
-     defaultnya Reguler), misalnya:
-       "input Abelle reguler"
-       "Kirana fast track"
-       "Dinda"                  → tipe otomatis Reguler
-     Lebih sedikit yang perlu didengerin = lebih jarang salah tangkep.
-
-     Begitu ngomong: nama & tipe langsung keisi, form langsung KE-KIRIM
-     sendiri, terus sistem "ngomong balik" konfirmasinya, misal:
-       "Abelle reguler berhasil masuk antrian"
-     Kalau gagal (mis. sesi admin habis / koneksi putus), sistem ngomong
-     pesan errornya juga.
-
-     Pakai Web Speech API bawaan browser — paling stabil di Chrome/Edge
-     Android & desktop. Kalau browsernya nggak dukung (mis. Firefox),
-     tombol nggak dipasang sama sekali. -->
-<script>
-(function(){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR) return; // browser tak dukung pengenalan suara
-
-  const WADAH_TARGET = '#daftar-input-container';
-  const SELEKTOR_TARGET = '.i-detail';
-  const HARGA_DEFAULT_SOLO = 5000; // harga standar dipakai diam-diam di mode Live Sendiri
-
-  function modeSoloAktif(){
-    // "sesiAktif" didefinisikan di script utama halaman ini ('solo' / 'mod')
-    return typeof sesiAktif !== 'undefined' && sesiAktif === 'solo';
-  }
-
-  /* ── ngomong balik lewat text-to-speech bawaan browser ── */
-  function ucapkan(teks){
-    try{
-      if(!('speechSynthesis' in window) || !teks) return;
-      window.speechSynthesis.cancel(); // potong ucapan sebelumnya kalau numpuk
-      const u = new SpeechSynthesisUtterance(teks);
-      u.lang = 'id-ID';
-      u.rate = 1;
-      window.speechSynthesis.speak(u);
-    } catch(err){ console.error(err); }
-  }
-
-  /* ── uraikan kalimat suara jadi {nama, tipe} — udah nggak perlu urus harga ── */
-  function uraiPerintah(mentah){
-    let t = ' ' + mentah.toLowerCase().trim() + ' ';
-
-    let tipe = null;
-    if(/fast\s*track|\bft\b|express|fas\s*trek/.test(t)){
-      tipe = 'Fast Track';
-      t = t.replace(/fast\s*track|\bft\b|express|fas\s*trek/g, ' ');
-    } else if(/\bregul[ae]r\b|\bregular\b|\breg\b|\bregulir\b/.test(t)){
-      tipe = 'Reguler';
-      t = t.replace(/\bregul[ae]r\b|\bregular\b|\breg\b|\bregulir\b/g, ' ');
-    }
-
-    // buang kata-kata pemicu/pengisi umum, sisanya = nama
-    t = t.replace(/\b(input|tambah|masukin|masukkan|catat|catet|order|antrian|antri|untuk|atas nama|nama|customer|pelanggan|orderan)\b/g, ' ');
-    t = t.replace(/\s+/g, ' ').trim();
-    const nama = t.replace(/\b\w/g, c => c.toUpperCase());
-
-    return { nama, tipe };
-  }
-
-  /* ── dari beberapa alternatif hasil dengaran, pilih yang paling "masuk akal"
-        (ada kata tipe yang kekenal & sisa namanya nggak kosong) ── */
-  function pilihAlternatifTerbaik(hasil){
-    let terbaik = null;
-    for(let i = 0; i < hasil.length; i++){
-      const teks = hasil[i].transcript;
-      const u = uraiPerintah(teks);
-      if(!u.nama) continue;
-      const skor = (u.tipe ? 1 : 0);
-      if(!terbaik || skor > terbaik.skor) terbaik = { ...u, skor, mentah: teks };
-      if(skor > 0) break; // udah dapet yang jelas tipenya, cukup
-    }
-    if(terbaik) return terbaik;
-    // semua alternatif namanya kosong (cuma nyebut tipe doang / kedengeran kosong)
-    return uraiPerintah(hasil[0] ? hasil[0].transcript : '');
-  }
-
-  /* ── pantau pesan status form, buat "ngomong balik" pas GAGAL kesimpan ──
-     Ucapan pas BERHASIL sekarang udah nggak dari sini lagi, tapi dari
-     "umumkanAntrianBaru" (global, jalan lewat data real-time server) —
-     soalnya itu jalan buat SIAPAPUN yang input (bukan cuma yg pake mic),
-     dan udah otomatis nyebutin nomor antriannya juga. Di sini cukup
-     ngomong pas GAGAL aja, karena kegagalan nggak kekirim ke server jadi
-     nggak bakal kedengeran lewat jalur realtime itu. */
-  const elStatus = document.querySelector('#i-status');
-  if(elStatus){
-    new MutationObserver(function(){
-      if(elStatus.classList.contains('err')){
-        ucapkan(elStatus.textContent);
-      }
-    }).observe(elStatus, {attributes:true, attributeFilter:['class']});
-  }
-
-  function layak(el){
-    if(el.dataset.suaraTerpasang) return false;
-    if(el.disabled || el.readOnly) return false;
-    if(!el.matches(SELEKTOR_TARGET)) return false;
-    if(!el.closest(WADAH_TARGET)) return false;
-    if(el.tagName === 'INPUT' && el.type !== 'text') return false;
-    return true;
-  }
-
-  function pasangTombol(elInput){
-    if(!layak(elInput)) return;
-    elInput.dataset.suaraTerpasang = '1';
-
-    const wadah = document.createElement('span');
-    wadah.className = 'wadah-suara';
-    elInput.parentNode.insertBefore(wadah, elInput);
-    wadah.appendChild(elInput);
-    elInput.classList.add('ada-tombol-suara');
-
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'tombol-suara';
-    btn.setAttribute('aria-label', 'Ngomong buat langsung input & kirim ke antrian');
-    btn.title = 'Ngomong: "nama, tipe" — misal "Abelle reguler" — langsung kekirim otomatis';
-    btn.textContent = '🎙';
-    wadah.appendChild(btn);
-
-    let rec = null, dengar = false;
-
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-
-      if(dengar){ rec && rec.stop(); return; }
-
-      rec = new SR();
-      rec.lang = 'id-ID';
-      rec.interimResults = false;
-      rec.maxAlternatives = 3; // ambil beberapa kemungkinan, pilih yang paling masuk akal
-
-      rec.onstart = function(){ dengar = true; btn.classList.add('dengar'); btn.textContent = '●'; };
-      rec.onend   = function(){ dengar = false; btn.classList.remove('dengar'); btn.textContent = '🎙'; };
-      rec.onerror = function(ev){
-        dengar = false; btn.classList.remove('dengar'); btn.textContent = '🎙';
-        if(ev.error === 'not-allowed' || ev.error === 'service-not-allowed'){
-          alert('Akses mic-nya diblokir. Izinin dulu ya lewat pengaturan browser ♡');
-        }
-      };
-      rec.onresult = function(ev){
-        if(!ev.results || !ev.results[0] || !ev.results[0].length) return;
-        const { nama, tipe } = pilihAlternatifTerbaik(ev.results[0]);
-        const baris = elInput.closest('.baris-input-item') || elInput.closest('.jendela') || document;
-
-        if(!nama){
-          ucapkan('Nama pelanggannya nggak kedengeran, coba ulang lagi ya');
-          return;
-        }
-
-        elInput.value = nama;
-        elInput.dispatchEvent(new Event('input', {bubbles:true}));
-
-        if(tipe === 'Fast Track'){
-          const pilFt = baris.querySelector('.btn-ft');
-          if(pilFt) pilFt.click();
-        } else if(tipe === 'Reguler'){
-          const pilReg = baris.querySelector('.btn-reg');
-          if(pilReg) pilReg.click();
-        }
-
-        // harga nggak ditanya lewat suara -- dibiarin ikut pill harga yang
-        // lagi aktif kepilih di form (7K/8K/15K/16K), nggak dipaksa lagi.
-
-        // langsung kirim form-nya, nggak usah pencet tombol manual lagi
-        const form = document.querySelector('#form-input');
-        if(form){
-          if(form.requestSubmit) form.requestSubmit();
-          else form.dispatchEvent(new Event('submit', {cancelable:true, bubbles:true}));
-        }
-      };
-
-      try{ rec.start(); } catch(err){ console.error(err); }
-    });
-  }
-
-  function pasangSemua(root){
-    (root || document).querySelectorAll(SELEKTOR_TARGET).forEach(pasangTombol);
-  }
-
-  /* ── tampilin/sembunyiin mic sesuai mode sesi yang aktif ──
-     Pilihan harga (7K/8K/15K/16K) SEKARANG selalu ditampilin di kedua mode
-     (Live Sendiri maupun Live + Moderator) -- dulu di mode Live Sendiri
-     harganya disembunyiin & dipaksa ke satu nilai default doang, sekarang
-     admin bebas milih harga order-nya juga pas Live Sendiri. */
-  function terapkanModeSesi(){
-    const solo = modeSoloAktif();
-    document.querySelectorAll(WADAH_TARGET + ' .tombol-suara').forEach(btn => {
-      btn.classList.toggle('sembunyi', !solo);
-    });
-  }
-
-  pasangSemua();
-  terapkanModeSesi();
-
-  new MutationObserver(function(mutasi){
-    mutasi.forEach(function(m){
-      m.addedNodes.forEach(function(node){
-        if(node.nodeType !== 1) return;
-        if(node.matches && node.matches(SELEKTOR_TARGET)) pasangTombol(node);
-        if(node.querySelectorAll) pasangSemua(node);
-      });
-    });
-    terapkanModeSesi(); // baris baru ikut nurut mode yang lagi aktif
-  }).observe(document.querySelector(WADAH_TARGET) || document.body, {childList:true, subtree:true});
-
-  // pita label mode (#pita-input) ganti class 'mod' pas admin pindah tab sesi
-  const elPita = document.querySelector('#pita-input');
-  if(elPita){
-    new MutationObserver(terapkanModeSesi).observe(elPita, {attributes:true, attributeFilter:['class']});
-  }
-})();
-</script>
 </body>
 </html>
