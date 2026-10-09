@@ -182,7 +182,7 @@ p{margin:0 0 12px}
   border-radius:28px;overflow:hidden;box-shadow:0 22px 44px -18px rgba(110,130,190,.65);
   border:1px solid rgba(255,255,255,.95);background:rgba(255,255,255,.8);backdrop-filter:blur(18px)}
 .nav .bar{padding:8px 14px}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);padding:7px;gap:5px}
+.tabs{display:grid;grid-template-columns:repeat(2,1fr);padding:7px;gap:5px}
 .tab{border:0;background:transparent;border-radius:19px;padding:9px 4px 8px;cursor:pointer;color:var(--tinta-muda);
   display:flex;flex-direction:column;align-items:center;gap:3px;transition:.25s;font-size:11px;letter-spacing:.05em;font-weight:600}
 .tab .ikon{font-size:17px;line-height:1}
@@ -342,6 +342,7 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--blush);box-
   background:rgba(255,255,255,.78);backdrop-filter:blur(12px);box-shadow:var(--bayang-lembut);font-size:17px;
   display:grid;place-items:center;transition:.25s;color:#8b96b0}
 .layang button:hover{transform:scale(1.08)}
+.layang.layang-admin{top:auto;bottom:132px;right:14px}
 .layang button.on{background:linear-gradient(160deg,#fde6f0,#f5d1e4);color:#b4708f}
 
 footer{text-align:center;padding:30px 16px 10px;position:relative;z-index:2}
@@ -1094,6 +1095,9 @@ textarea.ada-tombol-suara{padding-right:42px !important}
   <button id="btn-suara" title="Musik kayangan" aria-label="Nyalakan musik">♪</button>
   <button id="btn-atas" title="Kembali ke atas" aria-label="Kembali ke atas">↑</button>
 </div>
+<div class="layang layang-admin">
+  <button id="btn-admin" title="Login admin" aria-label="Login admin">♡</button>
+</div>
 
 <!-- ═══ KONTEN ═══ -->
 <div class="bungkus">
@@ -1158,19 +1162,6 @@ textarea.ada-tombol-suara{padding-right:42px !important}
         <div class="wadah-lainnya" id="antrian-wadah-selesai">
           <div class="isi-lainnya"><div class="feed" id="feed-antrian-selesai"></div></div>
         </div>
-      </div>
-    </div>
-
-    <!-- ─── LIST PRIVATE (CUSTOMER, NAMA DISENSOR) ───
-         Ditaro di antara Daftar Antrian sama Tarot Testimony. Kalau lagi
-         nggak ada booking private hari ini, jendelanya disembunyiin otomatis
-         lewat JS (gambarPrivatUtama). -->
-    <div class="jendela" id="jendela-privat-utama" style="display:none">
-      <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">list_private</span></div>
-      <div class="isi">
-        <h2 class="sub">List Private Hari Ini</h2>
-        <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Nama disensor demi privasi customer ya ♡ Jamnya prediksi kasar, bisa maju/mundur dikit tergantung jalannya live.</p>
-        <div class="feed" id="feed-privat-utama"></div>
       </div>
     </div>
 
@@ -1333,59 +1324,6 @@ textarea.ada-tombol-suara{padding-right:42px !important}
         </div>
       </div>
 
-      <!-- ═══ LIST PRIVATE (READING VIA DM, TERPISAH DARI ANTRIAN LIVE) ═══
-           Dibatasi maksimal sekian orang per hari (bisa diatur), tiap orang
-           dikasih perkiraan jam dibacakan (jaraknya 15 menitan per orang,
-           tapi jam-nya bisa diedit manual sama admin). Listnya (nama disensor)
-           muncul juga di halaman utama customer, di antara Daftar Antrian
-           sama Tarot Testimony. -->
-      <div class="jendela">
-        <div class="bar biru"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">list_private</span></div>
-        <div class="isi">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px">
-            <h2 class="sub" style="margin:0">List Private</h2>
-            <span class="ket-arsip" id="privat-slot-info">0/10 slot terisi hari ini</span>
-          </div>
-          <p style="font-size:13px;color:var(--tinta-muda);margin-bottom:14px">Reading private (DM) — beda antrian sama beda kuota dari Live. Customer di halaman utama cuma bisa lihat nama yang disensor ♡</p>
-
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
-            <label style="font-size:12.5px;color:var(--tinta-muda)">Kuota per hari:</label>
-            <input type="number" id="privat-kapasitas-input" min="1" style="width:70px;padding:8px 10px;border-radius:12px;border:1px solid var(--garis)">
-            <button type="button" class="mini" id="btn-simpan-kapasitas">Simpan Kuota</button>
-          </div>
-
-          <form class="form" id="form-privat" style="margin-bottom:18px">
-            <div style="display:grid;gap:12px">
-              <div>
-                <label>Nama Customer</label>
-                <input type="text" id="privat-nama" placeholder="Contoh: Anisa Aulia Putri" required>
-              </div>
-              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-                <div style="flex:1;min-width:160px">
-                  <label>Harga Order</label>
-                  <div class="pills-harga-input" id="privat-pills-harga">
-                    <button type="button" class="pill-harga-opt aktif" data-harga="7000">7K</button>
-                    <button type="button" class="pill-harga-opt" data-harga="8000">8K</button>
-                    <button type="button" class="pill-harga-opt" data-harga="15000">15K</button>
-                    <button type="button" class="pill-harga-opt" data-harga="16000">16K</button>
-                  </div>
-                  <input type="hidden" id="privat-harga-val" value="7000">
-                </div>
-                <div style="flex:1;min-width:140px">
-                  <label>Jam Dibacakan</label>
-                  <input type="time" id="privat-jam" required>
-                </div>
-              </div>
-              <p style="font-size:12px;color:var(--tinta-muda);margin:0" id="privat-prediksi-teks"></p>
-            </div>
-            <div class="pesan-status" id="privat-status"></div>
-            <button type="submit" class="kirim" id="btn-privat-tambah">+ Tambah ke List Private ♡</button>
-          </form>
-
-          <div class="feed" id="feed-privat"><div class="memuat">Memuat list private</div></div>
-        </div>
-      </div>
-
       <!-- LAPORAN PERTANYAAN PER TANGGAL -->
       <div class="jendela">
         <div class="bar"><i class="titik"></i><i class="titik"></i><i class="titik"></i><span class="nama">laporan_harian</span></div>
@@ -1538,7 +1476,6 @@ textarea.ada-tombol-suara{padding-right:42px !important}
   <div class="tabs">
     <button class="tab" role="tab" aria-selected="true" data-hal="antrian"><span class="ikon">💌</span>Halaman Antrian</button>
     <button class="tab" role="tab" aria-selected="false" data-hal="harga"><span class="ikon">💰</span>Pricelist</button>
-    <button class="tab" role="tab" aria-selected="false" data-hal="admin"><span class="ikon">👑</span>Dashboard Admin</button>
   </div>
 </nav>
 
@@ -2206,6 +2143,7 @@ function keHalaman(nama){
   scrollTo({top:0, behavior:'smooth'});
 }
 tabs.forEach(t => t.addEventListener('click', () => keHalaman(t.dataset.hal)));
+$('#btn-admin').addEventListener('click', () => keHalaman('admin'));
 
 /* ══════ SUB-TABS MENU HARGA (LIVE & PRIVATE) ══════ */
 $('#tab-harga-live').addEventListener('click', () => {
@@ -3475,309 +3413,6 @@ function gambarTesti(){
 })();
 
 muatAntrianLocal();
-
-/* ══════ LIST PRIVATE (READING VIA DM, TERPISAH TOTAL DARI ANTRIAN LIVE) ══════
-   Tabel Supabase BARU, namanya "privat". Jalanin SQL ini SEKALI aja di
-   Supabase > SQL Editor biar fiturnya kesimpen ke server (kalau belum
-   dijalanin, fitur ini tetep jalan tapi random ilang tiap refresh karena
-   nggak ketemu tabelnya):
-
-     create table if not exists privat (
-       id bigint generated by default as identity primary key,
-       tanggal text not null,
-       nama text not null,
-       harga bigint not null default 0,
-       jam text not null,
-       ts bigint not null
-     );
-     alter table privat enable row level security;
-     create policy "bebas akses privat" on privat for all using (true) with check (true);
-     alter publication supabase_realtime add table privat;
-
-   Kuota harian (default 10 orang, bisa diubah admin) numpang disimpen di
-   tabel "catatan" yang udah ada (id: 'privat_kapasitas') -- sama kayak trik
-   batas sesi, jadi nggak perlu kolom/tabel baru lagi buat itu. */
-const TABEL_PRIVAT = 'privat';
-const ID_KAPASITAS_PRIVAT = 'privat_kapasitas';
-const KAPASITAS_PRIVAT_DEFAULT = 10;
-let dPrivat = [];
-let kapasitasPrivat = KAPASITAS_PRIVAT_DEFAULT;
-let editingPrivatId = null;
-
-function tglHariIniStr(){
-  const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-}
-// Cuma booking private HARI INI, diurutin dari jam paling pagi.
-function privatHariIni(){
-  const hari = tglHariIniStr();
-  return dPrivat.filter(x => x.tanggal === hari).sort((a, b) => String(a.jam || '').localeCompare(String(b.jam || '')));
-}
-
-async function muatKapasitasPrivat(){
-  try{
-    const { data, error } = await supabaseClient
-      .from(TABEL_CATATAN).select('isi').eq('id', ID_KAPASITAS_PRIVAT).maybeSingle();
-    if(error) throw error;
-    if(data && data.isi) kapasitasPrivat = parseInt(data.isi, 10) || KAPASITAS_PRIVAT_DEFAULT;
-  } catch(e){ console.warn('Kuota private kepake default:', e); }
-}
-async function setKapasitasPrivat(nilai){
-  kapasitasPrivat = nilai;
-  try{
-    await supabaseClient.from(TABEL_CATATAN).upsert({ id: ID_KAPASITAS_PRIVAT, isi: String(nilai), ts: Date.now() });
-  } catch(e){ console.warn('Gagal simpen kuota private ke server:', e); }
-}
-
-async function muatPrivat(){
-  await muatKapasitasPrivat();
-  try{
-    const { data, error } = await supabaseClient.from(TABEL_PRIVAT).select('*');
-    if(error) throw error;
-    dPrivat = data || [];
-  } catch(e){
-    console.error('Gagal ambil data private dari Supabase (tabelnya udah dibuat belum?):', e);
-    dPrivat = [];
-  }
-  gambarPrivat();
-  gambarPrivatUtama();
-  pasangRealtimePrivat();
-}
-
-let realtimePrivatNyala = false;
-function pasangRealtimePrivat(){
-  if(realtimePrivatNyala) return;
-  realtimePrivatNyala = true;
-  supabaseClient
-    .channel('realtime-privat')
-    .on('postgres_changes', { event: '*', schema: 'public', table: TABEL_PRIVAT }, async () => {
-      // demi simpel & selalu konsisten sama urutan sesuai jam, muat ulang aja
-      try{
-        const { data, error } = await supabaseClient.from(TABEL_PRIVAT).select('*');
-        if(error) throw error;
-        dPrivat = data || [];
-      } catch(e){ console.error(e); }
-      gambarPrivat();
-      gambarPrivatUtama();
-    })
-    .subscribe();
-}
-
-/* Nama disensor buat halaman utama customer:
-   - tiap kata SELAIN kata terakhir -> disingkat jadi 1 huruf depan (inisial)
-   - kata TERAKHIR -> huruf depan + bintang sepanjang huruf tengahnya + huruf akhir
-   Misal "Anisa Aulia Putri" -> "A A P***I". Nama tetep kebaca LENGKAP di dashboard admin. */
-function sensorNama(nama){
-  const kata = String(nama || '').trim().split(/\s+/).filter(Boolean);
-  if(!kata.length) return '???';
-  return kata.map((k, i) => {
-    if(i === kata.length - 1){
-      if(k.length <= 2) return k.charAt(0).toUpperCase() + '*';
-      return k.charAt(0).toUpperCase() + '*'.repeat(k.length - 2) + k.charAt(k.length - 1).toUpperCase();
-    }
-    return k.charAt(0).toUpperCase();
-  }).join(' ');
-}
-
-/* Prediksi jam slot berikutnya = jam private TERAKHIR hari ini + 15 menit.
-   Kalau belum ada booking private sama sekali hari ini, tebak dari jam
-   sekarang dibulatkan ke kelipatan 15 menit terdekat ke depan.
-   Ini CUMA SARAN -- admin tetep bebas ubah manual di kolom jamnya. */
-function prediksiJamBerikutnya(){
-  const list = privatHariIni();
-  if(list.length){
-    const terakhir = list[list.length - 1].jam || '00:00';
-    const [h, m] = terakhir.split(':').map(Number);
-    let total = (h * 60 + m) + 15;
-    total = ((total % (24 * 60)) + 24 * 60) % (24 * 60);
-    return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
-  }
-  const d = new Date();
-  let mm = Math.ceil(d.getMinutes() / 15) * 15;
-  let hh = d.getHours();
-  if(mm >= 60){ mm -= 60; hh = (hh + 1) % 24; }
-  return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
-}
-
-async function tambahPrivatKeSupabase(item){
-  const { error } = await supabaseClient.from(TABEL_PRIVAT).insert(item);
-  return error;
-}
-async function hapusPrivatDiSupabase(id){
-  const { error } = await supabaseClient.from(TABEL_PRIVAT).delete().eq('id', id);
-  return error;
-}
-async function editPrivatKeSupabase(id, data){
-  const { error } = await supabaseClient.from(TABEL_PRIVAT).update(data).eq('id', id);
-  return error;
-}
-
-window.hapusPrivat = async function(id){
-  if(!confirm('Yakin mau hapus dari list private ini?')) return;
-  const errHapus = await hapusPrivatDiSupabase(id);
-  if(laporGagal(errHapus, 'menghapus dari list private')) return;
-  dPrivat = dPrivat.filter(x => x.id !== id);
-  gambarPrivat();
-  gambarPrivatUtama();
-};
-
-window.mulaiEditPrivat = function(id){ editingPrivatId = id; gambarPrivat(); };
-window.batalEditPrivat = function(){ editingPrivatId = null; gambarPrivat(); };
-
-window.simpanEditPrivat = async function(id){
-  const elNama = $('#edit-privat-nama-' + id);
-  const elJam = $('#edit-privat-jam-' + id);
-  const elHarga = $('#edit-privat-harga-' + id);
-  if(!elNama || !elJam || !elHarga) return;
-  const namaBaru = elNama.value.trim();
-  const jamBaru = elJam.value;
-  const hargaBaru = parseInt(elHarga.dataset.value, 10) || 0;
-  if(!namaBaru) return alert('Nama gak boleh kosong ya!');
-  if(!jamBaru) return alert('Jam dibacakannya gak boleh kosong ya!');
-
-  const errEdit = await editPrivatKeSupabase(id, { nama: namaBaru, jam: jamBaru, harga: hargaBaru });
-  if(laporGagal(errEdit, 'menyimpan perubahan private')) return;
-
-  const idx = dPrivat.findIndex(x => x.id === id);
-  if(idx !== -1) dPrivat[idx] = { ...dPrivat[idx], nama: namaBaru, jam: jamBaru, harga: hargaBaru };
-  editingPrivatId = null;
-  gambarPrivat();
-  gambarPrivatUtama();
-};
-
-function gambarPrivat(){
-  const el = $('#feed-privat');
-  if(!el) return;
-  const info = $('#privat-slot-info');
-  const list = privatHariIni();
-  if(info) info.textContent = `${list.length}/${kapasitasPrivat} slot terisi hari ini`;
-
-  const inputKapasitas = $('#privat-kapasitas-input');
-  if(inputKapasitas && document.activeElement !== inputKapasitas) inputKapasitas.value = kapasitasPrivat;
-
-  const opsiHarga = [7000, 8000, 15000, 16000];
-
-  if(!list.length){
-    el.innerHTML = `<div class="kosong"><div class="em">✉️</div><div class="j">belum ada booking private hari ini</div></div>`;
-    return;
-  }
-
-  el.innerHTML = list.map(x => {
-    if(editingPrivatId === x.id){
-      return `<article class="gelembung">
-        <div style="display:grid;gap:10px">
-          <input type="text" id="edit-privat-nama-${x.id}" value="${aman(x.nama)}" style="padding:9px 12px;border-radius:12px;border:1px solid var(--garis);font-family:inherit">
-          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-            <input type="time" id="edit-privat-jam-${x.id}" value="${aman(x.jam)}" style="padding:9px 12px;border-radius:12px;border:1px solid var(--garis);font-family:inherit">
-            <div class="pills-harga-input" id="edit-privat-harga-${x.id}" data-value="${x.harga}">
-              ${opsiHarga.map(h => `<button type="button" class="pill-harga-opt ${h === x.harga ? 'aktif' : ''}" onclick="pilihPillEdit(this, ${h})">${formatK(h)}</button>`).join('')}
-            </div>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button class="kirim" style="flex:1;padding:10px" onclick="simpanEditPrivat(${x.id})">Simpan ♡</button>
-            <button class="mini" onclick="batalEditPrivat()">Batal</button>
-          </div>
-        </div>
-      </article>`;
-    }
-    return `<article class="gelembung">
-      <div class="kepala">
-        <span class="lencana no-urut">🕐 ${aman(x.jam)}</span>
-        <div class="avatar">${aman((x.nama || '?').trim().charAt(0).toUpperCase())}</div>
-        <span class="nama-p">${aman(x.nama)}</span>
-        <span class="lencana harga">${formatK(x.harga)}</span>
-        <button class="btn-edit" onclick="mulaiEditPrivat(${x.id})">✏️ Edit</button>
-        <button class="btn-hapus" onclick="hapusPrivat(${x.id})">Hapus</button>
-      </div>
-    </article>`;
-  }).join('');
-}
-
-// Halaman utama customer: nama disensor, jendelanya cuma nongol kalau ada isinya.
-function gambarPrivatUtama(){
-  const el = $('#feed-privat-utama');
-  const wadah = $('#jendela-privat-utama');
-  if(!el) return;
-  const list = privatHariIni();
-  if(wadah) wadah.style.display = list.length ? '' : 'none';
-  if(!list.length){ el.innerHTML = ''; return; }
-  el.innerHTML = list.map(x => {
-    const namaSensor = sensorNama(x.nama);
-    return `<article class="gelembung">
-      <div class="kepala">
-        <span class="lencana no-urut">🕐 Prediksi ${aman(x.jam)}</span>
-        <div class="avatar">${aman(namaSensor.charAt(0))}</div>
-        <span class="nama-p">${aman(namaSensor)}</span>
-        <span class="lencana harga">${formatK(x.harga)}</span>
-      </div>
-    </article>`;
-  }).join('');
-}
-
-(function pasangFormPrivat(){
-  const form = $('#form-privat');
-  if(!form) return;
-  const pills = $('#privat-pills-harga');
-  const inputHarga = $('#privat-harga-val');
-  const inputJam = $('#privat-jam');
-  const teksPrediksi = $('#privat-prediksi-teks');
-
-  pills.querySelectorAll('.pill-harga-opt').forEach(btn => {
-    btn.addEventListener('click', () => {
-      pills.querySelectorAll('.pill-harga-opt').forEach(b => b.classList.remove('aktif'));
-      btn.classList.add('aktif');
-      inputHarga.value = btn.dataset.harga;
-    });
-  });
-
-  // Ngisi kolom jam otomatis pake saran (jam terakhir + 15 menit), tapi admin
-  // tetep bebas ubah manual sebelum nge-submit.
-  function isiPrediksi(){
-    const jam = prediksiJamBerikutnya();
-    inputJam.value = jam;
-    if(teksPrediksi) teksPrediksi.textContent = `Prediksi dibacakan jam ${jam}, sesuai urutan antrian private hari ini ya ♡ (jamnya bisa diubah manual kok)`;
-  }
-  isiPrediksi();
-  document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') isiPrediksi(); });
-
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const st = $('#privat-status');
-    const nama = $('#privat-nama').value.trim();
-    const harga = parseInt(inputHarga.value, 10) || 0;
-    const jam = inputJam.value;
-
-    if(!nama) return status(st, 'Nama customernya belum diisi ya ♡', 'err');
-    if(!jam) return status(st, 'Jam dibacakannya belum diisi ya ♡', 'err');
-
-    const listHariIni = privatHariIni();
-    if(listHariIni.length >= kapasitasPrivat){
-      return status(st, `Kuota private hari ini udah penuh (${kapasitasPrivat} orang) ♡`, 'err');
-    }
-
-    status(st, 'Menyimpan…', 'nulis');
-    const item = { tanggal: tglHariIniStr(), nama, harga, jam, ts: Date.now() };
-    const errTambah = await tambahPrivatKeSupabase(item);
-    if(laporGagal(errTambah, 'nambahin ke list private')) return;
-    if(errTambah){ status(st, 'Gagal nambahin: ' + (errTambah.message || ''), 'err'); return; }
-
-    status(st, 'Berhasil ditambahin ke list private! ♡', 'ok');
-    $('#privat-nama').value = '';
-    isiPrediksi();
-  });
-
-  const btnKapasitas = $('#btn-simpan-kapasitas');
-  if(btnKapasitas){
-    btnKapasitas.addEventListener('click', async () => {
-      const nilai = parseInt($('#privat-kapasitas-input').value, 10);
-      if(!nilai || nilai < 1) return alert('Kuota harus angka lebih dari 0 ya!');
-      await setKapasitasPrivat(nilai);
-      gambarPrivat();
-    });
-  }
-})();
-
-muatPrivat();
 </script>
 
 </body>
