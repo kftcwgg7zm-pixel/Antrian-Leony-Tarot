@@ -1039,6 +1039,19 @@ textarea.ada-tombol-suara{padding-right:42px !important}
 .tombol-suara:disabled{opacity:.35;cursor:not-allowed}
 .tombol-suara.sembunyi{display:none}
 @keyframes suaraDenyut{0%,100%{box-shadow:0 0 0 0 rgba(239,156,191,.55)}50%{box-shadow:0 0 0 9px rgba(239,156,191,0)}}
+
+/* PERATURAN RINGKAS (ditaruh di atas pricelist) */
+.blok-peraturan{margin:0 0 16px;padding:11px 13px;border-top:0;border-radius:14px;
+  background:rgba(255,243,226,.55);border:1px dashed #f3cfa5}
+.tag-peraturan{margin-bottom:7px;padding:4px 10px;font-size:10px!important}
+.daftar-peraturan{gap:5px}
+.daftar-peraturan li{font-size:12px!important;line-height:1.4;gap:6px}
+.daftar-peraturan li b{display:inline;font-size:12px}
+.daftar-peraturan li i{font-size:11px!important}
+.ikon-larang{font-size:11px}
+.catatan-peraturan{margin-top:8px;font-size:11px!important;padding:6px 9px;border-radius:10px}
+html[data-tema="gelap1"] .blok-peraturan,html[data-tema="gelap2"] .blok-peraturan{
+  background:var(--emas-bg);border:1px dashed var(--emas-tepi)}
 </style>
 <script>
 /* Dijalanin paling awal biar temanya udah nempel sebelum halaman digambar —
@@ -1388,6 +1401,18 @@ textarea.ada-tombol-suara{padding-right:42px !important}
         <h2 class="sub">Pricelist</h2>
         <p style="font-size:13.5px;color:var(--tinta-muda);margin-bottom:14px">Pilih jenis reading yang kamu mau ya ♡</p>
 
+        <!-- ═══ PERATURAN (berlaku untuk Live & Private) ═══ -->
+        <div class="blok-peraturan">
+          <span class="tag-peraturan">⚠️ Peraturan</span>
+          <ul class="daftar-peraturan">
+            <li><span class="ikon-larang">🚫</span><span><b>Dilarang minta bacaan dimana konteksnya kalian jadi selingkuhan.</b></span></li>
+            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan orientasi seksual seseorang.</b> <i>Baik diri sendiri maupun orang lain, ya ♡</i></span></li>
+            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan jodoh.</b> <i>Siapa, kapan ketemu, di mana ketemunya, dll.</i></span></li>
+            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan waktu &amp; tempat.</b> <i>Kapan nikah, kapan dia balik, kapan sukses, di mana, dll.</i></span></li>
+          </ul>
+          <div class="catatan-peraturan">Kalau pertanyaannya masuk kategori di atas, aku bakal minta kamu ganti pertanyaannya dulu ya ♡</div>
+        </div>
+
         <!-- Sub-tab: Pricelist Live | Pricelist Private -->
         <div class="sub-tabs">
           <button class="sub-tab aktif" id="tab-harga-live">🌸 Live</button>
@@ -1400,12 +1425,6 @@ textarea.ada-tombol-suara{padding-right:42px !important}
           <ul class="daftar-harga">
             <li><span>1 Pertanyaan (3 Kartu)</span><b>7K</b></li>
             <li><span>2 Pertanyaan (12 Kartu)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>15K</b></li>
-          </ul>
-
-          <span class="tag-kategori">🫶 Tarot + Oracle · Asmara Only</span>
-          <ul class="daftar-harga">
-            <li><span>1 Pertanyaan (3 Tarot + 1 Oracle)</span><b>8K</b></li>
-            <li><span>2 Pertanyaan (12 Tarot + 2 Oracle)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>16K</b></li>
           </ul>
 
           <span class="tag-fast">⚡ Fast Track (Bisa Skip Antrian)</span>
@@ -1421,10 +1440,9 @@ textarea.ada-tombol-suara{padding-right:42px !important}
 
         <!-- ═══ ISI: PRICELIST PRIVATE ═══ -->
         <div id="isi-harga-private" class="blok-biru" style="display:none">
-          <span class="tag-privat">✉️ Private Reading · Jawaban via DM</span>
+          <span class="tag-privat">✉️ Jawaban dikirim di DM</span>
           <ul class="daftar-harga">
-            <li><span>2 Pertanyaan (12 Kartu)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>25K</b></li>
-            <li><span>3 Pertanyaan (18 Kartu)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>35K</b></li>
+            <li><span>2 Pertanyaan (12 Kartu)<i class="ket-kartu">6 kartu / pertanyaan</i></span><b>35K</b></li>
           </ul>
 
           <h2 class="sub" style="font-size:clamp(30px,6vw,42px);margin-top:22px">How To Order!</h2>
@@ -1449,17 +1467,7 @@ textarea.ada-tombol-suara{padding-right:42px !important}
           <div class="privasi-aman">🔒 Privasi Aman · 100% Rahasia</div>
         </div>
 
-        <!-- ═══ PERATURAN (berlaku untuk Live & Private) ═══ -->
-        <div class="blok-peraturan">
-          <span class="tag-peraturan">⚠️ Peraturan</span>
-          <ul class="daftar-peraturan">
-            <li><span class="ikon-larang">🚫</span><span><b>Dilarang minta bacaan dimana konteksnya kalian jadi selingkuhan.</b></span></li>
-            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan orientasi seksual seseorang.</b><i>Baik diri sendiri maupun orang lain, ya ♡</i></span></li>
-            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan jodoh.</b><i>Siapa, kapan ketemu, di mana ketemunya, dll.</i></span></li>
-            <li><span class="ikon-larang">🚫</span><span><b>Dilarang menanyakan waktu &amp; tempat.</b><i>Kapan nikah, kapan dia balik, kapan sukses, di mana, dll.</i></span></li>
-          </ul>
-          <div class="catatan-peraturan">Kalau pertanyaannya masuk kategori di atas, aku bakal minta kamu ganti pertanyaannya dulu ya ♡</div>
-        </div>
+
       </div>
     </div>
   </section>
